@@ -1,0 +1,36 @@
+[package]
+name = "phynariamc"
+version = "0.1.0"
+description = "A Tauri App"
+authors = ["you"]
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[profile.dev]
+incremental = true
+opt-level = 1  # Slight optimization while keeping fast compiles
+debug = false  # Disables debug symbols
+
+[lib]
+# The `_lib` suffix may seem redundant but it is necessary
+# to make the lib name unique and wouldn't conflict with the bin name.
+# This seems to be only an issue on Windows, see https://github.com/rust-lang/cargo/issues/8519
+name = "phynariamc_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = ["macos-private-api"] }
+tauri-plugin-opener = "2"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+window-vibrancy = "0.5.2"
+tauri-plugin-os = "2"
+lyceris = { git = "https://github.com/BatuhanAksoyy/lyceris", rev = "df35c3f8bd6b7db68c33f717df5c6b65c5fb2754", version = "1.0.2" }
+thiserror = "2.0.11"
+log = "0.4.26"
+tauri-plugin-sql = { version = "2", features = ["sqlite"] }
+
