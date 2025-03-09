@@ -12,6 +12,7 @@ import { AnimatedOutlet } from "../../components/AOutlet";
 import { AnimatePresence, motion } from "motion/react";
 import { useAuth } from "../../store/auth";
 import { useEffect, useState } from "react";
+import { useOptions } from "../../store/options";
 export const Route = createFileRoute("/home")({
   component: RouteComponent,
 });
@@ -22,6 +23,7 @@ function RouteComponent() {
   const location = useLocation();
   const auth = useAuth();
   const router = useRouter();
+  const options = useOptions();
   const [accountModal, setAccountModal] = useState(false);
   const paths = location.pathname.split("/");
   // Click outside modal
@@ -38,7 +40,7 @@ function RouteComponent() {
     };
   }, []);
   return (
-    <div className="flex bg-black/20 w-full h-svh overflow-y-auto p-2 flex-col">
+    <div className="flex bg-black/20 w-full h-svh overflow-y-auto p-1.5 flex-col">
       <span className="absolute inset-0 size-full bg-cover bg-center bg-[url('/images/bg.png')] -z-10"></span>
       <span className="absolute inset-0 size-full bg-black/60 -z-10"></span>
       <header
@@ -271,7 +273,27 @@ function RouteComponent() {
           Settings
         </Link>
       </header>
-      <Outlet />
+      <main className="h-full">
+        <Outlet />
+      </main>
+      <footer className="w-full relative flex items-center h-8 bg-body pr-3 rounded-lg">
+        <img
+          src="/images/logo.png"
+          className="h-full aspect-square w-auto object-contain py-1"
+          alt=""
+        />
+        <p className="text-xs">
+          PhynariaMC{" "}
+          <span className="text-white/50">
+            {" "}
+            • Not affiliated with Mojang Studios
+          </span>
+        </p>
+        <div className="text-xs absolute inset-0 size-max m-auto text-white/50">
+          version {options.version}
+        </div>
+        <p className="text-xs ml-auto text-white/50">powered by Cubidron</p>
+      </footer>
     </div>
   );
 }

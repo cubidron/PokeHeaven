@@ -15,6 +15,7 @@ interface IOptions {
   autoUpdate: boolean;
   launchOnboot: boolean;
   launchBehavior: TLaunchBehavior;
+  version: string;
   sendLogs: boolean;
   tel: boolean
 }
@@ -31,6 +32,7 @@ export const useOptions = create<IOptionsStore>((set) => ({
   appDir: "%user%/Appliations/phynariamc.app",
   sync: true,
   notifications: true,
+  version: "1.0.0",
   autoUpdate: true,
   launchOnboot: false,
   launchBehavior: "minimize",

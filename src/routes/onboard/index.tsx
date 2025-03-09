@@ -54,6 +54,8 @@ function RouteComponent() {
           name="username"
           id="username"
           placeholder="Enter your username."
+          spellCheck="false"
+          autoComplete="off"
         />
         <label htmlFor="password" className="text-sm font-medium">
           Password
@@ -65,6 +67,7 @@ function RouteComponent() {
             type={showPassword ? "text" : "password"}
             placeholder="Enter your password."
             spellCheck="false"
+            autoComplete="off"
             className="pl-3 h-8 rounded-lg bg-dark outline-none text-sm w-full"
           />
           <button
