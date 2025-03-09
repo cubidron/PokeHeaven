@@ -46,7 +46,7 @@ function RouteComponent() {
         className={`flex rounded-xl items-center p-1 gap-1 z-50 bg-body w-full h-14`}>
         <span
           className={`flex gap-1 items-center h-full ${platform() == "macos" ? "mr-auto" : "ml-auto order-last flex-row-reverse"}`}>
-          <TitleButtons className={`z-50 relative px-3`} />
+          <TitleButtons className={`z-50 relative px-2`} />
           <span className="flex gap-1 h-full">
             <button
               onClick={() => {
@@ -216,7 +216,7 @@ function RouteComponent() {
                             account.username != auth?.user?.username &&
                               auth.switch(account);
                           }}
-                          className={`button shrink-0 overflow-hidden relative ${
+                          className={`button shrink-0 hover:bg-white/5 rounded-lg ease-smooth duration-200 px-2 py-1 overflow-hidden relative ${
                             auth?.user?.username === account.username
                               ? "hover:bg-dark cursor-default"
                               : ""
@@ -228,7 +228,7 @@ function RouteComponent() {
                         onClick={() => {
                           account.username && auth.logout(account);
                         }}
-                        className="button size-8 grid place-items-center overflow-hidden relative">
+                        className="button size-8 hover:bg-white/5 rounded-lg ease-smooth duration-200 px-2 py-1 grid place-items-center overflow-hidden relative">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           className="h-5"
@@ -243,7 +243,7 @@ function RouteComponent() {
                   ))}
                   <Link
                     to="/onboard"
-                    className="button size-8 !p-0 grid place-items-center overflow-hidden relative">
+                    className="button size-8 !p-0 grid hover:bg-white/5 rounded-lg place-items-center overflow-hidden relative">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       className="w-4"

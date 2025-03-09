@@ -86,13 +86,13 @@ export function TitleButtons(props: { className?: string; if?: Platform }) {
             <button
               onClick={titleAction}
               id="minimize"
-              className="w-12 h-8 hover:bg-white/10 ease-in-out duration-200 no-drag">
+              className="w-12 h-8 hover:bg-white/5 ease-in-out duration-200 no-drag">
               <IconMinimize className="fill-white w-3 m-auto pointer-events-none" />
             </button>
             <button
               onClick={titleAction}
               id="maximize"
-              className="w-12 h-8 hover:bg-white/10 ease-in-out duration-200 no-drag">
+              className="w-12 h-8 hover:bg-white/5 ease-in-out duration-200 no-drag">
               <IconMaximize className="fill-white w-3 h-3 m-auto pointer-events-none" />
             </button>
             <button
