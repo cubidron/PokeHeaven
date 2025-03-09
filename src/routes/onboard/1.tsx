@@ -38,7 +38,7 @@ function RouteComponent() {
             {auth.user?.username}
           </h1>
           <p className="text-base font-extralight leading-[100%]">
-            Microsoft Account
+            Phynaria Account
           </p>
         </span>
       )}
