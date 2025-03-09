@@ -1,13 +1,20 @@
 @import "tailwindcss";
 
 @font-face {
-  font-family: "Sora";
-  src: url("/Font.ttf") format("truetype");
+  font-family: "cNunito";
+  src: url("/fonts/font.ttf") format("truetype");
+}
+@font-face {
+  font-family: "cNunito";
+  src: url("/fonts/font-italic.ttf") format("truetype");
+  font-style: italic;
 }
 
 @theme {
-  --color-primary: #8308e5;
-  --font-Sora: Sora, sans-serif;
+  --color-primary: #bf4545;
+  --color-body: #151212;
+  --color-dark: #1e1a1a;
+  --font-cNunito: cNunito, sans-serif;
 
   --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
   --ease-spring: cubic-bezier(0.5, 1.25, 0.75, 1.25);
@@ -19,7 +26,7 @@ body {
   font-size: 16px;
   font-weight: 400;
   color: white;
-  font-family: Sora, sans-serif;
+  font-family: cNunito, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;

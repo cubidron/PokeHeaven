@@ -12,14 +12,23 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as OnboardRouteImport } from './routes/onboard/route'
+import { Route as HomeRouteImport } from './routes/home/route'
 import { Route as IndexImport } from './routes/index'
 import { Route as OnboardIndexImport } from './routes/onboard/index'
+import { Route as HomeIndexImport } from './routes/home/index'
+import { Route as Onboard1Import } from './routes/onboard/1'
 
 // Create/Update Routes
 
 const OnboardRouteRoute = OnboardRouteImport.update({
   id: '/onboard',
   path: '/onboard',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const HomeRouteRoute = HomeRouteImport.update({
+  id: '/home',
+  path: '/home',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -35,6 +44,18 @@ const OnboardIndexRoute = OnboardIndexImport.update({
   getParentRoute: () => OnboardRouteRoute,
 } as any)
 
+const HomeIndexRoute = HomeIndexImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => HomeRouteRoute,
+} as any)
+
+const Onboard1Route = Onboard1Import.update({
+  id: '/1',
+  path: '/1',
+  getParentRoute: () => OnboardRouteRoute,
+} as any)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -46,12 +67,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
+    '/home': {
+      id: '/home'
+      path: '/home'
+      fullPath: '/home'
+      preLoaderRoute: typeof HomeRouteImport
+      parentRoute: typeof rootRoute
+    }
     '/onboard': {
       id: '/onboard'
       path: '/onboard'
       fullPath: '/onboard'
       preLoaderRoute: typeof OnboardRouteImport
       parentRoute: typeof rootRoute
+    }
+    '/onboard/1': {
+      id: '/onboard/1'
+      path: '/1'
+      fullPath: '/onboard/1'
+      preLoaderRoute: typeof Onboard1Import
+      parentRoute: typeof OnboardRouteImport
+    }
+    '/home/': {
+      id: '/home/'
+      path: '/'
+      fullPath: '/home/'
+      preLoaderRoute: typeof HomeIndexImport
+      parentRoute: typeof HomeRouteImport
     }
     '/onboard/': {
       id: '/onboard/'
@@ -65,11 +107,25 @@ declare module '@tanstack/react-router' {
 
 // Create and export the route tree
 
+interface HomeRouteRouteChildren {
+  HomeIndexRoute: typeof HomeIndexRoute
+}
+
+const HomeRouteRouteChildren: HomeRouteRouteChildren = {
+  HomeIndexRoute: HomeIndexRoute,
+}
+
+const HomeRouteRouteWithChildren = HomeRouteRoute._addFileChildren(
+  HomeRouteRouteChildren,
+)
+
 interface OnboardRouteRouteChildren {
+  Onboard1Route: typeof Onboard1Route
   OnboardIndexRoute: typeof OnboardIndexRoute
 }
 
 const OnboardRouteRouteChildren: OnboardRouteRouteChildren = {
+  Onboard1Route: Onboard1Route,
   OnboardIndexRoute: OnboardIndexRoute,
 }
 
@@ -79,38 +135,55 @@ const OnboardRouteRouteWithChildren = OnboardRouteRoute._addFileChildren(
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/home': typeof HomeRouteRouteWithChildren
   '/onboard': typeof OnboardRouteRouteWithChildren
+  '/onboard/1': typeof Onboard1Route
+  '/home/': typeof HomeIndexRoute
   '/onboard/': typeof OnboardIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/onboard/1': typeof Onboard1Route
+  '/home': typeof HomeIndexRoute
   '/onboard': typeof OnboardIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
+  '/home': typeof HomeRouteRouteWithChildren
   '/onboard': typeof OnboardRouteRouteWithChildren
+  '/onboard/1': typeof Onboard1Route
+  '/home/': typeof HomeIndexRoute
   '/onboard/': typeof OnboardIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/onboard' | '/onboard/'
+  fullPaths: '/' | '/home' | '/onboard' | '/onboard/1' | '/home/' | '/onboard/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/onboard'
-  id: '__root__' | '/' | '/onboard' | '/onboard/'
+  to: '/' | '/onboard/1' | '/home' | '/onboard'
+  id:
+    | '__root__'
+    | '/'
+    | '/home'
+    | '/onboard'
+    | '/onboard/1'
+    | '/home/'
+    | '/onboard/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  HomeRouteRoute: typeof HomeRouteRouteWithChildren
   OnboardRouteRoute: typeof OnboardRouteRouteWithChildren
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  HomeRouteRoute: HomeRouteRouteWithChildren,
   OnboardRouteRoute: OnboardRouteRouteWithChildren,
 }
 
@@ -125,17 +198,33 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/home",
         "/onboard"
       ]
     },
     "/": {
       "filePath": "index.tsx"
     },
+    "/home": {
+      "filePath": "home/route.tsx",
+      "children": [
+        "/home/"
+      ]
+    },
     "/onboard": {
       "filePath": "onboard/route.tsx",
       "children": [
+        "/onboard/1",
         "/onboard/"
       ]
+    },
+    "/onboard/1": {
+      "filePath": "onboard/1.tsx",
+      "parent": "/onboard"
+    },
+    "/home/": {
+      "filePath": "home/index.tsx",
+      "parent": "/home"
     },
     "/onboard/": {
       "filePath": "onboard/index.tsx",

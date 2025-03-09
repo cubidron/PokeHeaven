@@ -25,7 +25,7 @@ export default function NotifyComponent() {
               initial={{ opacity: 0, y: -100, scale: 1.1 }}
               exit={{ opacity: 0, y: 100, scale: 0.9 }}
               transition={{ type: "spring", damping: 30, stiffness: 200 }}
-              className="bg-gradient-to-b from-white/6 to-black/6 outline-1 -outline-offset-1 outline-white/6 backdrop-blur relative text-white !rounded-xl px-6 py-2 text-sm text-center font-medium">
+              className="bg-body/60 backdrop-blur-2xl relative text-white !rounded-xl px-6 py-2 text-sm text-center font-medium">
               {noti.text}
             </motion.div>
           ))}

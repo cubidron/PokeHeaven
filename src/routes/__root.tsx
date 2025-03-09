@@ -7,7 +7,6 @@ import {
 import { useEffect } from "react";
 import { platform } from "@tauri-apps/plugin-os";
 import { Helmet } from "react-helmet";
-
 import { useDb } from "../store/db";
 import { useAuth } from "../store/auth";
 
@@ -29,15 +28,10 @@ function RootComponent() {
   }, []);
 
   useEffect(() => {
-    if (!useAuth.getState().minecraftAccount) {
+    if (!useAuth.getState().user) {
       location.href.includes("/onboard") ||
         nav({
-          to: "/onboard/",
-        });
-    } else {
-      location.href.includes("/home") ||
-        nav({
-          to: "/home",
+          to: "/onboard",
         });
     }
   }, [useAuth.getState()]);
@@ -62,18 +56,20 @@ function RootComponent() {
     }
   `}</style>
       </Helmet>
-      <input
+      {/* <input
         type="text"
         name="url"
-        className="fixed inset-0 mx-auto mt-4 z-50 w-96 h-8 !bg-primary/6"
+        className="fixed inset-0 mx-auto mt-14 z-50 w-96 h-8 rounded-md outline-1 -outline-offset-1 outline-white/24 px-3 !bg-primary/6"
         value={location.href}
         onChange={(e) => {
           nav({
             to: e.target.value,
           });
         }}
-      />
-      <Outlet />
+      /> */}
+      <div className="size-full">
+        <Outlet />
+      </div>
     </>
   );
 }

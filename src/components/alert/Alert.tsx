@@ -13,22 +13,22 @@ export default function AlertComponent() {
           }}
           style={{ background: `${alert_store.bg && "url(/bg.webp)"}` }}
           data-tauri-drag-region
-          className="fixed z-[100] inset-0 bg-black/60 flex !bg-center !bg-cover flex-col items-center justify-center">
+          className="fixed z-[100] inset-0 bg-black/40 flex !bg-center !bg-cover flex-col items-center justify-center">
           <div
             onClick={(e) => {
               e.stopPropagation();
             }}
-            className="w-64 p-4 bg-white/6 outline-1 -outline-offset-1 outline-white/6 backdrop-blur-2xl shadow-xl shadow-black/20 rounded-lg flex flex-col items-center justify-center">
+            className="w-64 p-4 bg-body/60 backdrop-blur-2xl shadow-xl shadow-black/20 rounded-lg flex flex-col items-center justify-center">
             <h1 className="font-bold text-base text-center mt-1">
               {alert_store.title}
             </h1>
             <p className="text-xs !select-all text-center font-light">
               {alert_store.message}
             </p>
-            <div className="flex flex-col-reverse w-full mt-auto pt-4 justify-end gap-2">
+            <div className="flex  w-full mt-auto pt-4 justify-end gap-2">
               {!alert_store.force && (
                 <button
-                  className={`w-full ${alert_store.action ? "!bg-white/6" : "!bg-primary"}`}
+                  className={`px-5 w-full py-0.5 cursor-pointer ease-smooth duration-200 hover:saturate-150 gap-2 bg-primary rounded-lg flex items-center justify-center ${alert_store.action ? "!bg-white/6" : "!bg-primary"}`}
                   onClick={alert_store.clear}
                   type="button">
                   {alert_store.action ? "Cancel" : "Done"}
@@ -36,7 +36,7 @@ export default function AlertComponent() {
               )}
               {alert_store.action && (
                 <button
-                  className="w-full"
+                  className="px-5 w-full py-0.5 cursor-pointer ease-smooth duration-200 hover:saturate-150 gap-2 bg-primary rounded-lg flex items-center justify-center"
                   onClick={async () => {
                     await alert_store.action?.();
                     alert_store.beforeAction?.();
