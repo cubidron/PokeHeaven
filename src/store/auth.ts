@@ -147,9 +147,9 @@ export const useAuth = create<UserStore>((set, state) => ({
   },
   logout: async (user) => {
     let newlist = state().users.filter(u => u.username !== user.username)
-    if (state().users.length > 0 && state().users[0].username !== user.username) {
+    if (newlist.length > 0) {
       set({
-        user: state().users[0],
+        user: newlist[0],
         users: newlist
       })
     } else {

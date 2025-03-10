@@ -36,7 +36,7 @@ function RootComponent() {
   }, []);
 
   useEffect(() => {
-    if (!useAuth.getState().user) {
+    if (!useAuth.getState().user && useAuth.getState().users.length <= 0) {
       location.href.includes("/onboard") ||
         nav({
           to: "/onboard",
