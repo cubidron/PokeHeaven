@@ -45,7 +45,7 @@ function RouteComponent() {
       <span className="relative flex flex-col mb-1">
         <Link
           to="/home"
-          className="px-3.5 py-1.5 cursor-pointer ease-smooth duration-200 hover:saturate-150 gap-3 bg-primary rounded-lg flex items-center justify-center">
+          className="px-3.5 py-1.5 cursor-pointer outline-none ease-smooth duration-200 hover:saturate-150 gap-3 bg-primary rounded-lg flex items-center justify-center">
           Continue
           <svg
             width="12"

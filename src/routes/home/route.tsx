@@ -7,8 +7,7 @@ import {
 } from "@tanstack/react-router";
 import { platform } from "@tauri-apps/plugin-os";
 // const platform = () => "windows";
-import { DragRegion, TitleButtons } from "../../components/tauri/TitleBar";
-import { AnimatedOutlet } from "../../components/AOutlet";
+import { TitleButtons } from "../../components/tauri/TitleBar";
 import { AnimatePresence, motion } from "motion/react";
 import { useAuth } from "../../store/auth";
 import { useEffect, useState } from "react";
@@ -45,7 +44,7 @@ function RouteComponent() {
       <span className="absolute inset-0 size-full bg-black/60 -z-10"></span>
       <header
         data-tauri-drag-region
-        className={`flex rounded-xl items-center p-1 gap-1 z-50 bg-body w-full h-14`}>
+        className={`flex rounded-xl items-center p-1 gap-1 z-50 bg-body/80 backdrop-blur-2xl w-full h-14`}>
         <span
           className={`flex gap-1 items-center h-full ${platform() == "macos" ? "mr-auto" : "ml-auto order-last flex-row-reverse"}`}>
           <TitleButtons className={`z-50 relative px-2`} />
@@ -273,10 +272,10 @@ function RouteComponent() {
           Settings
         </Link>
       </header>
-      <main className="h-full">
+      <main className="h-full flex flex-col gap-2 py-2">
         <Outlet />
       </main>
-      <footer className="w-full relative flex items-center h-8 bg-body pr-3 rounded-lg">
+      <footer className="w-full relative flex items-center h-8 bg-body/80 backdrop-blur-2xl pr-3 rounded-lg">
         <img
           src="/images/logo.png"
           className="h-full aspect-square w-auto object-contain py-1"

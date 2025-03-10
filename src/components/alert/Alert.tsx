@@ -28,7 +28,7 @@ export default function AlertComponent() {
             <div className="flex  w-full mt-auto pt-4 justify-end gap-2">
               {!alert_store.force && (
                 <button
-                  className={`px-5 w-full py-0.5 cursor-pointer ease-smooth duration-200 hover:saturate-150 gap-2 bg-primary rounded-lg flex items-center justify-center ${alert_store.action ? "!bg-white/6" : "!bg-primary"}`}
+                  className={`px-5 w-full py-0.5 cursor-pointer ease-smooth duration-200 hover:saturate-150 gap-2 bg-primary rounded-lg flex items-center justify-center outline-none ${alert_store.action ? "!bg-white/6" : "!bg-primary"}`}
                   onClick={alert_store.clear}
                   type="button">
                   {alert_store.action ? "Cancel" : "Done"}
@@ -36,13 +36,14 @@ export default function AlertComponent() {
               )}
               {alert_store.action && (
                 <button
-                  className="px-5 w-full py-0.5 cursor-pointer ease-smooth duration-200 hover:saturate-150 gap-2 bg-primary rounded-lg flex items-center justify-center"
+                  className="px-5 w-full py-0.5 cursor-pointer ease-smooth duration-200 hover:saturate-150 gap-2 bg-primary rounded-lg flex items-center justify-center outline-none"
                   onClick={async () => {
                     await alert_store.action?.();
                     alert_store.beforeAction?.();
                     alert_store.clear();
                   }}
-                  type="button">
+                  type="button"
+                  autoFocus>
                   Done
                 </button>
               )}

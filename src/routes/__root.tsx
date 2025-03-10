@@ -9,6 +9,8 @@ import { platform } from "@tauri-apps/plugin-os";
 import { Helmet } from "react-helmet";
 import { useDb } from "../store/db";
 import { useAuth } from "../store/auth";
+import useNewses from "../store/news";
+import { clearLoading, setLoading } from "../components/loading";
 
 export const Route = createRootRoute({
   component: RootComponent,
@@ -19,11 +21,17 @@ function RootComponent() {
   const db = useDb();
   const auth = useAuth();
   const nav = useNavigate();
+  const news = useNewses();
 
   useEffect(() => {
     (async () => {
+      setLoading("Please wait", "Initializing database...");
       await db.init();
+      setLoading("Please wait", "Initializing authentication...");
       await auth.init();
+      setLoading("Please wait", "Fetching news...");
+      await news.fetch();
+      clearLoading();
     })();
   }, []);
 

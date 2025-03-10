@@ -20,7 +20,7 @@ function RouteComponent() {
         <TitleButtons className="z-50 relative" />
         <DragRegion />
       </span>
-      <section className="bg-body min-w-96 overflow-clip contain-content rounded-xl flex flex-col gap-2 p-8">
+      <section className="bg-body/80 backdrop-blur-2xl min-w-96 overflow-clip contain-content rounded-xl flex flex-col gap-2 p-8">
         <AnimatePresence mode="wait">
           <AnimatedOutlet
             initial={{

@@ -17,6 +17,15 @@
     "core:window:allow-set-fullscreen",
     "sql:allow-execute",
     "sql:allow-load",
-    "sql:allow-select"
+    "sql:allow-select",
+    "http:default",
+    {
+      "identifier": "http:default",
+      "allow": [
+        {
+          "url": "https://*.cubidron.com"
+        }
+      ]
+    }
   ]
 }
