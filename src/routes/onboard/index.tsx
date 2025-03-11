@@ -1,5 +1,4 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import Alert from "../../components/alert";
 import { useState } from "react";
 import { useAuth } from "../../store/auth";
 
@@ -36,13 +35,7 @@ function RouteComponent() {
             username: input.get("username") as string,
             password: input.get("password") as string,
           });
-          Alert({
-            title: "User datas",
-            message: input.get("username") + " | " + input.get("password"),
-            action: () => {
-              navigate({ to: "/onboard/1" });
-            },
-          });
+          navigate({ to: "/onboard/1" });
         }}
         className="flex flex-col gap-1.5 w-full h-max">
         <label htmlFor="username" className="text-sm font-medium">

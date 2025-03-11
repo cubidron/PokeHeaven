@@ -1,0 +1,64 @@
+{
+  "exclude": [
+    "assets",
+    "libraries",
+    "logs",
+    "runtime",
+    "saves",
+    "versions",
+    "options.txt",
+    "optionsof.txt",
+    ".fabric"
+  ],
+  "title": "Elesya",
+  "updateZipLink": "https://launcher.elesya.eu/config/bundle.zip",
+  "updateVersion": "1.0.0",
+  "gameVersion": "1.21.4",
+  "modApi": "Fabric",
+  "modApiVersion": "0.16.9",
+  "serverIp": "humerus.lesbrascasses.net",
+  "serverPort": 11601,
+  "discordRpc": {
+    "clientId": "1312106083208269857",
+    "stateText": "Playing Elesya Minecraft",
+    "largeImage": "logo_512x512",
+    "largeText": "Elesya Logo",
+    "details": "https://elesya.eu"
+  },
+  "presets": [
+    {
+      "folderName": "high",
+      "name": "High (Default)",
+      "description": "PC requirements High."
+    },
+    {
+      "folderName": "low",
+      "name": "Low",
+      "description": "PC requirements Low."
+    }
+  ],
+  "version": "0.1.0",
+  "videoUrl": "https://www.youtube.com/embed/xvFZjo5PgG0?si=yxlUsB-wX2pXnR2h",
+  "description": "Elesya enhances Minecraft in various ways, preserving its core while introducing exciting new elements.",
+  "website": "https://discord.gg/z62fWza",
+  "notes": "nothing",
+  "pub_date": "2024-02-18T16:28:57Z",
+  "platforms": {
+    "windows-x86_64": {
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVTM0NBeTIzMHdPN3lEOGp4bzBkT1FtcHNuUzVsRmZIcDRMK0xobWdrcStFUkRZZ0xUVHVCT0REbmxMNU9rZFVlN1ZoVjJRMm9KRTA0d0l1cFc2WFVlMm52NUxyWDlNT3c0PQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzI0MzUyNDMzCWZpbGU6QmFzbyBOZXR3b3JrXzIuMC4yNF94NjQtc2V0dXAubnNpcy56aXAKTWxnYWx0Y0pwamw3OGVqemJXQ0lEWWJGcGlJY0tzZHZ4WTcrNTRJYVNTMVNkNVZYV3NRcnNGbG1nd1E3a2x0UnlpZDVZdnhmckZIcnhnVWFDa1c4RGc9PQo=",
+      "url": "https://launcher.elesya.eu/launcher/update/BasoNetwork_2.0.24_x64-setup.nsis.zip"
+    },
+    "darwin-x86_64": {
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVTM0NBeTIzMHdPN3lEOGp4bzBkT1FtcHNuUzVsRmZIcDRMK0xobWdrcStFUkRZZ0xUVHVCT0REbmxMNU9rZFVlN1ZoVjJRMm9KRTA0d0l1cFc2WFVlMm52NUxyWDlNT3c0PQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzI0MzUyNDMzCWZpbGU6QmFzbyBOZXR3b3JrXzIuMC4yNF94NjQtc2V0dXAubnNpcy56aXAKTWxnYWx0Y0pwamw3OGVqemJXQ0lEWWJGcGlJY0tzZHZ4WTcrNTRJYVNTMVNkNVZYV3NRcnNGbG1nd1E3a2x0UnlpZDVZdnhmckZIcnhnVWFDa1c4RGc9PQo=",
+      "url": "https://launcher.elesya.eu/launcher/update/BasoNetwork_2.0.24_x64-setup.nsis.zip"
+    },
+    "darwin-aarch64": {
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVTM0NBeTIzMHdPN3lEOGp4bzBkT1FtcHNuUzVsRmZIcDRMK0xobWdrcStFUkRZZ0xUVHVCT0REbmxMNU9rZFVlN1ZoVjJRMm9KRTA0d0l1cFc2WFVlMm52NUxyWDlNT3c0PQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzI0MzUyNDMzCWZpbGU6QmFzbyBOZXR3b3JrXzIuMC4yNF94NjQtc2V0dXAubnNpcy56aXAKTWxnYWx0Y0pwamw3OGVqemJXQ0lEWWJGcGlJY0tzZHZ4WTcrNTRJYVNTMVNkNVZYV3NRcnNGbG1nd1E3a2x0UnlpZDVZdnhmckZIcnhnVWFDa1c4RGc9PQo=",
+      "url": "https://launcher.elesya.eu/launcher/update/BasoNetwork_2.0.24_x64-setup.nsis.zip"
+    },
+    "linux-x86_64": {
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVTM0NBeTIzMHdPN3lEOGp4bzBkT1FtcHNuUzVsRmZIcDRMK0xobWdrcStFUkRZZ0xUVHVCT0REbmxMNU9rZFVlN1ZoVjJRMm9KRTA0d0l1cFc2WFVlMm52NUxyWDlNT3c0PQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzI0MzUyNDMzCWZpbGU6QmFzbyBOZXR3b3JrXzIuMC4yNF94NjQtc2V0dXAubnNpcy56aXAKTWxnYWx0Y0pwamw3OGVqemJXQ0lEWWJGcGlJY0tzZHZ4WTcrNTRJYVNTMVNkNVZYV3NRcnNGbG1nd1E3a2x0UnlpZDVZdnhmckZIcnhnVWFDa1c4RGc9PQo=",
+      "url": "https://launcher.elesya.eu/launcher/update/BasoNetwork_2.0.24_x64-setup.nsis.zip"
+    }
+  }
+}

@@ -134,6 +134,7 @@ interface UserStore {
   login: (user: IUser) => Promise<void>;
   logout: (user: IUser) => Promise<void>;
   switch: (account: IUser) => void;
+  isLogged: () => boolean;
 }
 
 export const useAuth = create<UserStore>((set, state) => ({
@@ -163,5 +164,8 @@ export const useAuth = create<UserStore>((set, state) => ({
     set({
       user: account
     })
+  },
+  isLogged: () => {
+    return state().user !== undefined
   }
 }))
