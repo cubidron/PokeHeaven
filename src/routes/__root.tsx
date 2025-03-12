@@ -54,36 +54,6 @@ function RootComponent() {
   }, [useAuth.getState()]);
   return (
     <>
-      <Helmet>
-        <style>{`
-    html,
-    body,
-    #app {
-      padding: 0;
-      border: 0;
-      margin: 0;
-      contain: content;
-      background-color: black;
-      background: black;
-      transition: background, background-color 0.3s;
-      transition-timing-function: ease-in-out;
-      min-height:100svh;
-      overflow: hidden;
-      border-radius: ${platform() == "macos" ? 10 : 8}px;
-    }
-  `}</style>
-      </Helmet>
-      {/* <input
-        type="text"
-        name="url"
-        className="fixed inset-0 mx-auto mt-14 z-50 w-96 h-8 rounded-md outline-1 -outline-offset-1 outline-white/24 px-3 !bg-primary/6"
-        value={location.href}
-        onChange={(e) => {
-          nav({
-            to: e.target.value,
-          });
-        }}
-      /> */}
       <div className="size-full">
         <Outlet />
       </div>

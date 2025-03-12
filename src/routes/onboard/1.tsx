@@ -26,7 +26,7 @@ function RouteComponent() {
         <img src="/images/logo.png" className="size-20 aspect-square" alt="" />
       </span>
       {auth.user && (
-        <span className="rounded-xl flex flex-col items-center justify-center gap-2 bg-dark p-4">
+        <span className="rounded-xl flex mt-3 flex-col items-center justify-center gap-2 bg-dark p-4">
           <img
             className="size-20 rounded-md bg-white/5 p-1.5"
             src={`https://visage.surgeplay.com/face/${
@@ -42,7 +42,7 @@ function RouteComponent() {
           </p>
         </span>
       )}
-      <span className="relative flex flex-col mb-1">
+      <span className="relative flex flex-col mb-1 mt-3">
         <Link
           to="/home"
           className="px-3.5 py-1.5 cursor-pointer outline-none ease-smooth duration-200 hover:saturate-150 gap-3 bg-primary rounded-lg flex items-center justify-center">
