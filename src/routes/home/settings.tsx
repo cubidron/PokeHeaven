@@ -63,7 +63,7 @@ function RouteComponent() {
             />
           </span>
           <hr />
-          <span className="flex gap-1">
+          <span className="flex gap-1 items-center">
             <p className="text-xs w-full text-white/60">Java location.</p>
             <input
               type="text"
@@ -72,7 +72,7 @@ function RouteComponent() {
             />
           </span>
           <hr />
-          <span className="flex justify-between gap-1">
+          <span className="flex justify-between gap-1 items-center">
             <p className="text-xs text-white/60">Full screen minecraft.</p>
             <Switch
               value={options.fullScreen}
