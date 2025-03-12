@@ -1,7 +1,5 @@
 import { create } from "zustand";
 import { invoke } from "@tauri-apps/api/core";
-import { fetch } from "@tauri-apps/plugin-http";
-import Alert from "../components/alert";
 
 interface IMods {
   name: string;

@@ -12,6 +12,7 @@ import { AnimatePresence, motion } from "motion/react";
 import { useAuth } from "../../store/auth";
 import { useEffect, useState } from "react";
 import { useOptions } from "../../store/options";
+import { getVersion } from "@tauri-apps/api/app";
 export const Route = createFileRoute("/home")({
   component: RouteComponent,
 });
@@ -178,17 +179,15 @@ function RouteComponent() {
                         className="bg-side size-8 rounded"></div>
                       <span className="relative">
                         <div
-                          className={`size-4 rounded-full grid place-items-center absolute -right-1 -top-1 ${
-                            auth?.user?.username == account.username
-                              ? "bg-green-500/40"
-                              : "bg-red-500/40"
-                          }`}>
+                          className={`size-4 rounded-full grid place-items-center absolute -right-1 -top-1 ${auth?.user?.username == account.username
+                            ? "bg-green-500/40"
+                            : "bg-red-500/40"
+                            }`}>
                           <div
-                            className={`size-2 rounded-full ${
-                              auth?.user?.username == account.username
-                                ? "bg-green-500"
-                                : "bg-red-500"
-                            }`}></div>
+                            className={`size-2 rounded-full ${auth?.user?.username == account.username
+                              ? "bg-green-500"
+                              : "bg-red-500"
+                              }`}></div>
                         </div>
                         <img
                           onLoad={(e) => {
@@ -217,11 +216,10 @@ function RouteComponent() {
                             account.username != auth?.user?.username &&
                               auth.switch(account);
                           }}
-                          className={`button shrink-0 hover:bg-white/5 rounded-lg ease-smooth duration-200 px-2 py-1 overflow-hidden relative ${
-                            auth?.user?.username === account.username
-                              ? "hover:bg-dark cursor-default"
-                              : ""
-                          }`}>
+                          className={`button shrink-0 hover:bg-white/5 rounded-lg ease-smooth duration-200 px-2 py-1 overflow-hidden relative ${auth?.user?.username === account.username
+                            ? "hover:bg-dark cursor-default"
+                            : ""
+                            }`}>
                           <p>Switch</p>
                         </button>
                       )}
@@ -289,7 +287,7 @@ function RouteComponent() {
           </span>
         </p>
         <div className="text-xs absolute inset-0 size-max m-auto text-white/50">
-          version {options.version}
+          version {options.version!}
         </div>
         <p className="text-xs ml-auto text-white/50">
           powered by{" "}

@@ -1,6 +1,4 @@
 import { createFileRoute } from "@tanstack/react-router";
-import NewsSection from "../../components/news";
-import SelectBox from "../../components/SelectBox";
 import useRemote from "../../store/remote";
 import { TLaunchBehavior, useOptions } from "../../store/options";
 import Switch from "../../components/Switch";
@@ -25,9 +23,9 @@ function RouteComponent() {
             <Dropdown
               options={["close", "keep", "minimize"]}
               id="launcherBehavior"
-              value={options.launchBehavior}
+              value={options.launchBehavior!}
               onChange={(value: TLaunchBehavior) =>
-                options.set({ ...options, launchBehavior: value })
+                options.set({ launchBehavior: value })
               }
               displayValue={(option) => {
                 const found = [
@@ -46,28 +44,29 @@ function RouteComponent() {
               Maximum memory amount.
             </p>
             <p className=" shrink-0 text-xs mr-2">
-              {(options.maxMemory * 512) / 1024} GB
+              {(options.maxMemory! * 512) / 1024} GB
             </p>
             <InputRange
               className=" shrink-0"
-              title="Selam"
+              title="Memory amount"
               min={1}
               max={32}
-              value={options.maxMemory}
+              value={options.maxMemory!}
               onChange={(e) => {
                 options.set({
-                  ...options,
                   maxMemory: e,
                 });
               }}
             />
           </span>
           <hr />
-          <span className="flex gap-1 items-center">
-            <p className="text-xs w-full text-white/60">Java location.</p>
+          <span className="flex gap-2 items-center">
+            <p className="text-xs w-30 text-white/60">Java location.</p>
             <input
               type="text"
-              className="w-full bg-dark rounded-md px-3 py-1.5 outline-none"
+              spellCheck={false}
+              readOnly
+              className="w-full select-none bg-dark text-sm rounded-md px-3 py-1.5 outline-none"
               value={options.javaPath}
             />
           </span>
@@ -75,8 +74,8 @@ function RouteComponent() {
           <span className="flex justify-between gap-1 items-center">
             <p className="text-xs text-white/60">Full screen minecraft.</p>
             <Switch
-              value={options.fullScreen}
-              onChange={(e) => options.set({ ...options, fullScreen: e })}
+              value={options.fullScreen!}
+              onChange={(e) => options.set({ fullScreen: e })}
             />
           </span>
         </section>

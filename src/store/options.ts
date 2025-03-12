@@ -1,28 +1,53 @@
 import { create } from "zustand";
+import { getVersion } from '@tauri-apps/api/app';
+import * as path from '@tauri-apps/api/path';
+import { storage } from "../routes/__root";
 
 export type TLaunchBehavior = "keep" | "minimize" | "close"
-interface IOptions {
-  //Minecraft options
-  maxMemory: number;
-  javaPath: string;
-  fullScreen: boolean;
-  //Launcher Options
-  appDir: string;
-  launchBehavior: TLaunchBehavior;
-  version: string;
+
+// Local options that launcher will store
+interface ILocalOptions {
+  maxMemory?: number;
+  fullScreen?: boolean;
+  launchBehavior?: TLaunchBehavior;
+}
+
+// Options that will set at runtime
+interface IOptions extends ILocalOptions {
+  javaPath?: string;
+  appDir?: string;
+  version?: string;
 }
 interface IOptionsStore extends IOptions {
-  set: (options: IOptions) => void;
-
+  init: () => Promise<void>;
+  set: (change: IOptions) => Promise<void>;
 }
 export const useOptions = create<IOptionsStore>((set) => ({
-  maxMemory: 4,
-  javaPath: "%user%/Java/jre20/bin/java.app",
-  fullScreen: false,
-  appDir: "%user%/Appliations/phynariamc.app",
-  version: "1.0.0",
-  launchBehavior: "minimize",
-  set: (options) => {
-    set(options)
+  init: async () => {
+    const options = await storage?.get<ILocalOptions>("options");
+    const appDir = await path.join(await path.dataDir(), ".phynaria");
+
+    set({
+      version: await getVersion(),
+      javaPath: await path.join(appDir, "runtimes"),
+      appDir,
+      launchBehavior: options?.launchBehavior ?? "keep",
+      maxMemory: options?.maxMemory ?? 2,
+      fullScreen: options?.fullScreen ?? false,
+    });
+  },
+  set: async (change: IOptions) => {
+    const options = {
+      ...useOptions.getState(),
+      ...change,
+    };
+
+    await storage?.set("options", {
+      launchBehavior: options.launchBehavior,
+      maxMemory: options.maxMemory,
+      fullScreen: options.fullScreen,
+    });
+
+    set(options);
   }
 }))

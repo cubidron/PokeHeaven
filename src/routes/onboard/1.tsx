@@ -16,7 +16,7 @@ function RouteComponent() {
           <p className="font-light text-sm text-white/50">
             Don't have an account?{" "}
             <a
-              href="https://phynaria.fr"
+              href="https://phynaria.fr/user/register"
               target="_blank"
               className="text-primary hover:underline">
               Sign Up

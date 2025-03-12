@@ -1,17 +1,18 @@
 import { createFileRoute } from "@tanstack/react-router";
 import NewsSection from "../../components/news";
-import { useOptions } from "../../store/options";
 import useRemote from "../../store/remote";
 import { useAuth } from "../../store/auth";
-import { useState } from "react";
-import { clearLoading, setLoading } from "../../components/loading";
+import React, { useState } from "react";
+import { clearLoading } from "../../components/loading";
 import Alert from "../../components/alert";
 import { create } from "zustand";
 import Mods from "../../components/mods";
+import Spinner from "../../components/Spinner";
 
 export const Route = createFileRoute("/home/")({
   component: RouteComponent,
 });
+
 const useDisabled = create<{
   disabled: boolean;
   setDisabled: (state: boolean) => void;
@@ -19,11 +20,29 @@ const useDisabled = create<{
   disabled: false,
   setDisabled: (state: boolean) => set({ disabled: state }),
 }));
+
+const YoutubeIFrame = React.memo(({ source, onFinish }: { source: string, onFinish: () => void }) => <iframe
+  className="size-full pointer-events-none opacity-0 scale-90 blur-2xl ease-in-out duration-500"
+  onLoad={(e) => {
+    e.currentTarget.classList.remove(
+      "opacity-0",
+      "scale-90",
+      "blur-2xl",
+      "pointer-events-none"
+    );
+    onFinish();
+  }}
+  src={source}
+  title=""
+  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"></iframe>
+);
+
 function RouteComponent() {
   const [modsModal, setModsModal] = useState(false);
   const remote = useRemote();
   const disabled = useDisabled();
-  const auth = useAuth();
+  //const auth = useAuth();
+  const [loading, setLoading] = useState(true);
   return (
     <>
       <section className="flex relative size-full p-12 gap-4 rounded-xl backdrop-blur-sm bg-body/80">
@@ -43,10 +62,10 @@ function RouteComponent() {
               disabled={disabled.disabled}
               onClick={async () => {
                 try {
-                  setLoading("Please wait!", "Launching game...");
-                  if (!auth.isLogged()) return;
-                  setLoading("Please wait!", "Launching game...");
-                  disabled.setDisabled(true);
+                  // setLoading("Please wait!", "Launching game...");
+                  // if (!auth.isLogged()) return;
+                  // setLoading("Please wait!", "Launching game...");
+                  // disabled.setDisabled(true);
                   // await invoke("launch", {
                   //   config: {
                   //     authentication: {
@@ -113,9 +132,8 @@ function RouteComponent() {
                   disabled.setDisabled(false);
                 }
               }}
-              className={`px-3.5 py-1.5 w-full cursor-pointer ease-smooth duration-200 hover:saturate-150 gap-3 bg-primary rounded-lg flex items-center justify-center ${
-                disabled.disabled && "brightness-50 cursor-not-allowed"
-              }`}>
+              className={`px-3.5 py-1.5 w-full cursor-pointer ease-smooth duration-200 hover:saturate-150 gap-3 bg-primary rounded-lg flex items-center justify-center ${disabled.disabled && "brightness-50 cursor-not-allowed"
+                }`}>
               Launch
             </button>
             <button
@@ -134,20 +152,14 @@ function RouteComponent() {
             </button>
           </div>
         </div>
-        <div className="w-1/2 rounded ml-auto overflow-clip aspect-video shrink-0">
-          <iframe
-            className="size-full pointer-events-none opacity-0 scale-90 blur-2xl ease-in-out duration-500"
-            onLoad={(e) => {
-              e.currentTarget.classList.remove(
-                "opacity-0",
-                "scale-90",
-                "blur-2xl",
-                "pointer-events-none"
-              );
-            }}
-            src={remote.videoUrl}
-            title="YouTube video player"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"></iframe>
+        <div className="w-1/2 rounded justify-center flex flex-col size-full h-full items-center overflow-clip aspect-video">
+          {loading && (
+            <div className="flex flex-col items-center gap-4 h-full m-auto inset-0 justify-center">
+              <Spinner className="!h-24" />
+              <p className="text-xl font-light">Loading video...</p>
+            </div>
+          )}
+          <YoutubeIFrame source={remote.videoUrl} onFinish={() => setLoading(false)} />
         </div>
       </section>
       <section className="w-full rounded-xl backdrop-blur-sm relative h-64 gap-1 bg-body/80 mt-auto flex flex-col p-4">

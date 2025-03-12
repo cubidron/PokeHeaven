@@ -2,12 +2,12 @@ import ReactDOM from "react-dom/client";
 import { RouterProvider, createRouter } from "@tanstack/react-router";
 import { routeTree } from "./routeTree.gen";
 import "./styles.css";
-
 import { Helmet } from "react-helmet";
 import { platform } from "@tauri-apps/plugin-os";
 import NotifyComponent from "./components/notification/Notify";
 import Loading from "./components/loading/Loading";
 import AlertComponent from "./components/alert/Alert";
+
 // Set up a Router instance
 const router = createRouter({
   routeTree,
@@ -19,6 +19,10 @@ declare module "@tanstack/react-router" {
   interface Register {
     router: typeof router;
   }
+}
+
+window.onunhandledrejection = (event) => {
+  console.error(event.reason);
 }
 
 const rootElement = document.getElementById("app")!;
@@ -44,9 +48,8 @@ if (!rootElement.innerHTML) {
             border-radius: ${platform() == "macos" ? 10 : 8}px;
           }
           
-          ${
-            platform() !== "macos"
-              ? `
+          ${platform() !== "macos"
+            ? `
           ::-webkit-scrollbar { 
             width: 8px; 
             height: 8px; 
@@ -67,7 +70,7 @@ if (!rootElement.innerHTML) {
             background: rgba(255, 255, 255, 0.6); 
           }
           `
-              : ""
+            : ""
           }
         `}</style>
       </Helmet>

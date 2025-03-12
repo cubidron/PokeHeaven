@@ -18,7 +18,7 @@ function RouteComponent() {
           <p className="font-light text-sm text-white/50">
             Don't have an account?{" "}
             <a
-              href="https://phynaria.fr"
+              href="https://phynaria.fr/user/register"
               target="_blank"
               className="text-primary hover:underline">
               Sign Up
@@ -28,14 +28,14 @@ function RouteComponent() {
         <img src="/images/logo.png" className="size-20 aspect-square" alt="" />
       </span>
       <form
-        onSubmit={(e) => {
+        onSubmit={async (e) => {
           e.preventDefault();
           const input = new FormData(e.currentTarget);
-          auth.login({
-            username: input.get("username") as string,
+          const result = await auth.login({
+            email: input.get("username") as string,
             password: input.get("password") as string,
           });
-          navigate({ to: "/onboard/1" });
+          if (result) navigate({ to: "/onboard/1" });
         }}
         className="flex flex-col gap-1.5 w-full h-max">
         <label htmlFor="username" className="text-sm font-medium">

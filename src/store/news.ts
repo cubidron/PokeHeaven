@@ -16,7 +16,7 @@ interface NewsStore {
 const useNewses = create<NewsStore>((set) => ({
   newses: [],
   fetch: async () => {
-    const response = await fetch("https://cdn.cubidron.com/news.json");
+    const response = await fetch("https:///cdn.cubidron.com/news.json");
 
     if (!response.ok) {
       addNoti("Could not fetch news.");
@@ -24,7 +24,7 @@ const useNewses = create<NewsStore>((set) => ({
     }
 
     const news = await response.json();
-    console.log(news)
+
     if (news) {
       set({ newses: news });
       return;

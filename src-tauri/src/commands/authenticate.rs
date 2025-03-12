@@ -6,7 +6,7 @@ use tauri::{webview::PageLoadEvent, AppHandle, Url, WebviewUrl, WebviewWindowBui
 static AUTHENTICATION_WINDOW_LABEL: &str = "auth";
 
 /// This command authenticates user with
-/// their Microsoft Account.
+/// their Microsoft account.
 #[tauri::command]
 pub async fn authenticate(app: AppHandle, window: Window) -> crate::Result<MinecraftAccount> {
     // Create a channel to receive the authentication result asynchronously.
@@ -41,7 +41,7 @@ pub async fn authenticate(app: AppHandle, window: Window) -> crate::Result<Minec
     .focused(true)
     .on_page_load({
         move |window, payload| {
-            // We try to retrieve the code from the URL
+            // We try to retrieve the code from the URL.
             if let PageLoadEvent::Started = payload.event() {
                 let url = payload.url();
                 let tx = tx.clone();
@@ -59,18 +59,18 @@ pub async fn authenticate(app: AppHandle, window: Window) -> crate::Result<Minec
                         let code = code.to_string();
 
                         // Spawn a new async task to handle the authentication
-                        // because `authenticate`` is blocking
+                        // because `authenticate` is blocking.
                         tauri::async_runtime::spawn(async move {
                             // Handle the window close and authentication sequentially
                             let result = match window.close() {
                                 Ok(_) => {
-                                    // Now that the window is closed, try to authenticate asynchronously
+                                    // Now that the window is closed, try to authenticate asynchronously.
                                     ms_authenticate(code).await.map_err(crate::Error::Launcher)
                                 }
                                 Err(err) => Err(crate::Error::Tauri(err)),
                             };
 
-                            // Send the result through the channel and handle send errors
+                            // Send the result through the channel and handle send errors.
                             if let Err(send_err) = tx.send(result).await {
                                 log::error!("Unable to send authentication result: {:?}", send_err);
                             }
@@ -98,7 +98,7 @@ pub async fn authenticate(app: AppHandle, window: Window) -> crate::Result<Minec
     .build()
     .map_err(crate::Error::Tauri)?;
 
-    // Wait for the result from the channel
+    // Wait for the result from the channel.
     match rx.recv().await {
         Some(Ok(online)) => Ok(online),
         Some(Err(err)) => Err(err),

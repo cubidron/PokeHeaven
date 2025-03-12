@@ -15,17 +15,21 @@
     "core:window:allow-start-dragging",
     "os:default",
     "core:window:allow-set-fullscreen",
-    "sql:allow-execute",
-    "sql:allow-load",
-    "sql:allow-select",
     "http:default",
     {
       "identifier": "http:default",
       "allow": [
         {
           "url": "https://*.cubidron.com"
+        },
+        {
+          "url": "https://phynaria.fr"
+        },
+        {
+          "url": "http://*.phynaria.fr"
         }
       ]
-    }
+    },
+    "store:default"
   ]
 }

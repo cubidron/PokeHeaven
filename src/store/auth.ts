@@ -1,171 +1,106 @@
 import { create } from "zustand";
-import { invoke } from "@tauri-apps/api/core"
-import Alert from "../components/alert";
-import { useDb } from "./db";
-
-//MOJANG AUTH
-// interface MinecraftAccount {
-//   username?: string;
-//   uuid?: string;
-//   access_token?: string;
-//   refresh_token?: string;
-//   xuid?: string;
-//   exp?: number;
-// }
-// interface UserStore {
-//   minecraftAccount?: MinecraftAccount;
-//   minecraftAccounts: MinecraftAccount[];
-//   init: () => Promise<void>;
-//   add: () => Promise<void>;
-//   remove: (account: MinecraftAccount) => Promise<void>;
-//   switch: (account: MinecraftAccount) => void;
-// }
-
-// export const useAuth = create<UserStore>((set) => ({
-//   minecraftAccounts: [],
-//   init: async () => {
-//     const db = useDb.getState().instance!;
-//     const result: MinecraftAccount[] = await db.select(`SELECT * FROM accounts`);
-//     const lastAccount = localStorage.getItem("lastAccount");
-//     const currentAccount = lastAccount
-//       ? result.find(a => a.uuid === lastAccount) : result.length > 0
-//         ? result[0] : undefined;
-
-//     set({
-//       minecraftAccount: currentAccount,
-//       minecraftAccounts: result
-//     });
-//   },
-//   add: async () => {
-//     try {
-//       const account: MinecraftAccount = await invoke("authenticate");
-//       const { minecraftAccounts: accounts } = useAuth.getState();
-//       const existingIndex = accounts.findIndex(a => a.uuid === account.uuid);
-
-//       if (existingIndex !== -1 && accounts) {
-//         accounts[existingIndex] = account;
-//         set({ minecraftAccount: account, minecraftAccounts: accounts });
-//         return;
-//       }
-
-//       const db = useDb.getState().instance!;
-//       const result = await db.execute(
-//         `INSERT INTO accounts (username, access_token, refresh_token, uuid, exp) 
-//        VALUES ($1, $2, $3, $4, $5)`,
-//         [account.username, account.access_token, account.refresh_token, account.uuid, account.exp]
-//       );
-
-//       if (!result.rowsAffected) {
-//         return Alert({
-//           title: "Oh no!",
-//           message: "There was an error during authentication. Please try again later."
-//         });
-//       }
-
-//       set({
-//         minecraftAccount: account,
-//         minecraftAccounts: [...accounts ?? [], account]
-//       });
-//     } catch (error) {
-//       console.error(error);
-//       if (error === "Account does not own Minecraft.") {
-//         return Alert({
-//           title: "Oh no!",
-//           message: "This account does not own Minecraft.",
-//           force: true,
-//           action: () => { useAuth.getState().add() }
-//         });
-//       }
-//       else if (error === "Authentication channel closed unexpectedly") {
-//         return;
-//       }
-//       return Alert({
-//         title: "Oh no!",
-//         message: "There was an error during authentication. Please try again later."
-//       });
-//     }
-//   },
-//   remove: async (account: MinecraftAccount) => {
-//     const state = useAuth.getState();
-//     const db = useDb.getState().instance!;
-
-//     try {
-//       const result = await db.execute(`DELETE FROM accounts WHERE uuid = $1`,
-//         [account.uuid]
-//       );
-
-//       if (result.rowsAffected === 0) {
-//         return Alert({
-//           title: "Oh no!", message: `There was an error during account removal. Please try again later.`
-//         });
-//       }
-
-//       const currentAccount = state.minecraftAccounts?.find((a) => a.uuid !== account.uuid);
-//       localStorage.setItem("lastAccount", currentAccount?.uuid!);
-
-//       set({
-//         minecraftAccount: currentAccount,
-//         minecraftAccounts: state.minecraftAccounts?.filter((a) => a.uuid !== account.uuid)
-//       })
-//     } catch (error) {
-//       return Alert({
-//         title: "Oh no!", message: `There was an error during account removal. Please try again later.`
-//       });
-//     }
-//   },
-//   switch: (account: MinecraftAccount) => {
-//     localStorage.setItem("lastAccount", account.uuid!);
-//     set({
-//       minecraftAccount: account
-//     })
-//   }
-// }))
+import { WEB_API_BASE } from "../constants";
+import { jsonRequest } from "../helpers";
+import { addNoti } from "../components/notification";
+import { storage } from "../routes/__root";
 
 //SYSTEM AUTH
 interface IUser {
+  email?: string;
+  access_token: string;
   username?: string;
-  mail?: string;
-  password?: string;
 }
 interface UserStore {
   user?: IUser
   users: IUser[]
   init: () => Promise<void>;
-  login: (user: IUser) => Promise<void>;
+  login: (user: {
+    email: string;
+    password: string;
+  }) => Promise<boolean>;
   logout: (user: IUser) => Promise<void>;
   switch: (account: IUser) => void;
   isLogged: () => boolean;
 }
 
-export const useAuth = create<UserStore>((set, state) => ({
+export const useAuth = create<UserStore>((set, get) => ({
   users: [],
-  init: async () => { },
-  login: async (user) => {
-    set({
-      user: user,
-      users: [...state().users, user]
-    })
-  },
-  logout: async (user) => {
-    let newlist = state().users.filter(u => u.username !== user.username)
-    if (newlist.length > 0) {
-      set({
-        user: newlist[0],
-        users: newlist
-      })
-    } else {
-      set({
-        user: undefined,
-        users: newlist
-      })
+  init: async () => {
+    try {
+      const userData = await storage?.get<{ all: IUser[]; current: IUser }>("user");
+      if (!userData) return;
+
+      const { current, all } = userData;
+
+      if (current) {
+        const { data, request } = await jsonRequest<{
+          access_token: string;
+          banned: boolean;
+          reason: string;
+          message: string;
+          username: string;
+        }>(`${WEB_API_BASE}/verify`, "POST", {
+          access_token: current.access_token
+        });
+
+        if (data.access_token) {
+          userData.current = {
+            username: data.username,
+            access_token: data.access_token
+          };
+        } else {
+          console.log({ data, request});
+        }
+      }
+      await storage?.set("user", userData);
+      set({ user: userData.current, users: all });
+    } catch (error) {
+      addNoti("Error while loading user data. Please try again or contact support.");
     }
   },
-  switch: (account: IUser) => {
-    set({
-      user: account
-    })
+
+  login: async ({ email, password }) => {
+    try {
+      const { data, request } = await jsonRequest<{
+        access_token: string;
+        banned: boolean;
+        reason: string;
+        message: string;
+        username: string;
+      }>(`${WEB_API_BASE}/authenticate`, "POST", { email, password });
+
+      if (request.status !== 200) {
+        addNoti(data.reason === "invalid_credentials"
+          ? "Invalid credentials"
+          : "Authentication error. Please try again or contact support.");
+        return false;
+      }
+
+      const newUser = { email, access_token: data.access_token, username: data.username };
+      const allUsers = [...get().users.filter(user => user.email !== newUser.email), newUser];
+
+      await storage?.set("user", { all: allUsers, current: newUser });
+      set({ user: newUser, users: allUsers });
+      return true;
+    } catch {
+      return false;
+    }
   },
-  isLogged: () => {
-    return state().user !== undefined
-  }
-}))
+
+  logout: async (user) => {
+    const { users, user: currentUser } = get();
+    const all = users.filter(u => u.username !== user.username);
+    const current = currentUser?.username === user.username ? all[0] : currentUser;
+
+    await jsonRequest(`${WEB_API_BASE}/logout`, "POST", { access_token: user.access_token });
+    await storage?.set("user", { all, current });
+    set({ user: current, users: all });
+  },
+
+  switch: async (account) => {
+    await storage?.set("user", { all: get().users, current: account });
+    set({ user: account });
+  },
+
+  isLogged: () => get().user !== undefined
+}));
