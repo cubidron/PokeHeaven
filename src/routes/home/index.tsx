@@ -120,7 +120,7 @@ function RouteComponent() {
             </button>
             <button
               onClick={() => setModsModal(true)}
-              className="h-10 aspect-square shrink-0 cursor-pointer ease-smooth duration-200 hover:saturate-150 bg-body hover:bg-primary rounded-lg flex items-center justify-center">
+              className="h-10 aspect-square shrink-0 cursor-pointer ease-smooth duration-200 hover:saturate-150 bg-dark hover:bg-primary rounded-lg flex items-center justify-center">
               <svg
                 className="h-5"
                 viewBox="0 0 18 18"

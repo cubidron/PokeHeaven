@@ -8,7 +8,7 @@ export default function Switch(props: {
   return (
     <button
       onClick={() => props.onChange(!props.value)}
-      className={`bg-body w-10 flex relative rounded-full p-1 h-6 ${
+      className={`bg-dark w-10 flex relative rounded-full p-0.5 h-6 ${
         props.value ? "justify-end" : "justify-start"
       } ${props.className}`}>
       <motion.div
