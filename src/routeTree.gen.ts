@@ -17,6 +17,7 @@ import { Route as IndexImport } from './routes/index'
 import { Route as OnboardIndexImport } from './routes/onboard/index'
 import { Route as HomeIndexImport } from './routes/home/index'
 import { Route as Onboard1Import } from './routes/onboard/1'
+import { Route as HomeSettingsImport } from './routes/home/settings'
 
 // Create/Update Routes
 
@@ -56,6 +57,12 @@ const Onboard1Route = Onboard1Import.update({
   getParentRoute: () => OnboardRouteRoute,
 } as any)
 
+const HomeSettingsRoute = HomeSettingsImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => HomeRouteRoute,
+} as any)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -80,6 +87,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/onboard'
       preLoaderRoute: typeof OnboardRouteImport
       parentRoute: typeof rootRoute
+    }
+    '/home/settings': {
+      id: '/home/settings'
+      path: '/settings'
+      fullPath: '/home/settings'
+      preLoaderRoute: typeof HomeSettingsImport
+      parentRoute: typeof HomeRouteImport
     }
     '/onboard/1': {
       id: '/onboard/1'
@@ -108,10 +122,12 @@ declare module '@tanstack/react-router' {
 // Create and export the route tree
 
 interface HomeRouteRouteChildren {
+  HomeSettingsRoute: typeof HomeSettingsRoute
   HomeIndexRoute: typeof HomeIndexRoute
 }
 
 const HomeRouteRouteChildren: HomeRouteRouteChildren = {
+  HomeSettingsRoute: HomeSettingsRoute,
   HomeIndexRoute: HomeIndexRoute,
 }
 
@@ -137,6 +153,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/home': typeof HomeRouteRouteWithChildren
   '/onboard': typeof OnboardRouteRouteWithChildren
+  '/home/settings': typeof HomeSettingsRoute
   '/onboard/1': typeof Onboard1Route
   '/home/': typeof HomeIndexRoute
   '/onboard/': typeof OnboardIndexRoute
@@ -144,6 +161,7 @@ export interface FileRoutesByFullPath {
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/home/settings': typeof HomeSettingsRoute
   '/onboard/1': typeof Onboard1Route
   '/home': typeof HomeIndexRoute
   '/onboard': typeof OnboardIndexRoute
@@ -154,6 +172,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/home': typeof HomeRouteRouteWithChildren
   '/onboard': typeof OnboardRouteRouteWithChildren
+  '/home/settings': typeof HomeSettingsRoute
   '/onboard/1': typeof Onboard1Route
   '/home/': typeof HomeIndexRoute
   '/onboard/': typeof OnboardIndexRoute
@@ -161,14 +180,22 @@ export interface FileRoutesById {
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/home' | '/onboard' | '/onboard/1' | '/home/' | '/onboard/'
+  fullPaths:
+    | '/'
+    | '/home'
+    | '/onboard'
+    | '/home/settings'
+    | '/onboard/1'
+    | '/home/'
+    | '/onboard/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/onboard/1' | '/home' | '/onboard'
+  to: '/' | '/home/settings' | '/onboard/1' | '/home' | '/onboard'
   id:
     | '__root__'
     | '/'
     | '/home'
     | '/onboard'
+    | '/home/settings'
     | '/onboard/1'
     | '/home/'
     | '/onboard/'
@@ -208,6 +235,7 @@ export const routeTree = rootRoute
     "/home": {
       "filePath": "home/route.tsx",
       "children": [
+        "/home/settings",
         "/home/"
       ]
     },
@@ -217,6 +245,10 @@ export const routeTree = rootRoute
         "/onboard/1",
         "/onboard/"
       ]
+    },
+    "/home/settings": {
+      "filePath": "home/settings.tsx",
+      "parent": "/home"
     },
     "/onboard/1": {
       "filePath": "onboard/1.tsx",

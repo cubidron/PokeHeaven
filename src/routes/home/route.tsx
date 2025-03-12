@@ -291,7 +291,15 @@ function RouteComponent() {
         <div className="text-xs absolute inset-0 size-max m-auto text-white/50">
           version {options.version}
         </div>
-        <p className="text-xs ml-auto text-white/50">powered by Cubidron</p>
+        <p className="text-xs ml-auto text-white/50">
+          powered by{" "}
+          <a
+            href="https://cubidron.com"
+            target="_blank"
+            className="font-medium hover:underline hover:text-primary">
+            Cubidron
+          </a>
+        </p>
       </footer>
     </div>
   );
