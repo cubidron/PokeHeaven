@@ -4,26 +4,25 @@ interface SpinnerProps extends React.SVGProps<SVGSVGElement> {
   className?: string;
 }
 
-const spinnerStyle: React.CSSProperties = {
-  color: "var(--c1)",
-  boxSizing: "border-box",
-  width: "44px",
-  height: "44px",
-  padding: "3px",
-  overflow: "visible",
-};
-
-const circleStyle: React.CSSProperties = {
-  fill: "none",
-  stroke: "currentColor",
-  strokeWidth: "12px",
-  strokeLinecap: "round",
-  transformOrigin: "center",
-  strokeDasharray: "0 314.159%", // Initial value to hide the circle
-  strokeDashoffset: "0%", // Initial value to hide the circle
-};
-
 const Spinner: React.FC<SpinnerProps> = ({ className, ...props }) => {
+  const spinnerStyle: React.CSSProperties = {
+    color: "var(--c1)",
+    boxSizing: "border-box",
+    width: "44px",
+    height: "44px",
+    padding: "3px",
+    overflow: "visible",
+  };
+
+  const circleStyle: React.CSSProperties = {
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: props.stroke ? `${props.stroke}px` : "12px",
+    strokeLinecap: "round",
+    transformOrigin: "center",
+    strokeDasharray: "0 314.159%", // Initial value to hide the circle
+    strokeDashoffset: "0%", // Initial value to hide the circle
+  };
   return (
     <svg {...props} style={spinnerStyle} className={`spinner ${className}`}>
       <circle cx="50%" cy="50%" r="50%" style={circleStyle}>

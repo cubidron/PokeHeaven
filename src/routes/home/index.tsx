@@ -21,20 +21,24 @@ const useDisabled = create<{
   setDisabled: (state: boolean) => set({ disabled: state }),
 }));
 
-const YoutubeIFrame = React.memo(({ source, onFinish }: { source: string, onFinish: () => void }) => <iframe
-  className="size-full pointer-events-none opacity-0 scale-90 blur-2xl ease-in-out duration-500"
-  onLoad={(e) => {
-    e.currentTarget.classList.remove(
-      "opacity-0",
-      "scale-90",
-      "blur-2xl",
-      "pointer-events-none"
-    );
-    onFinish();
-  }}
-  src={source}
-  title=""
-  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"></iframe>
+const YoutubeIFrame = React.memo(
+  ({ source, onFinish }: { source: string; onFinish: () => void }) => (
+    <iframe
+      className="size-full pointer-events-none opacity-0 scale-90 blur-2xl ease-in-out duration-500"
+      onLoad={(e) => {
+        e.currentTarget.classList.remove(
+          "opacity-0",
+          "scale-90",
+          "blur-2xl",
+          "pointer-events-none"
+        );
+        onFinish();
+      }}
+      src={source}
+      title=""
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+    />
+  )
 );
 
 function RouteComponent() {
@@ -132,8 +136,9 @@ function RouteComponent() {
                   disabled.setDisabled(false);
                 }
               }}
-              className={`px-3.5 py-1.5 w-full cursor-pointer ease-smooth duration-200 hover:saturate-150 gap-3 bg-primary rounded-lg flex items-center justify-center ${disabled.disabled && "brightness-50 cursor-not-allowed"
-                }`}>
+              className={`px-3.5 py-1.5 w-full cursor-pointer ease-smooth duration-200 hover:saturate-150 gap-3 bg-primary rounded-lg flex items-center justify-center ${
+                disabled.disabled && "brightness-50 cursor-not-allowed"
+              }`}>
               Launch
             </button>
             <button
@@ -152,14 +157,16 @@ function RouteComponent() {
             </button>
           </div>
         </div>
-        <div className="w-1/2 rounded justify-center flex flex-col size-full h-full items-center overflow-clip aspect-video">
+        <div className="w-1/2 shrink-0 rounded relative justify-center flex flex-col size-full h-full items-center overflow-clip aspect-video">
           {loading && (
-            <div className="flex flex-col items-center gap-4 h-full m-auto inset-0 justify-center">
+            <div className="flex absolute flex-col items-center gap-4 h-full m-auto inset-0 justify-center">
               <Spinner className="!h-24" />
-              <p className="text-xl font-light">Loading video...</p>
             </div>
           )}
-          <YoutubeIFrame source={remote.videoUrl} onFinish={() => setLoading(false)} />
+          <YoutubeIFrame
+            source={remote.videoUrl}
+            onFinish={() => setLoading(false)}
+          />
         </div>
       </section>
       <section className="w-full rounded-xl backdrop-blur-sm relative h-64 gap-1 bg-body/80 mt-auto flex flex-col p-4">

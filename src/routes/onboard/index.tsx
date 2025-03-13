@@ -1,6 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { useAuth } from "../../store/auth";
+import Spinner from "../../components/Spinner";
 
 export const Route = createFileRoute("/onboard/")({
   component: RouteComponent,
@@ -10,6 +11,7 @@ function RouteComponent() {
   const navigate = useNavigate();
   const auth = useAuth();
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, _loading] = useState(false);
   return (
     <>
       <span className="flex justify-between">
@@ -30,14 +32,16 @@ function RouteComponent() {
       <form
         onSubmit={async (e) => {
           e.preventDefault();
+          _loading(true);
           const input = new FormData(e.currentTarget);
           const result = await auth.login({
             email: input.get("username") as string,
             password: input.get("password") as string,
           });
+          _loading(false);
           if (result) navigate({ to: "/onboard/1" });
         }}
-        className="flex flex-col gap-1.5 w-full h-max">
+        className={`flex flex-col gap-1.5 w-full h-max ${loading && "scale-95 brightness-50"} ease-smooth duration-700`}>
         <label htmlFor="username" className="text-sm font-medium">
           Username
         </label>
@@ -80,17 +84,21 @@ function RouteComponent() {
         </div>
         <button className="px-3.5 py-1.5 cursor-pointer ease-smooth duration-200 hover:saturate-150 gap-3 bg-primary rounded-lg mt-3 flex items-center justify-center">
           Sign in
-          <svg
-            width="12"
-            height="12"
-            viewBox="0 0 12 12"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg">
-            <path
-              d="M5.475 0.525C5.18505 0.81495 5.18505 1.28505 5.475 1.575L7.44289 3.54289C8.07286 4.17286 7.62669 5.25 6.73579 5.25H0.750001C0.335787 5.25 0 5.58579 0 6C0 6.41421 0.335786 6.75 0.75 6.75H6.73579C7.62669 6.75 8.07286 7.82714 7.44289 8.45711L5.475 10.425C5.18505 10.7149 5.18505 11.1851 5.475 11.475C5.76495 11.7649 6.23505 11.7649 6.525 11.475L11.2929 6.70711C11.6834 6.31658 11.6834 5.68342 11.2929 5.29289L6.525 0.525C6.23505 0.235051 5.76495 0.23505 5.475 0.525Z"
-              fill="#E4E4E4"
-            />
-          </svg>
+          {loading ? (
+            <Spinner stroke="4" className="!size-4.5" />
+          ) : (
+            <svg
+              width="12"
+              height="12"
+              viewBox="0 0 12 12"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M5.475 0.525C5.18505 0.81495 5.18505 1.28505 5.475 1.575L7.44289 3.54289C8.07286 4.17286 7.62669 5.25 6.73579 5.25H0.750001C0.335787 5.25 0 5.58579 0 6C0 6.41421 0.335786 6.75 0.75 6.75H6.73579C7.62669 6.75 8.07286 7.82714 7.44289 8.45711L5.475 10.425C5.18505 10.7149 5.18505 11.1851 5.475 11.475C5.76495 11.7649 6.23505 11.7649 6.525 11.475L11.2929 6.70711C11.6834 6.31658 11.6834 5.68342 11.2929 5.29289L6.525 0.525C6.23505 0.235051 5.76495 0.23505 5.475 0.525Z"
+                fill="#E4E4E4"
+              />
+            </svg>
+          )}
         </button>
       </form>
     </>
