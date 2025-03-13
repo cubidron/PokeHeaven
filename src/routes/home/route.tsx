@@ -6,13 +6,12 @@ import {
   useRouter,
 } from "@tanstack/react-router";
 import { platform } from "@tauri-apps/plugin-os";
-// const platform = () => "windows";
 import { TitleButtons } from "../../components/tauri/TitleBar";
 import { AnimatePresence, motion } from "motion/react";
 import { useAuth } from "../../store/auth";
 import { useEffect, useState } from "react";
 import { useOptions } from "../../store/options";
-import { getVersion } from "@tauri-apps/api/app";
+
 export const Route = createFileRoute("/home")({
   component: RouteComponent,
 });

@@ -1,7 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import NewsSection from "../../components/news";
 import useRemote from "../../store/remote";
-import { useAuth } from "../../store/auth";
 import React, { useState } from "react";
 import { clearLoading } from "../../components/loading";
 import Alert from "../../components/alert";
@@ -36,7 +35,7 @@ const YoutubeIFrame = React.memo(
       }}
       src={source}
       title=""
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      sandbox="allow-scripts allow-same-origin"
     />
   )
 );
