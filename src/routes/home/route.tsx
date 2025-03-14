@@ -39,12 +39,12 @@ function RouteComponent() {
     };
   }, []);
   return (
-    <div className="flex bg-black/20 w-full h-svh overflow-y-auto p-1.5 flex-col">
+    <div className="flex bg-black/20 w-full h-svh overflow-y-auto p-1.5 flex-col relative max-h-svh">
       <span className="absolute inset-0 size-full bg-cover bg-center bg-[url('/images/bg.png')] -z-10"></span>
       <span className="absolute inset-0 size-full bg-black/60 -z-10"></span>
       <header
         data-tauri-drag-region
-        className={`flex rounded-xl items-center p-1 gap-1 z-50 bg-body/80 backdrop-blur-2xl w-full h-14`}>
+        className={`flex shrink-0 rounded-xl items-center p-1 gap-1 z-50 bg-body/80 backdrop-blur-2xl w-full h-14`}>
         <span
           className={`flex gap-1 items-center h-full ${platform() == "macos" ? "mr-auto" : "ml-auto order-last flex-row-reverse"}`}>
           <TitleButtons className={`z-50 relative px-2`} />
@@ -178,15 +178,17 @@ function RouteComponent() {
                         className="bg-side size-8 rounded"></div>
                       <span className="relative">
                         <div
-                          className={`size-4 rounded-full grid place-items-center absolute -right-1 -top-1 ${auth?.user?.username == account.username
-                            ? "bg-green-500/40"
-                            : "bg-red-500/40"
-                            }`}>
+                          className={`size-4 rounded-full grid place-items-center absolute -right-1 -top-1 ${
+                            auth?.user?.username == account.username
+                              ? "bg-green-500/40"
+                              : "bg-red-500/40"
+                          }`}>
                           <div
-                            className={`size-2 rounded-full ${auth?.user?.username == account.username
-                              ? "bg-green-500"
-                              : "bg-red-500"
-                              }`}></div>
+                            className={`size-2 rounded-full ${
+                              auth?.user?.username == account.username
+                                ? "bg-green-500"
+                                : "bg-red-500"
+                            }`}></div>
                         </div>
                         <img
                           onLoad={(e) => {
@@ -215,10 +217,11 @@ function RouteComponent() {
                             account.username != auth?.user?.username &&
                               auth.switch(account);
                           }}
-                          className={`button shrink-0 hover:bg-white/5 rounded-lg ease-smooth duration-200 px-2 py-1 overflow-hidden relative ${auth?.user?.username === account.username
-                            ? "hover:bg-dark cursor-default"
-                            : ""
-                            }`}>
+                          className={`button shrink-0 hover:bg-white/5 rounded-lg ease-smooth duration-200 px-2 py-1 overflow-hidden relative ${
+                            auth?.user?.username === account.username
+                              ? "hover:bg-dark cursor-default"
+                              : ""
+                          }`}>
                           <p>Switch</p>
                         </button>
                       )}
@@ -269,10 +272,10 @@ function RouteComponent() {
           Settings
         </Link>
       </header>
-      <main className="h-full flex flex-col gap-2 py-2">
+      <main className="h-full flex shrink flex-col gap-2 py-2 relative">
         <Outlet />
       </main>
-      <footer className="w-full relative flex items-center h-8 bg-body/80 backdrop-blur-2xl pr-3 rounded-lg">
+      <footer className="w-full shrink-0 relative flex items-center h-8 bg-body/80 backdrop-blur-2xl pr-3 rounded-lg">
         <img
           src="/images/logo.png"
           className="h-full aspect-square w-auto object-contain py-1"

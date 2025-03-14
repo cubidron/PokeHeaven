@@ -2,6 +2,7 @@ import { create } from "zustand";
 // import { fetch } from "@tauri-apps/plugin-http";
 
 interface IServer {
+  icon?: string;
   title?: string;
   profile?: string;
   description?: string;

@@ -8,12 +8,32 @@
   },
   "servers": [
     {
-      "title":"ATM10",
+      "icon": "/images/logo.png",
+      "title": "ATM10",
       "profile": "phynariamc",
       "description": "Elesya enhances Minecraft in various ways, preserving its core while introducing exciting new elements.",
-      "version":"1.0.0",
-      "serverName":"Phynaria MC | ATM10",
-      "ip":"hypixel.net",
+      "version": "1.0.0",
+      "serverName": "Phynaria MC | ATM10",
+      "ip": "hypixel.net",
+      "port": 25565,
+      "minecraft": {
+        "version": "1.21.3",
+        "loader": {
+          "type": "fabric",
+          "version": "0.16.10"
+        },
+        "exclude": []
+      },
+      "videoUrl": "https://www.youtube.com/embed/0KROgbD0kfQ"
+    },
+    {
+      "icon": "/images/logo.png",
+      "title": "ATM11",
+      "profile": "phynariamc2",
+      "description": "Elesya enhances Minecraft in various ways, preserving its core while introducing exciting new elements.",
+      "version": "1.0.0",
+      "serverName": "Phynaria MC | ATM11",
+      "ip": "hypixel.net",
       "port": 25565,
       "minecraft": {
         "version": "1.21.3",
