@@ -5,7 +5,7 @@ pub use error::Error;
 
 pub type Result<T> = std::result::Result<T, Error>;
 
-use commands::authenticate;
+use tauri::Manager;
 use tauri_plugin_http::reqwest;
 
 struct AppState {
@@ -19,7 +19,21 @@ pub fn run() {
         .plugin(tauri_plugin_http::init())
         .plugin(tauri_plugin_os::init())
         .plugin(tauri_plugin_opener::init())
-        .invoke_handler(tauri::generate_handler![authenticate])
+        .invoke_handler(tauri::generate_handler![])
+        .setup(|app| {
+            let request = reqwest::Client::builder()
+                .user_agent(concat!(
+                    env!("CARGO_PKG_NAME"),
+                    "/",
+                    env!("CARGO_PKG_VERSION"),
+                ))
+                .cookie_store(true)
+                .build()
+                .unwrap();
+
+            app.manage(AppState { request });
+            Ok(())
+        })
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

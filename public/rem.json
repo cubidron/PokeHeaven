@@ -1,23 +1,4 @@
 {
-  "exclude": [
-    "assets",
-    "libraries",
-    "logs",
-    "runtime",
-    "saves",
-    "versions",
-    "options.txt",
-    "optionsof.txt",
-    ".fabric"
-  ],
-  "title": "Elesya",
-  "updateZipLink": "https://launcher.elesya.eu/config/bundle.zip",
-  "updateVersion": "1.0.0",
-  "gameVersion": "1.21.4",
-  "modApi": "Fabric",
-  "modApiVersion": "0.16.9",
-  "serverIp": "humerus.lesbrascasses.net",
-  "serverPort": 11601,
   "discordRpc": {
     "clientId": "1312106083208269857",
     "stateText": "Playing Elesya Minecraft",
@@ -25,21 +6,27 @@
     "largeText": "Elesya Logo",
     "details": "https://elesya.eu"
   },
-  "presets": [
+  "servers": [
     {
-      "folderName": "high",
-      "name": "High (Default)",
-      "description": "PC requirements High."
-    },
-    {
-      "folderName": "low",
-      "name": "Low",
-      "description": "PC requirements Low."
+      "title":"ATM10",
+      "profile": "phynariamc",
+      "description": "Elesya enhances Minecraft in various ways, preserving its core while introducing exciting new elements.",
+      "version":"1.0.0",
+      "serverName":"Phynaria MC | ATM10",
+      "ip":"hypixel.net",
+      "port": 25565,
+      "minecraft": {
+        "version": "1.21.3",
+        "loader": {
+          "type": "fabric",
+          "version": "0.16.10"
+        },
+        "exclude": []
+      },
+      "videoUrl": "https://www.youtube.com/embed/0KROgbD0kfQ"
     }
   ],
-  "version": "0.1.0",
-  "videoUrl": "https://www.youtube.com/embed/0KROgbD0kfQ",
-  "description": "Elesya enhances Minecraft in various ways, preserving its core while introducing exciting new elements.",
+  "version": "1.0.0",
   "website": "https://discord.gg/z62fWza",
   "notes": "nothing",
   "pub_date": "2024-02-18T16:28:57Z",

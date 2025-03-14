@@ -1,71 +1,62 @@
 import { create } from "zustand";
 // import { fetch } from "@tauri-apps/plugin-http";
 
-interface IPreset {
-  folderName: string;
-  name: string;
-  description: string;
+interface IServer {
+  title?: string;
+  profile?: string;
+  description?: string;
+  version?: string;
+  serverName?: string;
+  ip?: string;
+  port?: number;
+  minecraft?: {
+    version: string;
+    loader: {
+      type: string;
+      version: string;
+    };
+    exclude: string[];
+  };
+  videoUrl?: string;
 }
 
 interface IRemote {
-  exclude: string[];
-  updateZipLink: string;
-  updateVersion: string;
-  gameVersion: string;
-  modApi: string;
-  modApiVersion: string;
-  serverIp: string;
-  serverPort: number;
-  memory: {
-    min: number;
-    max: number;
-  };
-  discordRpc: {
+  discordRpc?: {
     clientId: string;
     stateText: string;
     largeImage: string;
     largeText: string;
     details: string;
-    buttons: any[];
   };
-  videoUrl: string;
-  presets: IPreset[];
-  version: string;
-  title: string;
-  description: string;
-  website: string;
+  servers?: IServer[];
+  version?: string;
+  website?: string;
+  notes?: string;
+  pub_date?: string;
+  platforms?: {
+    "windows-x86_64": {
+      signature: string;
+      url: string;
+    };
+    "darwin-x86_64": {
+      signature: string;
+      url: string;
+    };
+    "darwin-aarch64": {
+      signature: string;
+      url: string;
+    };
+    "linux-x86_64": {
+      signature: string;
+      url: string;
+    };
+  };
 }
 interface RemoteStore extends IRemote {
   init: () => Promise<void>;
 }
 
 const useRemote = create<RemoteStore>((set) => ({
-  exclude: [],
-  updateZipLink: "",
-  updateVersion: "",
-  gameVersion: "",
-  modApi: "",
-  modApiVersion: "",
-  serverIp: "",
-  videoUrl: "",
-  serverPort: 0,
-  memory: {
-    min: 4096,
-    max: 8192,
-  },
-  presets: [],
-  discordRpc: {
-    clientId: "",
-    stateText: "",
-    largeImage: "",
-    largeText: "",
-    details: "",
-    buttons: [],
-  },
-  version: "",
-  description: "",
-  title: "",
-  website: "",
   init: async () => {
     const response = await fetch("/rem.json");
 
@@ -76,13 +67,7 @@ const useRemote = create<RemoteStore>((set) => ({
     const data = await response.json();
 
     set({
-      ...data,
-      presets: [...data.presets, {
-        name: "Advanced",
-        description:
-          "Allow you to change settings on your own.",
-        folderName: "advanced",
-      }]
+      ...data
     });
   },
 }));

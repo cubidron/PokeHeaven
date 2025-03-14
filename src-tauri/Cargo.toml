@@ -29,7 +29,7 @@ serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 window-vibrancy = "0.5.2"
 tauri-plugin-os = "2"
-lyceris = { git = "https://github.com/BatuhanAksoyy/lyceris", rev = "df35c3f8bd6b7db68c33f717df5c6b65c5fb2754", version = "1.0.2" }
+lyceris = "1.1.1"
 thiserror = "2.0.11"
 log = "0.4.26"
 tauri-plugin-store = "2"
