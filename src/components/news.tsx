@@ -154,7 +154,7 @@ export default function NewsSection() {
       <ul
         ref={sliderRef}
         id="news"
-        className={`relative snap-x snap-mandatory ease-in-out duration-500 h-[12rem] w-full mt-4 scroll-smooth flex overflow-y-auto noscroll flex-row gap-4 ${
+        className={`relative snap-x snap-mandatory hidden-scroll ease-in-out duration-500 h-[12rem] w-full mt-4 scroll-smooth flex overflow-y-auto noscroll flex-row gap-4 ${
           !loading ? "opacity-100 scale-100" : "opacity-10 blur-2xl scale-90"
         }`}
         onScroll={() => {
