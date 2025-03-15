@@ -44,6 +44,82 @@
         "exclude": []
       },
       "videoUrl": "https://www.youtube.com/embed/0KROgbD0kfQ"
+    },
+    {
+      "icon": "/images/logo.png",
+      "title": "ATM12",
+      "profile": "phynariamc3",
+      "description": "Elesya enhances Minecraft in various ways, preserving its core while introducing exciting new elements.",
+      "version": "1.0.0",
+      "serverName": "Phynaria MC | ATM12",
+      "ip": "hypixel.net",
+      "port": 25565,
+      "minecraft": {
+        "version": "1.21.3",
+        "loader": {
+          "type": "fabric",
+          "version": "0.16.10"
+        },
+        "exclude": []
+      },
+      "videoUrl": "https://www.youtube.com/embed/0KROgbD0kfQ"
+    },
+    {
+      "icon": "/images/logo.png",
+      "title": "ATM13",
+      "profile": "phynariamc4",
+      "description": "Elesya enhances Minecraft in various ways, preserving its core while introducing exciting new elements.",
+      "version": "1.0.0",
+      "serverName": "Phynaria MC | ATM13",
+      "ip": "hypixel.net",
+      "port": 25565,
+      "minecraft": {
+        "version": "1.21.3",
+        "loader": {
+          "type": "fabric",
+          "version": "0.16.10"
+        },
+        "exclude": []
+      },
+      "videoUrl": "https://www.youtube.com/embed/0KROgbD0kfQ"
+    },
+    {
+      "icon": "/images/logo.png",
+      "title": "ATM14",
+      "profile": "phynariamc5",
+      "description": "Elesya enhances Minecraft in various ways, preserving its core while introducing exciting new elements.",
+      "version": "1.0.0",
+      "serverName": "Phynaria MC | ATM14",
+      "ip": "hypixel.net",
+      "port": 25565,
+      "minecraft": {
+        "version": "1.21.3",
+        "loader": {
+          "type": "fabric",
+          "version": "0.16.10"
+        },
+        "exclude": []
+      },
+      "videoUrl": "https://www.youtube.com/embed/0KROgbD0kfQ"
+    },
+    {
+      "icon": "/images/logo.png",
+      "title": "ATM15",
+      "profile": "phynariamc6",
+      "description": "Elesya enhances Minecraft in various ways, preserving its core while introducing exciting new elements.",
+      "version": "1.0.0",
+      "serverName": "Phynaria MC | ATM15",
+      "ip": "hypixel.net",
+      "port": 25565,
+      "minecraft": {
+        "version": "1.21.3",
+        "loader": {
+          "type": "fabric",
+          "version": "0.16.10"
+        },
+        "exclude": []
+      },
+      "videoUrl": "https://www.youtube.com/embed/0KROgbD0kfQ"
     }
   ],
   "version": "1.0.0",

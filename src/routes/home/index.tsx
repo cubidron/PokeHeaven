@@ -8,6 +8,7 @@ import { create } from "zustand";
 import Mods from "../../components/mods";
 import Spinner from "../../components/Spinner";
 import { AnimatePresence, motion } from "motion/react";
+import DragWrapper from "../../components/DragWrapper";
 
 export const Route = createFileRoute("/home/")({
   component: RouteComponent,
@@ -51,20 +52,33 @@ function RouteComponent() {
 
   return (
     <>
-      <section className="flex relative size-full overflow-clip max-h-full contain-strict p-8 gap-4 rounded-xl backdrop-blur-sm bg-body/80">
-        <span className=" absolute inset-4 h-4 flex">
-          {remote.servers &&
-            remote.servers.map((server) => (
-              <button
-                key={server.serverName}
-                onClick={() => setSelectedServer(server.profile || "")}
-                className={`px-3 py-1.5 cursor-pointer ease-smooth duration-200 hover:saturate-150 bg-dark hover:bg-primary rounded-lg flex items-center justify-center ${
-                  selectedServer === server.profile && "bg-primary"
+      <span className="flex h-12 shrink-0 relative rounded-xl backdrop-blur-sm bg-body/80">
+        <DragWrapper rootClass="border-2 border-red-500">
+          <ul className="h-full grid grid-flow-col w-full max-w-full border-2 border-blue-500 relative p-1 hidden-scroll grid-rows-1 gap-1 overflow-x-auto overflow-y-hidden">
+            {remote?.servers?.map((server) => (
+              <div
+                // onClick={() => setSelectedServer(server.profile || "")}
+                className={`shrink-0 flex pointer-events-none outline-none w-56 items-center justify-center hover:bg-white/5 ease-smooth duration-200 rounded-lg ${
+                  selectedServer === server.profile
+                    ? "text-white bg-white/5"
+                    : " opacity-40 mix-blend-luminosity"
                 }`}>
-                {server.serverName}
-              </button>
+                <img
+                  src={server.icon || "/images/logo.png"}
+                  className="h-full p-1 inline-block aspect-square max-w-max"
+                  alt=""
+                />
+                <h1
+                  title={server.serverName}
+                  className="text-sm font-medium text-ellipsis line-clamp-1">
+                  {server.serverName || "Unnamed Server"}
+                </h1>
+              </div>
             ))}
-        </span>
+          </ul>
+        </DragWrapper>
+      </span>
+      <section className="flex relative size-full overflow-clip max-h-full contain-strict p-8 gap-4 rounded-xl backdrop-blur-sm bg-body/80">
         <AnimatePresence mode="wait">
           {remote.servers &&
             remote.servers
