@@ -74,7 +74,7 @@ function RouteComponent() {
                 }`}>
                 <img
                   src={server.icon || "/images/logo.png"}
-                  className="h-full p-1 inline-block aspect-square max-w-max"
+                  className="h-full p-1 pointer-events-none inline-block aspect-square max-w-max"
                   alt=""
                 />
                 <h1
