@@ -39,7 +39,7 @@ function RouteComponent() {
     };
   }, []);
   return (
-    <div className="flex bg-black/20 w-full h-svh overflow-y-auto p-1.5 flex-col relative max-h-svh">
+    <div className="flex bg-black/20 contain-content w-full h-svh overflow-clip p-1.5 flex-col relative max-h-svh">
       <span className="absolute inset-0 size-full bg-cover bg-center bg-[url('/images/bg.png')] -z-10"></span>
       <span className="absolute inset-0 size-full bg-black/60 -z-10"></span>
       <header
@@ -272,7 +272,7 @@ function RouteComponent() {
           Settings
         </Link>
       </header>
-      <main className="h-full flex shrink contain-content flex-col gap-2 py-2 relative">
+      <main className="h-full flex shrink flex-col gap-2 py-2 relative">
         <Outlet />
       </main>
       <footer className="w-full shrink-0 relative flex items-center h-8 bg-body/80 backdrop-blur-2xl pr-3 rounded-lg">
