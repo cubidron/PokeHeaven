@@ -1,7 +1,6 @@
 import { fetch } from "@tauri-apps/plugin-http";
 
 export const jsonRequest = async<T>(url: string, method: string, body?: any): Promise<{ data: T, request: Response }> => {
-    console.log(url);
     const response = await fetch(url, {
         method,
         headers: {

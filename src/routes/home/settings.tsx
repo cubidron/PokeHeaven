@@ -72,7 +72,7 @@ function RouteComponent() {
           </span>
           <hr />
           <span className="flex justify-between gap-1 items-center">
-            <p className="text-xs text-white/60">Full screen minecraft.</p>
+            <p className="text-xs text-white/60">Fullscreen minecraft.</p>
             <Switch
               value={options.fullScreen!}
               onChange={(e) => options.set({ fullScreen: e })}

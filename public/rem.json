@@ -36,10 +36,10 @@
       "ip": "hypixel.net",
       "port": 25565,
       "minecraft": {
-        "version": "1.21.3",
+        "version": "1.21.4",
         "loader": {
-          "type": "fabric",
-          "version": "0.16.10"
+          "type": "neoforge",
+          "version": "21.4.111-beta"
         },
         "exclude": []
       },

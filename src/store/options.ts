@@ -10,6 +10,7 @@ interface ILocalOptions {
   maxMemory?: number;
   fullScreen?: boolean;
   launchBehavior?: TLaunchBehavior;
+  selectedServer?: string;
 }
 
 // Options that will set at runtime
@@ -34,6 +35,7 @@ export const useOptions = create<IOptionsStore>((set) => ({
       launchBehavior: options?.launchBehavior ?? "keep",
       maxMemory: options?.maxMemory ?? 2,
       fullScreen: options?.fullScreen ?? false,
+      selectedServer: options?.selectedServer
     });
   },
   set: async (change: IOptions) => {
@@ -46,6 +48,7 @@ export const useOptions = create<IOptionsStore>((set) => ({
       launchBehavior: options.launchBehavior,
       maxMemory: options.maxMemory,
       fullScreen: options.fullScreen,
+      selectedServer: options.selectedServer
     });
 
     set(options);

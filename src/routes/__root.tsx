@@ -7,11 +7,12 @@ import {
 import { useEffect } from "react";
 import { useAuth } from "../store/auth";
 import useNewses from "../store/news";
-import { clearLoading, setLoading } from "../components/loading";
+import { clearLoading, setLoading, useLoading } from "../components/loading";
 import useMods from "../store/mods";
 import useRemote from "../store/remote";
 import { useOptions } from "../store/options";
 import { load, Store } from "@tauri-apps/plugin-store";
+import { listen, UnlistenFn } from "@tauri-apps/api/event";
 
 export let storage: Store | undefined;
 
@@ -29,6 +30,7 @@ function RootComponent() {
   const options = useOptions();
 
   useEffect(() => {
+    let unlisten: UnlistenFn | undefined;
     (async () => {
       try {
         storage = await load('storage.json', { autoSave: true });
@@ -49,12 +51,23 @@ function RootComponent() {
         setLoading("Please wait", "Fetching mods...");
         await mods.fetch();
         setLoading("Please wait", "Finishing...");
+        unlisten = await listen("progress", (event: any) => {
+          console.log(event.payload)
+          useLoading.setState({
+            currentProgress: event.payload.current,
+            maxProgress: event.payload.max,
+          });
+        });
+
         clearLoading();
       } catch (error) {
         console.error(error);
       }
     })();
 
+    return () => {
+      unlisten?.();
+    }
   }, []);
 
   useEffect(() => {

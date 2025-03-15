@@ -2,13 +2,16 @@ import { createFileRoute } from "@tanstack/react-router";
 import NewsSection from "../../components/news";
 import useRemote from "../../store/remote";
 import React, { useState } from "react";
-import { clearLoading } from "../../components/loading";
+import { clearLoading, useLoading } from "../../components/loading";
 import Alert from "../../components/alert";
 import { create } from "zustand";
 import Mods from "../../components/mods";
 import Spinner from "../../components/Spinner";
 import { AnimatePresence, motion } from "motion/react";
 import DragWrapper from "../../components/DragWrapper";
+import { useOptions } from "../../store/options";
+import { invoke } from "@tauri-apps/api/core";
+import { useAuth } from "../../store/auth";
 
 export const Route = createFileRoute("/home/")({
   component: RouteComponent,
@@ -46,20 +49,24 @@ function RouteComponent() {
   const [modsModal, setModsModal] = useState(false);
   const remote = useRemote();
   const disabled = useDisabled();
-  //const auth = useAuth();
   const [loading, setLoading] = useState(true);
-  const [selectedServer, setSelectedServer] = useState<string>("phynariamc2");
+  const options = useOptions();
+  const auth = useAuth();
+  const mainLoading = useLoading();
 
   return (
     <>
-      <span className="flex h-12 shrink-0 relative rounded-xl backdrop-blur-sm bg-body/80">
-        <DragWrapper rootClass="border-2 border-red-500">
-          <ul className="h-full grid grid-flow-col w-full max-w-full border-2 border-blue-500 relative p-1 hidden-scroll grid-rows-1 gap-1 overflow-x-auto overflow-y-hidden">
+      <span className="flex h-12 shrink-0 relative rounded-xl backdrop-blur-sm bg-body/80 w-full">
+        <DragWrapper rootClass="w-full">
+          <ul className="h-full grid grid-flow-col w-full max-w-full relative p-1 hidden-scroll grid-rows-1 gap-1 overflow-x-auto overflow-y-hidden">
             {remote?.servers?.map((server) => (
               <div
-                // onClick={() => setSelectedServer(server.profile || "")}
-                className={`shrink-0 flex pointer-events-none outline-none w-56 items-center justify-center hover:bg-white/5 ease-smooth duration-200 rounded-lg ${
-                  selectedServer === server.profile
+                onClick={(e) => {
+                  e.stopPropagation();
+                  options.set({ selectedServer: server.profile })
+                }}
+                className={`shrink-0 flex outline-none w-56 items-center justify-center hover:bg-white/5 ease-smooth duration-200 rounded-lg ${
+                  (options.selectedServer !== undefined ? options.selectedServer : remote?.servers?.[0]?.profile) === server.profile
                     ? "text-white bg-white/5"
                     : " opacity-40 mix-blend-luminosity"
                 }`}>
@@ -82,7 +89,8 @@ function RouteComponent() {
         <AnimatePresence mode="wait">
           {remote.servers &&
             remote.servers
-              .filter((server) => server.profile === selectedServer)
+              .filter((server) => server.profile ===
+                (options.selectedServer !== undefined ? options.selectedServer : remote?.servers?.[0]?.profile))
               .map((server) => (
                 <motion.span
                   key={server.serverName}
@@ -116,7 +124,24 @@ function RouteComponent() {
                         onClick={async () => {
                           try {
                             disabled.setDisabled(false);
+                            mainLoading.set("Please wait", "Launching game...");
+                            await invoke("launch", {
+                              cfg: {
+                                username: auth.user?.username,
+                                title: server.title,
+                                profile: server.profile,
+                                version: server.version,
+                                ip: server.ip,
+                                port: server.port,
+                                memory: options.maxMemory,
+                                fullscreen: options.fullScreen,
+                                gameDir: options.appDir,
+                                minecraft: server.minecraft,
+                              }
+                            });
+                            mainLoading.clear();
                           } catch (err: any) {
+                            console.error(err);
                             if (!err.message && err.includes("[Minecraft]")) {
                               Alert({
                                 title: "Error",
@@ -166,7 +191,7 @@ function RouteComponent() {
                 </motion.span>
               ))}
         </AnimatePresence>
-      </section>
+      </section >
       <section className="w-full rounded-xl backdrop-blur-sm relative h-64 gap-1 bg-body/80 mt-auto flex flex-col p-4">
         <NewsSection />
       </section>

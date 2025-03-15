@@ -1,5 +1,4 @@
-import React from "react";
-import { useRef, useState, ReactNode } from "react";
+import React, { useRef,  ReactNode, useEffect } from "react";
 
 export default function DragWrapper({
   rootClass = "",
@@ -8,63 +7,65 @@ export default function DragWrapper({
   rootClass?: string;
   children: ReactNode;
 }) {
-  const ourRef = useRef<HTMLDivElement>(null);
-  const [isMouseDown, setIsMouseDown] = useState(false);
-  const mouseCoords = useRef({
-    startX: 0,
-    startY: 0,
-    scrollLeft: 0,
-    scrollTop: 0,
-  });
+  const sliderRef = useRef<HTMLElement>(null);
+  const isMouseDown = useRef(false);
+  const startX = useRef(0);
+  const scrollLeft = useRef(0);
 
-  const handleDragStart = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    if (!ourRef.current) return;
-    const slider = ourRef.current.children[0];
-    const startX = e.pageX - (slider as HTMLElement).offsetLeft;
-    const startY = e.pageY - (slider as HTMLElement).offsetTop;
-    const scrollLeft = (slider as HTMLElement).scrollLeft;
-    const scrollTop = (slider as HTMLElement).scrollTop;
-    mouseCoords.current = { startX, startY, scrollLeft, scrollTop };
-    setIsMouseDown(true);
-    document.body.style.cursor = "grabbing";
-    document.body.style.userSelect = "none";
-    document.body.style.webkitUserSelect = "none";
+  const handleMouseDown = (e: React.MouseEvent) => {
+    isMouseDown.current = true;
+    const slider = sliderRef.current;
+    if (!slider) return;
+
+    slider.style.scrollBehavior = "auto";
+    startX.current = e.clientX - slider.offsetLeft;
+    scrollLeft.current = slider.scrollLeft;
+    
+    // Add native event listeners for smoother tracking
+    slider.addEventListener("mousemove", handleMouseMove);
+    slider.addEventListener("mouseup", handleMouseUp);
+    slider.addEventListener("mouseleave", handleMouseUp);
   };
 
-  const handleDragEnd = () => {
-    setIsMouseDown(false);
-    if (!ourRef.current) return;
-    document.body.style.cursor = "default";
-    document.body.style.userSelect = "auto";
-    document.body.style.webkitUserSelect = "auto";
-  };
-  const handleDrag = (
-    e: React.MouseEvent<HTMLDivElement, MouseEvent>
-  ): void => {
-    if (!isMouseDown || !ourRef.current) return;
+  const handleMouseMove = (e: MouseEvent) => {
+    if (!isMouseDown.current || !sliderRef.current) return;
     e.preventDefault();
-    const slider = ourRef.current.children[0] as HTMLElement;
-    const x = e.pageX - slider.offsetLeft;
-    const y = e.pageY - slider.offsetTop;
-    const walkY = (y - mouseCoords.current.startY) * 1.1;
-    const walkX = (x - mouseCoords.current.startX) * 1.1;
-    slider.scrollLeft = mouseCoords.current.scrollLeft - walkX;
-    slider.scrollTop = mouseCoords.current.scrollTop - walkY;
-    console.log(walkX, walkY);
+    
+    const x = e.clientX - sliderRef.current.offsetLeft;
+    const walk = (x - startX.current) * 1.5; // Direct 1:1 movement ratio
+    sliderRef.current.scrollLeft = scrollLeft.current - walk;
   };
+
+  const handleMouseUp = () => {
+    isMouseDown.current = false;
+    const slider = sliderRef.current;
+    if (!slider) return;
+
+    slider.style.scrollBehavior = "smooth";
+    
+    // Clean up native listeners
+    slider.removeEventListener("mousemove", handleMouseMove);
+    slider.removeEventListener("mouseup", handleMouseUp);
+    slider.removeEventListener("mouseleave", handleMouseUp);
+  };
+
+  useEffect(() => {
+    return () => {
+      // Cleanup on unmount
+      if (sliderRef.current) {
+        sliderRef.current.removeEventListener("mousemove", handleMouseMove);
+        sliderRef.current.removeEventListener("mouseup", handleMouseUp);
+        sliderRef.current.removeEventListener("mouseleave", handleMouseUp);
+      }
+    };
+  }, []);
 
   return (
-    <div
-      ref={ourRef}
-      className={
-        rootClass +
-        " select-none! overflow-hidden cursor-grab active:cursor-grabbing"
-      }>
+    <div className={`${rootClass} w-full`}>
       {React.cloneElement(children as React.ReactElement, {
-        onMouseDown: handleDragStart,
-        onMouseUp: handleDragEnd,
-        onMouseMove: handleDrag,
-        onMouseLeave: handleDragEnd,
+        ref: sliderRef,
+        onMouseDown: handleMouseDown,
+        style: { cursor: "grab", userSelect: "none" }
       })}
     </div>
   );

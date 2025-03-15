@@ -2391,8 +2391,7 @@ checksum = "30bde2b3dc3671ae49d8e2e9f044c7c005836e7a023ee57cffa25ab82764bb9e"
 [[package]]
 name = "lyceris"
 version = "1.1.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "088e858f1705a3893a24ac5391aabc40a39d8ff1c295004bcfbef7af29a88776"
+source = "git+https://github.com/BatuhanAksoyy/lyceris?rev=aead2268af7fcefb360894303a824f22278a4e8a#aead2268af7fcefb360894303a824f22278a4e8a"
 dependencies = [
  "base64 0.22.1",
  "event-emitter-rs",

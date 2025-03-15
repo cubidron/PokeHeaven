@@ -9,8 +9,8 @@ edition = "2021"
 
 [profile.dev]
 incremental = true
-opt-level = 1  # Slight optimization while keeping fast compiles
-debug = false  # Disables debug symbols
+opt-level = 1      # Slight optimization while keeping fast compiles
+debug = false      # Disables debug symbols
 
 [lib]
 # The `_lib` suffix may seem redundant but it is necessary
@@ -29,9 +29,8 @@ serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 window-vibrancy = "0.5.2"
 tauri-plugin-os = "2"
-lyceris = "1.1.1"
+lyceris = { git = "https://github.com/BatuhanAksoyy/lyceris", rev = "aead2268af7fcefb360894303a824f22278a4e8a" }
 thiserror = "2.0.11"
 log = "0.4.26"
 tauri-plugin-store = "2"
 tauri-plugin-http = "2"
-
