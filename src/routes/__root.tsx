@@ -13,6 +13,9 @@ import useRemote from "../store/remote";
 import { useOptions } from "../store/options";
 import { load, Store } from "@tauri-apps/plugin-store";
 import { listen, UnlistenFn } from "@tauri-apps/api/event";
+import { start } from "tauri-plugin-drpc";
+import { initializeDiscordState } from "../helpers";
+import { DISCORD_CLIENT_ID } from "../constants";
 
 export let storage: Store | undefined;
 
@@ -36,6 +39,14 @@ function RootComponent() {
         storage = await load('storage.json', { autoSave: true });
         setLoading("Please wait", "Loading settings...");
         await options.init();
+        if (useOptions.getState().discordRpc) {
+          try {
+            console.log("Starting Discord RPC");
+            await start(DISCORD_CLIENT_ID);
+            
+          } catch (error) {} // Ignore error.
+          await initializeDiscordState();
+        }
         setLoading("Please wait", "Initializing authentication...");
         await auth.init();
         if (useAuth.getState().user && useAuth.getState().users.length > 0) {

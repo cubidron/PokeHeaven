@@ -3,8 +3,7 @@ use std::path::PathBuf;
 use lyceris::minecraft::{config::Profile, emitter::Emitter as LycerisEmitter};
 use serde::{Deserialize, Serialize};
 use tauri::Emitter;
-use tauri::{AppHandle, Runtime, State, Window};
-use tauri_plugin_store::{Store, StoreExt};
+use tauri::{State, Window};
 
 use crate::AppState;
 
@@ -19,7 +18,7 @@ pub struct Config {
     port: u32,
     minecraft: MinecraftConfig,
     game_dir: String,
-    memory: u16,
+    memory: u64,
     fullscreen: bool,
 }
 
@@ -51,7 +50,7 @@ pub async fn launch(window: Window, state: State<'_, AppState>, cfg: Config) -> 
             username: cfg.username,
             uuid: None,
         },
-        memory: Some(lyceris::minecraft::config::Memory::Gigabyte(cfg.memory)),
+        memory: Some(lyceris::minecraft::config::Memory::Megabyte(cfg.memory * 512)),
         version_name: None,
         loader: Some(get_loader_by(
             &cfg.minecraft.loader.r#type,

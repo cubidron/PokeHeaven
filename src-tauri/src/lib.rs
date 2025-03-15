@@ -1,15 +1,12 @@
 pub mod commands;
 pub mod error;
 
-use std::sync::Arc;
-
 pub use error::Error;
 
 pub type Result<T> = std::result::Result<T, Error>;
 
 use tauri::Manager;
 use tauri_plugin_http::reqwest;
-use tauri_plugin_store::{Store, StoreExt};
 
 pub struct AppState {
     request: reqwest::Client,
@@ -22,6 +19,7 @@ pub fn run() {
         .plugin(tauri_plugin_http::init())
         .plugin(tauri_plugin_os::init())
         .plugin(tauri_plugin_opener::init())
+        .plugin(tauri_plugin_drpc::init())
         .invoke_handler(tauri::generate_handler![commands::launch])
         .setup(|app| {
             let request = reqwest::Client::builder()

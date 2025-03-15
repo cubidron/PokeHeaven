@@ -11,6 +11,7 @@ interface ILocalOptions {
   fullScreen?: boolean;
   launchBehavior?: TLaunchBehavior;
   selectedServer?: string;
+  discordRpc?: boolean
 }
 
 // Options that will set at runtime
@@ -35,7 +36,8 @@ export const useOptions = create<IOptionsStore>((set) => ({
       launchBehavior: options?.launchBehavior ?? "keep",
       maxMemory: options?.maxMemory ?? 2,
       fullScreen: options?.fullScreen ?? false,
-      selectedServer: options?.selectedServer
+      selectedServer: options?.selectedServer,
+      discordRpc: options?.discordRpc ?? true
     });
   },
   set: async (change: IOptions) => {
@@ -48,7 +50,8 @@ export const useOptions = create<IOptionsStore>((set) => ({
       launchBehavior: options.launchBehavior,
       maxMemory: options.maxMemory,
       fullScreen: options.fullScreen,
-      selectedServer: options.selectedServer
+      selectedServer: options.selectedServer,
+      discordRpc: options.discordRpc
     });
 
     set(options);

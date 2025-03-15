@@ -4,6 +4,9 @@ import { TLaunchBehavior, useOptions } from "../../store/options";
 import Switch from "../../components/Switch";
 import { InputRange } from "../../components/InputRange";
 import Dropdown from "../../components/Dropdown";
+import { start, destroy, stop } from "tauri-plugin-drpc";
+import { DISCORD_CLIENT_ID } from "../../constants";
+import { initializeDiscordState } from "../../helpers";
 
 export const Route = createFileRoute("/home/settings")({
   component: RouteComponent,
@@ -82,8 +85,16 @@ function RouteComponent() {
           <span className="flex justify-between gap-1 items-center">
             <p className="text-xs text-white/60">Toggle discord RPC.</p>
             <Switch
-              value={options.fullScreen!} //! Fix this
-              onChange={(e) => options.set({ fullScreen: e })} //! Fix this
+              value={options.discordRpc!}
+              onChange={async (e) => {
+                options.set({ discordRpc: e });
+                if(e) {
+                  await start(DISCORD_CLIENT_ID);
+                  await initializeDiscordState();
+                } else {
+                  await destroy();
+                }
+              }}
             />
           </span>
         </section>

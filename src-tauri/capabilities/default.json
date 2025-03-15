@@ -30,6 +30,11 @@
         }
       ]
     },
-    "store:default"
+    "store:default",
+    "drpc:allow-clear-activity",
+    "drpc:allow-set-activity",
+    "drpc:allow-is-running",
+    "drpc:allow-spawn-thread",
+    "drpc:allow-destroy-thread"
   ]
 }
