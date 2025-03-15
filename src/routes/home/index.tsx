@@ -58,15 +58,17 @@ function RouteComponent() {
     <>
       <span className="flex h-12 shrink-0 relative rounded-xl backdrop-blur-sm bg-body/80 w-full">
         <DragWrapper rootClass="w-full">
-          <ul className="h-full grid grid-flow-col w-full max-w-full relative p-1 hidden-scroll grid-rows-1 gap-1 overflow-x-auto overflow-y-hidden">
+          <ul className="h-full grid grid-flow-col !scroll-auto w-full max-w-full relative p-1 hidden-scroll grid-rows-1 gap-1 overflow-x-auto overflow-y-hidden">
             {remote?.servers?.map((server) => (
               <div
                 onClick={(e) => {
                   e.stopPropagation();
-                  options.set({ selectedServer: server.profile })
+                  options.set({ selectedServer: server.profile });
                 }}
                 className={`shrink-0 flex outline-none w-56 items-center justify-center hover:bg-white/5 ease-smooth duration-200 rounded-lg ${
-                  (options.selectedServer !== undefined ? options.selectedServer : remote?.servers?.[0]?.profile) === server.profile
+                  (options.selectedServer !== undefined
+                    ? options.selectedServer
+                    : remote?.servers?.[0]?.profile) === server.profile
                     ? "text-white bg-white/5"
                     : " opacity-40 mix-blend-luminosity"
                 }`}>
@@ -89,8 +91,13 @@ function RouteComponent() {
         <AnimatePresence mode="wait">
           {remote.servers &&
             remote.servers
-              .filter((server) => server.profile ===
-                (options.selectedServer !== undefined ? options.selectedServer : remote?.servers?.[0]?.profile))
+              .filter(
+                (server) =>
+                  server.profile ===
+                  (options.selectedServer !== undefined
+                    ? options.selectedServer
+                    : remote?.servers?.[0]?.profile)
+              )
               .map((server) => (
                 <motion.span
                   key={server.serverName}
@@ -137,7 +144,7 @@ function RouteComponent() {
                                 fullscreen: options.fullScreen,
                                 gameDir: options.appDir,
                                 minecraft: server.minecraft,
-                              }
+                              },
                             });
                             mainLoading.clear();
                           } catch (err: any) {
@@ -191,7 +198,7 @@ function RouteComponent() {
                 </motion.span>
               ))}
         </AnimatePresence>
-      </section >
+      </section>
       <section className="w-full rounded-xl backdrop-blur-sm relative h-64 gap-1 bg-body/80 mt-auto flex flex-col p-4">
         <NewsSection />
       </section>
