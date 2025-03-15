@@ -49,7 +49,7 @@ function RouteComponent() {
   const [modsModal, setModsModal] = useState(false);
   const remote = useRemote();
   const disabled = useDisabled();
-  const [loading, setLoading] = useState(true);
+  const [loading, _loading] = useState(true);
   const options = useOptions();
   const auth = useAuth();
   const mainLoading = useLoading();
@@ -64,6 +64,7 @@ function RouteComponent() {
                 onClick={(e) => {
                   e.stopPropagation();
                   options.set({ selectedServer: server.profile });
+                  _loading(true);
                 }}
                 className={`shrink-0 flex outline-none w-56 items-center justify-center hover:bg-white/5 ease-smooth duration-200 rounded-lg ${
                   (options.selectedServer !== undefined
@@ -106,7 +107,7 @@ function RouteComponent() {
                   exit={{ opacity: 0, scale: 0.9, filter: "blur(12px)" }}
                   transition={{
                     type: "spring",
-                    stiffness: 200,
+                    stiffness: 300,
                     damping: 20,
                   }}
                   className="flex w-full gap-4 items-center justify-center">
@@ -186,13 +187,13 @@ function RouteComponent() {
                   </div>
                   <div className="w-1/2 shrink-0 rounded relative justify-center flex flex-col size-full h-full items-center overflow-clip aspect-video">
                     {loading && (
-                      <div className="flex absolute flex-col items-center gap-4 h-full m-auto inset-0 justify-center">
+                      <div className="flex absolute -z-10 flex-col items-center gap-4 h-full m-auto inset-0 justify-center">
                         <Spinner className="!h-24" />
                       </div>
                     )}
                     <YoutubeIFrame
                       source={server.videoUrl || ""}
-                      onFinish={() => setLoading(false)}
+                      onFinish={() => _loading(false)}
                     />
                   </div>
                 </motion.span>
