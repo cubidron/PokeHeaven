@@ -78,6 +78,14 @@ function RouteComponent() {
               onChange={(e) => options.set({ fullScreen: e })}
             />
           </span>
+          <hr />
+          <span className="flex justify-between gap-1 items-center">
+            <p className="text-xs text-white/60">Toggle discord RPC.</p>
+            <Switch
+              value={options.fullScreen!} //! Fix this
+              onChange={(e) => options.set({ fullScreen: e })} //! Fix this
+            />
+          </span>
         </section>
         <section className="flex flex-col gap-1 relative size-full p-6 rounded-xl backdrop-blur-sm bg-body/80">
           <h4 className="font-extrabold mb-2">About Launcher</h4>
