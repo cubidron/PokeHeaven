@@ -272,7 +272,7 @@ function RouteComponent() {
           Settings
         </Link>
       </header>
-      <main className="h-full flex shrink flex-col gap-2 py-2 relative">
+      <main className="h-full flex shrink contain-content flex-col gap-2 py-2 relative">
         <Outlet />
       </main>
       <footer className="w-full shrink-0 relative flex items-center h-8 bg-body/80 backdrop-blur-2xl pr-3 rounded-lg">
