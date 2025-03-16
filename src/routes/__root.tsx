@@ -13,9 +13,11 @@ import useRemote from "../store/remote";
 import { useOptions } from "../store/options";
 import { load, Store } from "@tauri-apps/plugin-store";
 import { listen, UnlistenFn } from "@tauri-apps/api/event";
+import { error, info } from "@tauri-apps/plugin-log";
 import { start } from "tauri-plugin-drpc";
 import { initializeDiscordState } from "../helpers";
 import { DISCORD_CLIENT_ID } from "../constants";
+import Alert from "../components/alert";
 
 export let storage: Store | undefined;
 
@@ -33,20 +35,14 @@ function RootComponent() {
   const options = useOptions();
 
   useEffect(() => {
-    let unlisten: UnlistenFn | undefined;
+    info("Mounting root component");
+    let unlisten: UnlistenFn[] | undefined;
     (async () => {
       try {
+        info("Loading storage");
         storage = await load('storage.json', { autoSave: true });
         setLoading("Please wait", "Loading settings...");
         await options.init();
-        if (useOptions.getState().discordRpc) {
-          try {
-            console.log("Starting Discord RPC");
-            await start(DISCORD_CLIENT_ID);
-            
-          } catch (error) {} // Ignore error.
-          await initializeDiscordState();
-        }
         setLoading("Please wait", "Initializing authentication...");
         await auth.init();
         if (useAuth.getState().user && useAuth.getState().users.length > 0) {
@@ -59,25 +55,47 @@ function RootComponent() {
         await news.fetch();
         setLoading("Please wait", "Fetching remote...");
         await remote.init();
+        if (useOptions.getState().discordRpc) {
+          try {
+            info("Initializing Discord RPC");
+            await start(remote.discordRpc?.clientId || DISCORD_CLIENT_ID);
+            await initializeDiscordState(useRemote.getState().discordRpc!);
+            info("Discord RPC initialized");
+
+          } catch (e: any) {
+            error(`Error during Discord RPC initialization: ${typeof (e) === "string" ? e : e?.message}`);
+          } // Ignore error.
+        }
         setLoading("Please wait", "Fetching mods...");
         await mods.fetch();
         setLoading("Please wait", "Finishing...");
-        unlisten = await listen("progress", (event: any) => {
-          console.log(event.payload)
-          useLoading.setState({
-            currentProgress: event.payload.current,
-            maxProgress: event.payload.max,
-          });
-        });
-
+        unlisten = [
+          await listen("progress", (event: any) => {
+            useLoading.setState({
+              currentProgress: event.payload.current,
+              maxProgress: event.payload.max,
+            });
+          }),
+          await listen("clear-loading", (_) => {
+            clearLoading();
+          }),
+          await listen("crash", (event: any) => {
+            Alert({ title: event.payload.title, message: event.payload.message, bg: true });
+          })
+        ];
         clearLoading();
-      } catch (error) {
-        console.error(error);
+      } catch (e: any) {
+        error(`Error druing front initialization: ${typeof (e) === "string" ? e : e?.message}`);
+        return Alert({
+          title: "Error", message: "There was an error during initialization. Please try again or contact with support.", force: true, bg: true, action() {
+            window.location.reload();
+          },
+        });
       }
     })();
 
     return () => {
-      unlisten?.();
+      unlisten?.map((fn) => fn());
     }
   }, []);
 

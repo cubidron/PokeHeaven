@@ -1,5 +1,6 @@
+import { fetch } from "@tauri-apps/plugin-http";
 import { create } from "zustand";
-// import { fetch } from "@tauri-apps/plugin-http";
+import { LAUNCHER_BASE } from "../constants";
 
 interface IServer {
   icon?: string;
@@ -17,8 +18,16 @@ interface IServer {
       version: string;
     };
     exclude: string[];
+    optionalMods: IOptionalMod[];
   };
   videoUrl?: string;
+}
+
+export interface IOptionalMod {
+  name: string;
+  fileName: string;
+  default: boolean;
+  enabled?: boolean;
 }
 
 interface IRemote {
@@ -59,7 +68,7 @@ interface RemoteStore extends IRemote {
 
 const useRemote = create<RemoteStore>((set) => ({
   init: async () => {
-    const response = await fetch("/rem.json");
+    const response = await fetch(`${LAUNCHER_BASE}/PhynariaLauncherV2/config.json`);
 
     if (!response.ok) {
       throw new Error("Could not fetch the data");

@@ -11,7 +11,12 @@ interface ILocalOptions {
   fullScreen?: boolean;
   launchBehavior?: TLaunchBehavior;
   selectedServer?: string;
-  discordRpc?: boolean
+  discordRpc?: boolean,
+  optionalMods?: {
+    fileName: string;
+    enabled: boolean;
+    profile: string;
+  }[];
 }
 
 // Options that will set at runtime
@@ -37,7 +42,8 @@ export const useOptions = create<IOptionsStore>((set) => ({
       maxMemory: options?.maxMemory ?? 2,
       fullScreen: options?.fullScreen ?? false,
       selectedServer: options?.selectedServer,
-      discordRpc: options?.discordRpc ?? true
+      discordRpc: options?.discordRpc ?? true,
+      optionalMods: options?.optionalMods ?? []
     });
   },
   set: async (change: IOptions) => {
@@ -51,7 +57,8 @@ export const useOptions = create<IOptionsStore>((set) => ({
       maxMemory: options.maxMemory,
       fullScreen: options.fullScreen,
       selectedServer: options.selectedServer,
-      discordRpc: options.discordRpc
+      discordRpc: options.discordRpc,
+      optionalMods: options.optionalMods
     });
 
     set(options);

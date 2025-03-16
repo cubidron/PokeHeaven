@@ -4,7 +4,7 @@ import { TLaunchBehavior, useOptions } from "../../store/options";
 import Switch from "../../components/Switch";
 import { InputRange } from "../../components/InputRange";
 import Dropdown from "../../components/Dropdown";
-import { start, destroy, stop } from "tauri-plugin-drpc";
+import { start, destroy } from "tauri-plugin-drpc";
 import { DISCORD_CLIENT_ID } from "../../constants";
 import { initializeDiscordState } from "../../helpers";
 
@@ -90,7 +90,7 @@ function RouteComponent() {
                 options.set({ discordRpc: e });
                 if(e) {
                   await start(DISCORD_CLIENT_ID);
-                  await initializeDiscordState();
+                  await initializeDiscordState(remote.discordRpc!);
                 } else {
                   await destroy();
                 }

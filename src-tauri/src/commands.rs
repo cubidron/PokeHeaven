@@ -1,13 +1,21 @@
 use std::path::PathBuf;
+use std::sync::LazyLock;
+use std::time::Duration;
 
 use lyceris::minecraft::{config::Profile, emitter::Emitter as LycerisEmitter};
 use serde::{Deserialize, Serialize};
-use tauri::Emitter;
+use tauri::async_runtime::Mutex;
+use tauri::{Emitter, Manager};
 use tauri::{State, Window};
+use tokio::process::Child;
 
+use crate::helpers::{get_loader_by, synchronize_files};
 use crate::AppState;
 
-#[derive(Serialize, Deserialize)]
+// The main instance of the minecraft process
+pub static GAME: LazyLock<Mutex<Option<Child>>> = LazyLock::new(|| Mutex::new(None));
+
+#[derive(Serialize, Deserialize, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct Config {
     title: String,
@@ -20,16 +28,17 @@ pub struct Config {
     game_dir: String,
     memory: u64,
     fullscreen: bool,
+    after: String,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Clone)]
 pub struct MinecraftConfig {
     version: String,
     loader: LoaderConfig,
     exclude: Vec<String>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Clone)]
 pub struct LoaderConfig {
     r#type: String,
     version: String,
@@ -37,12 +46,16 @@ pub struct LoaderConfig {
 
 #[tauri::command]
 pub async fn launch(window: Window, state: State<'_, AppState>, cfg: Config) -> crate::Result<()> {
+    log::info!(
+        "Launching game with memory: {}, username: {}",
+        cfg.memory * 512,
+        cfg.username
+    );
     let game_dir = PathBuf::from(cfg.game_dir);
-
-    let cfg = lyceris::minecraft::config::Config {
+    let lyceris_config = lyceris::minecraft::config::Config {
         game_dir: game_dir.clone(),
         profile: Some(Profile {
-            name: cfg.profile,
+            name: cfg.profile.clone(),
             root: game_dir.join("profiles"),
         }),
         version: cfg.minecraft.version,
@@ -50,7 +63,9 @@ pub async fn launch(window: Window, state: State<'_, AppState>, cfg: Config) -> 
             username: cfg.username,
             uuid: None,
         },
-        memory: Some(lyceris::minecraft::config::Memory::Megabyte(cfg.memory * 512)),
+        memory: Some(lyceris::minecraft::config::Memory::Megabyte(
+            cfg.memory * 512,
+        )),
         version_name: None,
         loader: Some(get_loader_by(
             &cfg.minecraft.loader.r#type,
@@ -72,40 +87,83 @@ pub async fn launch(window: Window, state: State<'_, AppState>, cfg: Config) -> 
     emitter
         .on(
             lyceris::minecraft::emitter::Event::MultipleDownloadProgress,
-            move |(_, current, total): (String, u64, u64)| {
-                #[derive(Clone, Serialize, Deserialize)]
-                struct Payload {
-                    current: u64,
-                    total: u64,
+            {
+                let window = window.clone();
+                move |(_, current, total): (String, u64, u64)| {
+                    #[derive(Clone, Serialize, Deserialize)]
+                    struct Payload {
+                        current: u64,
+                        total: u64,
+                    }
+                    window.emit("progress", Payload { current, total }).ok();
                 }
-                window.emit("progress", Payload { current, total }).ok();
             },
         )
         .await;
 
-    lyceris::minecraft::install::install(&cfg, Some(&emitter)).await?;
+    log::info!("Installing/checking game");
+    lyceris::minecraft::install::install(&lyceris_config, Some(&emitter)).await?;
 
-    let mut child = lyceris::minecraft::launch::launch(&cfg, Some(&emitter)).await?;
+    log::info!("Synchronizing files");
+    synchronize_files(
+        game_dir.join("profiles").join(cfg.profile.clone()),
+        cfg.profile,
+        cfg.minecraft.exclude,
+        emitter.clone(),
+        state.request.clone(),
+    )
+    .await?;
 
-    child.wait().await.unwrap();
+    let mut child = GAME.lock().await;
+
+    *child = Some(lyceris::minecraft::launch::launch(&lyceris_config, Some(&emitter)).await?);
+
+    log::info!("Game launched");
+
+    match cfg.after.as_str() {
+        "close" => {
+            window.app_handle().exit(1);
+        }
+        "minimize" => {
+            window.hide().ok();
+        }
+        _ => {}
+    }
+
+    drop(child);
+
+    window.emit("clear-loading", ()).ok();
+
+    loop {
+        let mut lock = GAME.lock().await;
+        if let Some(status) = lock.as_mut().unwrap().try_wait()? {
+            if status.success() {
+                window.show().ok();
+                window.set_focus().ok();
+            } else {
+                #[derive(Clone, Serialize, Deserialize)]
+                struct Payload {
+                    title: String,
+                    message: String,
+                }
+
+                log::info!("Launcher closed with a different status code. Game might have crashed. Status code: {}", status.code().unwrap_or_default());
+
+                window
+                    .emit(
+                        "crash",
+                        Payload {
+                            title: "Game crashed!".to_string(),
+                            message: "It seems like your game just crashed. Please try again or check the crash reports log for more information.".to_string(),
+                        },
+                    )
+                    .ok();
+            }
+            break;
+        }
+
+        tokio::time::sleep(Duration::from_secs(1)).await;
+    }
 
     Ok(())
-}
-
-fn get_loader_by(r#type: &str, version: &str) -> Box<dyn lyceris::minecraft::loader::Loader> {
-    match r#type {
-        "fabric" => Box::new(lyceris::minecraft::loader::fabric::Fabric(
-            version.to_string(),
-        )),
-        "forge" => Box::new(lyceris::minecraft::loader::forge::Forge(
-            version.to_string(),
-        )),
-        "neoforge" => Box::new(lyceris::minecraft::loader::neoforge::NeoForge(
-            version.to_string(),
-        )),
-        "quilt" => Box::new(lyceris::minecraft::loader::quilt::Quilt(
-            version.to_string(),
-        )),
-        _ => panic!("Unknown loader type: {}", r#type),
-    }
 }

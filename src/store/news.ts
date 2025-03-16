@@ -1,6 +1,7 @@
 import { fetch } from "@tauri-apps/plugin-http";
 import { create } from "zustand";
 import { addNoti } from "../components/notification";
+import { LAUNCHER_BASE } from "../constants";
 
 interface News {
   link: string;
@@ -16,7 +17,7 @@ interface NewsStore {
 const useNewses = create<NewsStore>((set) => ({
   newses: [],
   fetch: async () => {
-    const response = await fetch("https:///cdn.cubidron.com/news.json");
+    const response = await fetch(`${LAUNCHER_BASE}/PhynariaLauncherV2/news.json`);
 
     if (!response.ok) {
       addNoti("Could not fetch news.");

@@ -22,10 +22,21 @@ export const jsonRequest = async<T>(url: string, method: string, body?: any): Pr
     return { data: data as T, request: response };
 }
 
-export const initializeDiscordState = async () => {
+export const initializeDiscordState = async ({
+    stateText,
+    largeImage,
+    largeText,
+    details
+}: { clientId: string, stateText: string, largeImage: string, largeText: string, details: string }) => {
     const activity = new Activity()
-        .setAssets(new Assets().setLargeImage("logo"))
+        .setAssets(
+            new Assets()
+                .setLargeImage(largeImage)
+                .setLargeText(largeText)
+        )
+        .setDetails(details)
+        .setState(stateText)
         .setTimestamps(new Timestamps(Date.now()))
-    
+
     await setActivity(activity);
 }

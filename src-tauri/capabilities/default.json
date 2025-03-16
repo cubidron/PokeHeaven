@@ -26,7 +26,7 @@
           "url": "https://phynaria.fr"
         },
         {
-          "url": "http://*.phynaria.fr"
+          "url": "https://*.phynaria.fr"
         }
       ]
     },
@@ -35,6 +35,7 @@
     "drpc:allow-set-activity",
     "drpc:allow-is-running",
     "drpc:allow-spawn-thread",
-    "drpc:allow-destroy-thread"
+    "drpc:allow-destroy-thread",
+    "log:default"
   ]
 }

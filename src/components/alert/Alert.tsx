@@ -1,19 +1,21 @@
 import { useAlert } from ".";
+import { clearLoading } from "../loading";
 
 export default function AlertComponent() {
   const alert_store = useAlert();
   return (
     <>
       {alert_store.status && (
+        console.log(alert_store.bg),
+        clearLoading(),
         <section
           onClick={() => {
             if (!alert_store.force) {
               alert_store.clear();
             }
           }}
-          style={{ background: `${alert_store.bg && "url(/bg.webp)"}` }}
           data-tauri-drag-region
-          className="fixed z-[100] inset-0 bg-black/40 flex !bg-center !bg-cover flex-col items-center justify-center">
+          className={`fixed z-[100] inset-0 bg-black/40 flex !bg-center ${alert_store.bg ? "bg-[url('/images/bg.png')]" : ""} bg-blend-darken !bg-cover flex-col items-center justify-center`}>
           <div
             onClick={(e) => {
               e.stopPropagation();
