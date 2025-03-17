@@ -29,7 +29,7 @@
     ],
     "macOSPrivateApi": true,
     "security": {
-      "csp": null
+      "csp": "frame-ancestors 'youtube.com' 'www.youtube.com';"
     }
   },
   "bundle": {
@@ -54,7 +54,7 @@
   },
   "plugins": {
     "updater": {
-      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDFEQzYzNTIwMjM0OTdGRkEKUldUNmYwa2pJRFhHSFZuaWc5V0gvUGpHTzRyUXEwUnoxaDdqWXUrc2pqUTVhbFdwT2tBbkY1U3cK",
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDVCMjgyOUVDQUNDNTJDRTgKUldUb0xNV3M3Q2tvVzZwbjdVektydmIxbFF5eVB6eDBqSkZZcUl5c1YxNzFvYXRDb3ZTNkYwYkUK",
       "endpoints": [
         "https://launcher.phynaria.fr/www/PhynariaLauncherV2/config.json"
       ]
