@@ -146,7 +146,7 @@ function RouteComponent() {
                 initial={{ opacity: 0, scale: 0.9, filter: "blur(12px)" }}
                 animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
                 exit={{ opacity: 0, scale: 0.9, filter: "blur(12px)" }}
-                transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                transition={{ type: "spring", stiffness: 400, damping: 30 }}
                 className="flex w-full gap-4 items-center justify-center">
                 <div className="flex w-full flex-col min-w-[24rem]">
                   <img
