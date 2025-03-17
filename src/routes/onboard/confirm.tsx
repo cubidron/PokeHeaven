@@ -68,7 +68,7 @@ function RouteComponent() {
           <span
             onClick={() => {
               auth.user && auth.logout(auth.user);
-              navigate({ to: "/onboard/login" });
+              navigate({ to: "/onboard" });
             }}
             className="text-primary cursor-pointer hover:underline">
             Annuler
