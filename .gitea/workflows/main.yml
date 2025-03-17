@@ -58,6 +58,9 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: tauri-build-${{ matrix.platform }}-${{ matrix.arch }}
-          path: ${{ matrix.folder == '' && 'src-tauri/target/release/bundle' || 'src-tauri/target/' + matrix.folder + '/release/bundle' }}
+          path: ${{ 
+            matrix.folder == '' && 
+            'src-tauri/target/release/bundle' || 
+            format('src-tauri/target/{0}/release/bundle', matrix.folder) }}
           retention-days: 5
           compression-level: 6
