@@ -25,6 +25,10 @@ function RouteComponent() {
   const options = useOptions();
   const [accountModal, setAccountModal] = useState(false);
   const paths = location.pathname.split("/");
+  const frenchPages = {
+    Home: "Accueil",
+    Settings: "Paramètres",
+  };
   // Click outside modal
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -89,7 +93,7 @@ function RouteComponent() {
           </span>
           <nav className="flex items-center hover:bg-white/5 ease-smooth duration-200 px-2 rounded-lg h-full w-max">
             {paths.length === 2 && paths[1] === "" ? (
-              <span className="font-medium">Home</span>
+              <span className="font-medium">Accueil</span>
             ) : (
               paths
                 .filter((item) => item !== "")
@@ -100,7 +104,9 @@ function RouteComponent() {
                       <Link
                         to={path}
                         className="font-medium hover:text-primary ease-gentle duration-200 px-1.5">
-                        {item.charAt(0).toUpperCase() + item.slice(1)}
+                        {frenchPages[
+                          item.charAt(0).toUpperCase() + item.slice(1)
+                        ] || item.charAt(0).toUpperCase() + item.slice(1)}
                       </Link>
                       {i != paths.length - 2 && <span className="mx-0">/</span>}
                     </span>
@@ -169,7 +175,7 @@ function RouteComponent() {
                   left: platform() == "macos" ? "auto" : 0,
                 }}
                 className="absolute accountModal top-full mt-2 p-4 pt-2 bg-body rounded-xl w-max min-w-80 min-h-20">
-                <h1 className="text-xl font-medium text-center">Accounts</h1>
+                <h1 className="text-xl font-medium text-center">Comptes</h1>
                 <ul className="flex flex-col gap-4 mt-2">
                   {auth.users.map((account, i) => (
                     <li key={i} className="flex gap-2 items-center">
@@ -222,7 +228,7 @@ function RouteComponent() {
                               ? "hover:bg-dark cursor-default"
                               : ""
                           }`}>
-                          <p>Switch</p>
+                          <p>Changer</p>
                         </button>
                       )}
                       <button
@@ -264,12 +270,12 @@ function RouteComponent() {
         <Link
           to="/home"
           className="flex items-center hover:bg-white/5 ease-smooth duration-200 px-4 rounded-lg h-full w-max">
-          Home
+          Accueil
         </Link>
         <Link
           to="/home/settings"
           className="flex items-center hover:bg-white/5 ease-smooth duration-200 px-4 rounded-lg h-full w-max">
-          Settings
+          Paramètres
         </Link>
       </header>
       <main className="h-full flex shrink flex-col gap-2 py-2 relative">
@@ -283,10 +289,7 @@ function RouteComponent() {
         />
         <p className="text-xs">
           PhynariaMC{" "}
-          <span className="text-white/50">
-            {" "}
-            • Not affiliated with Mojang Studios
-          </span>
+          <span className="text-white/50"> • Non affilié à Mojang Studios</span>
         </p>
         <div className="text-xs absolute inset-0 size-max m-auto text-white/50">
           version {options.version!}

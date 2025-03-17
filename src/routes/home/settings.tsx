@@ -18,10 +18,10 @@ function RouteComponent() {
     <>
       <div className="flex gap-2 size-full">
         <section className="flex flex-col relative size-full p-6 gap-4 rounded-xl backdrop-blur-sm bg-body/80">
-          <h4 className="font-extrabold mb-2">Launcher Settings</h4>
+          <h4 className="font-extrabold mb-2">Paramètres du lanceur</h4>
           <div className="flex items-center justify-between gap-1">
             <p className="text-xs text-white/60">
-              The behavior of the launcher when the game starts
+              Le comportement du lanceur lorsque le jeu démarre
             </p>
             <Dropdown
               options={["close", "keep", "minimize"]}
@@ -32,26 +32,26 @@ function RouteComponent() {
               }
               displayValue={(option) => {
                 const found = [
-                  { label: "Keep Open", value: "keep" },
-                  { label: "Minimize", value: "minimize" },
-                  { label: "Close", value: "close" },
+                  { label: "Garder ouvert", value: "keep" },
+                  { label: "Minimiser", value: "minimize" },
+                  { label: "Fermer", value: "close" },
                 ].find((item) => item.value === option);
                 return found ? found.label : option;
               }}
             />
           </div>
-          <p className="font-extrabold my-2">In-Game Initial Settings</p>
+          <p className="font-extrabold my-2">Paramètres initiaux en jeu</p>
 
           <span className="flex h-max gap-1 items-center">
             <p className="text-xs w-full text-white/60">
-              Maximum memory amount.
+              Quantité maximale de mémoire.
             </p>
             <p className=" shrink-0 text-xs mr-2">
               {(options.maxMemory! * 512) / 1024} GB
             </p>
             <InputRange
               className=" shrink-0"
-              title="Memory amount"
+              title="Quantité de mémoire"
               min={1}
               max={32}
               value={options.maxMemory!}
@@ -64,7 +64,7 @@ function RouteComponent() {
           </span>
           <hr />
           <span className="flex gap-2 items-center">
-            <p className="text-xs w-30 text-white/60">Java location.</p>
+            <p className="text-xs w-30 text-white/60">Emplacement de Java.</p>
             <input
               type="text"
               spellCheck={false}
@@ -75,7 +75,7 @@ function RouteComponent() {
           </span>
           <hr />
           <span className="flex justify-between gap-1 items-center">
-            <p className="text-xs text-white/60">Fullscreen minecraft.</p>
+            <p className="text-xs text-white/60">Minecraft en plein écran.</p>
             <Switch
               value={options.fullScreen!}
               onChange={(e) => options.set({ fullScreen: e })}
@@ -83,12 +83,14 @@ function RouteComponent() {
           </span>
           <hr />
           <span className="flex justify-between gap-1 items-center">
-            <p className="text-xs text-white/60">Toggle discord RPC.</p>
+            <p className="text-xs text-white/60">
+              Activer/désactiver RPC Discord.
+            </p>
             <Switch
               value={options.discordRpc!}
               onChange={async (e) => {
                 options.set({ discordRpc: e });
-                if(e) {
+                if (e) {
                   await start(DISCORD_CLIENT_ID);
                   await initializeDiscordState(remote.discordRpc!);
                 } else {
@@ -99,7 +101,7 @@ function RouteComponent() {
           </span>
         </section>
         <section className="flex flex-col gap-1 relative size-full p-6 rounded-xl backdrop-blur-sm bg-body/80">
-          <h4 className="font-extrabold mb-2">About Launcher</h4>
+          <h4 className="font-extrabold mb-2">À propos du lanceur</h4>
           <h1 className="text-4xl font-light">PhynariaMC</h1>
           <p>
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium
@@ -111,7 +113,7 @@ function RouteComponent() {
       </div>
       <section className="flex flex-col relative p-4 rounded-xl backdrop-blur-sm bg-body/80">
         <p className="text-xs font-light text-white/50 text-center">
-          Not affiliated with Mojang or Microsoft. Minecraft is a trademark of
+          Non affilié à Mojang ou Microsoft. Minecraft est une marque déposée de
           Mojang AB.
         </p>
         <span className="flex gap-4 mx-auto">
@@ -119,13 +121,13 @@ function RouteComponent() {
             className="text-xs font-light text-white/50 text-center underline hover:text-primary"
             target="_blank"
             href={remote.website}>
-            Contact Us
+            Contactez-nous
           </a>
           <a
             className="text-xs font-light text-white/50 text-center underline hover:text-primary"
             target="_blank"
             href={remote.website}>
-            Report an Issue
+            Signaler un problème
           </a>
         </span>
       </section>

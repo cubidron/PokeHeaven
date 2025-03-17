@@ -39,9 +39,12 @@ function RootComponent() {
       try {
         info("Loading storage");
         storage = await load("storage.json", { autoSave: true });
-        setLoading("Please wait", "Loading settings...");
+        setLoading("Veuillez patienter", "Chargement des paramètres...");
         await options.init();
-        setLoading("Please wait", "Initializing authentication...");
+        setLoading(
+          "Veuillez patienter",
+          "Initialisation de l'authentification..."
+        );
         await auth.init();
         if (useAuth.getState().user && useAuth.getState().users.length > 0) {
           location.href.includes("/home") ||
@@ -49,9 +52,9 @@ function RootComponent() {
               to: "/home",
             });
         }
-        setLoading("Please wait", "Fetching news...");
+        setLoading("Veuillez patienter", "Récupération des actualités...");
         await news.fetch();
-        setLoading("Please wait", "Fetching remote...");
+        setLoading("Veuillez patienter", "Récupération à distance...");
         await remote.init();
         if (useOptions.getState().discordRpc) {
           try {
@@ -61,11 +64,11 @@ function RootComponent() {
             info("Discord RPC initialized");
           } catch (e: any) {
             error(
-              `Error during Discord RPC initialization: ${typeof e === "string" ? e : e?.message}`
+              `Error initializing Discord RPC: ${typeof e === "string" ? e : e?.message}`
             );
           } // Ignore error.
         }
-        setLoading("Please wait", "Finishing...");
+        setLoading("Veuillez patienter", "Finalisation...");
         unlisten = [
           await listen("progress", (event: any) => {
             useLoading.setState({
@@ -87,12 +90,12 @@ function RootComponent() {
         clearLoading();
       } catch (e: any) {
         error(
-          `Error druing front initialization: ${typeof e === "string" ? e : e?.message}`
+          `Error initializing frontend: ${typeof e === "string" ? e : e?.message}`
         );
         return Alert({
-          title: "Error",
+          title: "Erreur",
           message:
-            "There was an error during initialization. Please try again or contact with support.",
+            "Une erreur s'est produite lors de l'initialisation. Veuillez réessayer ou contacter le support.",
           force: true,
           bg: true,
           action() {

@@ -66,7 +66,7 @@ function RouteComponent() {
     async (server: any) => {
       try {
         disabled.setDisabled(true);
-        mainLoading.set("Please wait", "Launching game...");
+        mainLoading.set("Veuillez patienter", "Lancement du jeu...");
         await invoke("launch", {
           cfg: {
             username: auth.user?.username,
@@ -86,10 +86,10 @@ function RouteComponent() {
       } catch (err: any) {
         console.error(err);
         Alert({
-          title: "Error",
+          title: "Erreur",
           message:
             err.message ||
-            "There was an error during game launch. Please try again or contact support.",
+            "Une erreur s'est produite lors du lancement du jeu. Veuillez réessayer ou contacter le support.",
         });
       } finally {
         clearLoading();
@@ -129,7 +129,7 @@ function RouteComponent() {
                 <h1
                   title={server.serverName}
                   className="text-sm font-medium text-ellipsis line-clamp-1">
-                  {server.serverName || "Unnamed Server"}
+                  {server.serverName || "Serveur sans nom"}
                 </h1>
               </div>
             ))}
@@ -157,7 +157,7 @@ function RouteComponent() {
                   <h1
                     title={server.serverName}
                     className="text-3xl w-full font-bold text-ellipsis line-clamp-1">
-                    {server.serverName || "Unnamed Server"}
+                    {server.serverName || "Serveur sans nom"}
                   </h1>
                   <p>
                     {server.description ||
@@ -170,7 +170,7 @@ function RouteComponent() {
                       className={`px-3.5 py-1.5 w-full cursor-pointer ease-smooth duration-200 hover:saturate-150 gap-3 bg-primary rounded-lg flex items-center justify-center ${
                         disabled.disabled && "brightness-50 cursor-not-allowed"
                       }`}>
-                      Launch
+                      Lancer
                     </button>
                     <button
                       onClick={() => setModsModal(true)}

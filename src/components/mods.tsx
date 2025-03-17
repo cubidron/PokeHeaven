@@ -59,11 +59,11 @@ export default function Mods({
               onClick={(e) => e.stopPropagation()}
               className="w-[44rem] h-max max-h-[36rem] min-h-48 p-4 bg-body text-white shadow-2xl shadow-black/60 rounded-xl flex flex-col">
               <h1 className="text-xl leading-3 flex items-center justify-between font-medium">
-                Optional Mods
+                Mods Optionnels
                 <button
                   onClick={async () => {
                     setLoading(true);
-                    // await mods.fetch(); // Uncomment and implement this line if needed
+                    // await mods.fetch(); // Décommentez et implémentez cette ligne si nécessaire
                     setLoading(false);
                   }}
                   className="w-6 h-6 bg-body hover:bg-primary ease-in-out duration-300 rounded">
@@ -107,7 +107,7 @@ export default function Mods({
                     </div>
                   ))
                 ) : (
-                  <p className="text-white/60">No mods found</p>
+                  <p className="text-white/60">Aucun mod trouvé</p>
                 )}
               </ul>
             </div>
