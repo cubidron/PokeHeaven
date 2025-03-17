@@ -63,7 +63,7 @@ function RouteComponent() {
             />
           </svg>
         </Link>
-        {/* <p className="font-light top-full w-full text-center mt-1 absolute text-sm text-white/50">
+        <p className="font-light top-full w-full text-center mt-1 absolute text-sm text-white/50">
           Ce n'est pas votre compte?{" "}
           <span
             onClick={() => {
@@ -73,7 +73,7 @@ function RouteComponent() {
             className="text-primary cursor-pointer hover:underline">
             Annuler
           </span>
-        </p> */}
+        </p>
       </span>
     </>
   );

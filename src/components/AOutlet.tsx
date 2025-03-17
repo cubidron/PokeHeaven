@@ -23,8 +23,16 @@ export const AnimatedOutlet = (
   const isPresent = useIsPresent();
 
   if (isPresent) {
-    const clone = cloneDeep(routerContext);
-    renderedContext.current = clone;
+    try {
+      const clone = cloneDeep(routerContext);
+      renderedContext.current = clone;
+    } catch (error) {
+      console.error(
+        "cloneDeep failed, falling back to original routerContext",
+        error
+      );
+      renderedContext.current = routerContext;
+    }
   }
 
   // console.log('Animated', isPresent, renderedContext.current);
