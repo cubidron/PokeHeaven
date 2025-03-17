@@ -1,9 +1,9 @@
 import { create } from "zustand";
-import { getVersion } from '@tauri-apps/api/app';
-import * as path from '@tauri-apps/api/path';
+import { getVersion } from "@tauri-apps/api/app";
+import * as path from "@tauri-apps/api/path";
 import { storage } from "../routes/__root";
 
-export type TLaunchBehavior = "keep" | "minimize" | "close"
+export type TLaunchBehavior = "keep" | "minimize" | "close";
 
 // Local options that launcher will store
 interface ILocalOptions {
@@ -11,7 +11,7 @@ interface ILocalOptions {
   fullScreen?: boolean;
   launchBehavior?: TLaunchBehavior;
   selectedServer?: string;
-  discordRpc?: boolean,
+  discordRpc?: boolean;
   optionalMods?: {
     fileName: string;
     enabled: boolean;
@@ -39,11 +39,11 @@ export const useOptions = create<IOptionsStore>((set) => ({
       javaPath: await path.join(appDir, "runtimes"),
       appDir,
       launchBehavior: options?.launchBehavior ?? "minimize",
-      maxMemory: options?.maxMemory ?? 2048,
+      maxMemory: options?.maxMemory ?? 4,
       fullScreen: options?.fullScreen ?? false,
       selectedServer: options?.selectedServer,
       discordRpc: options?.discordRpc ?? true,
-      optionalMods: options?.optionalMods ?? []
+      optionalMods: options?.optionalMods ?? [],
     });
   },
   set: async (change: IOptions) => {
@@ -58,9 +58,9 @@ export const useOptions = create<IOptionsStore>((set) => ({
       fullScreen: options.fullScreen,
       selectedServer: options.selectedServer,
       discordRpc: options.discordRpc,
-      optionalMods: options.optionalMods
+      optionalMods: options.optionalMods,
     });
 
     set(options);
-  }
-}))
+  },
+}));

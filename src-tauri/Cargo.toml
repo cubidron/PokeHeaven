@@ -23,11 +23,15 @@ crate-type = ["staticlib", "cdylib", "rlib"]
 tauri-build = { version = "2", features = [] }
 
 [dependencies]
-tauri = { version = "2", features = ["macos-private-api", "tray-icon"] }
+tauri = { version = "2", features = [
+    "macos-private-api",
+    "tray-icon",
+    "devtools",
+] }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 window-vibrancy = "0.5.2"
-lyceris = { git = "https://github.com/BatuhanAksoyy/lyceris", rev = "3b0c2c8ef5af021bb0f7b32cd32c19428d5402b3" }
+lyceris = { git = "https://github.com/BatuhanAksoyy/lyceris", rev = "4860e859d09c993adaef40eac843fe846015b6fc" }
 thiserror = "2.0.11"
 tokio = { version = "1.44.1", features = ["process"] }
 log = "0.4.26"
