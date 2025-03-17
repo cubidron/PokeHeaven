@@ -29,7 +29,7 @@
     ],
     "macOSPrivateApi": true,
     "security": {
-      "csp": "frame-ancestors 'youtube.com' 'www.youtube.com';"
+      "csp": "default-src * 'unsafe-inline' 'unsafe-eval'; frame-src https://www.youtube.com;"
     }
   },
   "bundle": {

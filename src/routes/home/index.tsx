@@ -40,7 +40,8 @@ const YoutubeIFrame = React.memo(
       }}
       src={source}
       title=""
-      sandbox="allow-scripts allow-same-origin"
+      allow="encrypted-media; picture-in-picture"
+      sandbox="allow-scripts allow-same-origin allow-presentation"
     />
   )
 );
