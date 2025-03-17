@@ -8,7 +8,6 @@ import { useEffect } from "react";
 import { useAuth } from "../store/auth";
 import useNewses from "../store/news";
 import { clearLoading, setLoading, useLoading } from "../components/loading";
-import useMods from "../store/mods";
 import useRemote from "../store/remote";
 import { useOptions } from "../store/options";
 import { load, Store } from "@tauri-apps/plugin-store";
@@ -29,7 +28,6 @@ function RootComponent() {
   const location = useLocation();
   const auth = useAuth();
   const nav = useNavigate();
-  const mods = useMods();
   const remote = useRemote();
   const news = useNewses();
   const options = useOptions();
@@ -40,7 +38,7 @@ function RootComponent() {
     (async () => {
       try {
         info("Loading storage");
-        storage = await load('storage.json', { autoSave: true });
+        storage = await load("storage.json", { autoSave: true });
         setLoading("Please wait", "Loading settings...");
         await options.init();
         setLoading("Please wait", "Initializing authentication...");
@@ -61,33 +59,43 @@ function RootComponent() {
             await start(remote.discordRpc?.clientId || DISCORD_CLIENT_ID);
             await initializeDiscordState(useRemote.getState().discordRpc!);
             info("Discord RPC initialized");
-
           } catch (e: any) {
-            error(`Error during Discord RPC initialization: ${typeof (e) === "string" ? e : e?.message}`);
+            error(
+              `Error during Discord RPC initialization: ${typeof e === "string" ? e : e?.message}`
+            );
           } // Ignore error.
         }
-        setLoading("Please wait", "Fetching mods...");
-        await mods.fetch();
         setLoading("Please wait", "Finishing...");
         unlisten = [
           await listen("progress", (event: any) => {
             useLoading.setState({
               currentProgress: event.payload.current,
-              maxProgress: event.payload.max,
+              maxProgress: event.payload.total,
             });
           }),
           await listen("clear-loading", (_) => {
             clearLoading();
           }),
           await listen("crash", (event: any) => {
-            Alert({ title: event.payload.title, message: event.payload.message, bg: true });
-          })
+            Alert({
+              title: event.payload.title,
+              message: event.payload.message,
+              bg: true,
+            });
+          }),
         ];
         clearLoading();
       } catch (e: any) {
-        error(`Error druing front initialization: ${typeof (e) === "string" ? e : e?.message}`);
+        error(
+          `Error druing front initialization: ${typeof e === "string" ? e : e?.message}`
+        );
         return Alert({
-          title: "Error", message: "There was an error during initialization. Please try again or contact with support.", force: true, bg: true, action() {
+          title: "Error",
+          message:
+            "There was an error during initialization. Please try again or contact with support.",
+          force: true,
+          bg: true,
+          action() {
             window.location.reload();
           },
         });
@@ -96,7 +104,7 @@ function RootComponent() {
 
     return () => {
       unlisten?.map((fn) => fn());
-    }
+    };
   }, []);
 
   useEffect(() => {

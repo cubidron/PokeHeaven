@@ -21,7 +21,7 @@ const Loading = () => {
   const isLoading = currentProgress <= 0 || subText.includes("Checking");
 
   const progressPercentage =
-    maxProgress > 0 ? (currentProgress / maxProgress) * 100 : 0;
+    maxProgress > 0 ? (currentProgress / maxProgress) * 100 : 31;
 
   return (
     <section

@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useAuth } from "../../store/auth";
 
-export const Route = createFileRoute("/onboard/1")({
+export const Route = createFileRoute("/onboard/confirm")({
   component: RouteComponent,
 });
 
@@ -14,12 +14,12 @@ function RouteComponent() {
         <span>
           <h1 className="font-extrabold text-3xl">PhynariaMC</h1>
           <p className="font-light text-sm text-white/50">
-            Don't have an account?{" "}
+            Vous n'avez pas de compte?{" "}
             <a
               href="https://phynaria.fr/user/register"
               target="_blank"
               className="text-primary hover:underline">
-              Sign Up
+              S'inscrire
             </a>
           </p>
         </span>
@@ -42,15 +42,15 @@ function RouteComponent() {
             {auth.user?.username}
           </h1>
           <p className="text-base font-extralight leading-[100%]">
-            Phynaria Account
+            Compte Phynaria
           </p>
         </span>
       )}
-      <span className="relative flex flex-col mb-1 mt-3">
+      <span className="relative flex flex-col mb-1_ mt-3">
         <Link
           to="/home"
           className="px-3.5 py-1.5 cursor-pointer outline-none ease-smooth duration-200 hover:saturate-150 gap-3 bg-primary rounded-lg flex items-center justify-center">
-          Continue
+          Continuer
           <svg
             width="12"
             height="12"
@@ -63,17 +63,17 @@ function RouteComponent() {
             />
           </svg>
         </Link>
-        <p className="font-light top-full w-full text-center mt-1 absolute text-sm text-white/50">
-          This not your account?{" "}
+        {/* <p className="font-light top-full w-full text-center mt-1 absolute text-sm text-white/50">
+          Ce n'est pas votre compte?{" "}
           <span
             onClick={() => {
               auth.user && auth.logout(auth.user);
-              navigate({ to: "/onboard" });
+              navigate({ to: "/onboard/login" });
             }}
             className="text-primary cursor-pointer hover:underline">
-            Cancel
+            Annuler
           </span>
-        </p>
+        </p> */}
       </span>
     </>
   );

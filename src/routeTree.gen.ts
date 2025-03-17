@@ -16,7 +16,8 @@ import { Route as HomeRouteImport } from './routes/home/route'
 import { Route as IndexImport } from './routes/index'
 import { Route as OnboardIndexImport } from './routes/onboard/index'
 import { Route as HomeIndexImport } from './routes/home/index'
-import { Route as Onboard1Import } from './routes/onboard/1'
+import { Route as OnboardLoginImport } from './routes/onboard/login'
+import { Route as OnboardConfirmImport } from './routes/onboard/confirm'
 import { Route as HomeSettingsImport } from './routes/home/settings'
 
 // Create/Update Routes
@@ -51,9 +52,15 @@ const HomeIndexRoute = HomeIndexImport.update({
   getParentRoute: () => HomeRouteRoute,
 } as any)
 
-const Onboard1Route = Onboard1Import.update({
-  id: '/1',
-  path: '/1',
+const OnboardLoginRoute = OnboardLoginImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => OnboardRouteRoute,
+} as any)
+
+const OnboardConfirmRoute = OnboardConfirmImport.update({
+  id: '/confirm',
+  path: '/confirm',
   getParentRoute: () => OnboardRouteRoute,
 } as any)
 
@@ -95,11 +102,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HomeSettingsImport
       parentRoute: typeof HomeRouteImport
     }
-    '/onboard/1': {
-      id: '/onboard/1'
-      path: '/1'
-      fullPath: '/onboard/1'
-      preLoaderRoute: typeof Onboard1Import
+    '/onboard/confirm': {
+      id: '/onboard/confirm'
+      path: '/confirm'
+      fullPath: '/onboard/confirm'
+      preLoaderRoute: typeof OnboardConfirmImport
+      parentRoute: typeof OnboardRouteImport
+    }
+    '/onboard/login': {
+      id: '/onboard/login'
+      path: '/login'
+      fullPath: '/onboard/login'
+      preLoaderRoute: typeof OnboardLoginImport
       parentRoute: typeof OnboardRouteImport
     }
     '/home/': {
@@ -136,12 +150,14 @@ const HomeRouteRouteWithChildren = HomeRouteRoute._addFileChildren(
 )
 
 interface OnboardRouteRouteChildren {
-  Onboard1Route: typeof Onboard1Route
+  OnboardConfirmRoute: typeof OnboardConfirmRoute
+  OnboardLoginRoute: typeof OnboardLoginRoute
   OnboardIndexRoute: typeof OnboardIndexRoute
 }
 
 const OnboardRouteRouteChildren: OnboardRouteRouteChildren = {
-  Onboard1Route: Onboard1Route,
+  OnboardConfirmRoute: OnboardConfirmRoute,
+  OnboardLoginRoute: OnboardLoginRoute,
   OnboardIndexRoute: OnboardIndexRoute,
 }
 
@@ -154,7 +170,8 @@ export interface FileRoutesByFullPath {
   '/home': typeof HomeRouteRouteWithChildren
   '/onboard': typeof OnboardRouteRouteWithChildren
   '/home/settings': typeof HomeSettingsRoute
-  '/onboard/1': typeof Onboard1Route
+  '/onboard/confirm': typeof OnboardConfirmRoute
+  '/onboard/login': typeof OnboardLoginRoute
   '/home/': typeof HomeIndexRoute
   '/onboard/': typeof OnboardIndexRoute
 }
@@ -162,7 +179,8 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/home/settings': typeof HomeSettingsRoute
-  '/onboard/1': typeof Onboard1Route
+  '/onboard/confirm': typeof OnboardConfirmRoute
+  '/onboard/login': typeof OnboardLoginRoute
   '/home': typeof HomeIndexRoute
   '/onboard': typeof OnboardIndexRoute
 }
@@ -173,7 +191,8 @@ export interface FileRoutesById {
   '/home': typeof HomeRouteRouteWithChildren
   '/onboard': typeof OnboardRouteRouteWithChildren
   '/home/settings': typeof HomeSettingsRoute
-  '/onboard/1': typeof Onboard1Route
+  '/onboard/confirm': typeof OnboardConfirmRoute
+  '/onboard/login': typeof OnboardLoginRoute
   '/home/': typeof HomeIndexRoute
   '/onboard/': typeof OnboardIndexRoute
 }
@@ -185,18 +204,26 @@ export interface FileRouteTypes {
     | '/home'
     | '/onboard'
     | '/home/settings'
-    | '/onboard/1'
+    | '/onboard/confirm'
+    | '/onboard/login'
     | '/home/'
     | '/onboard/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/home/settings' | '/onboard/1' | '/home' | '/onboard'
+  to:
+    | '/'
+    | '/home/settings'
+    | '/onboard/confirm'
+    | '/onboard/login'
+    | '/home'
+    | '/onboard'
   id:
     | '__root__'
     | '/'
     | '/home'
     | '/onboard'
     | '/home/settings'
-    | '/onboard/1'
+    | '/onboard/confirm'
+    | '/onboard/login'
     | '/home/'
     | '/onboard/'
   fileRoutesById: FileRoutesById
@@ -242,7 +269,8 @@ export const routeTree = rootRoute
     "/onboard": {
       "filePath": "onboard/route.tsx",
       "children": [
-        "/onboard/1",
+        "/onboard/confirm",
+        "/onboard/login",
         "/onboard/"
       ]
     },
@@ -250,8 +278,12 @@ export const routeTree = rootRoute
       "filePath": "home/settings.tsx",
       "parent": "/home"
     },
-    "/onboard/1": {
-      "filePath": "onboard/1.tsx",
+    "/onboard/confirm": {
+      "filePath": "onboard/confirm.tsx",
+      "parent": "/onboard"
+    },
+    "/onboard/login": {
+      "filePath": "onboard/login.tsx",
       "parent": "/onboard"
     },
     "/home/": {
