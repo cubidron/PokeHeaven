@@ -48,6 +48,7 @@ jobs:
         uses: swatinem/rust-cache@v2
         with:
           workspaces: './src-tauri -> target'
+        continue-on-error: true
 
       - name: install dependencies (ubuntu only)
         if: matrix.platform == 'ubuntu-22.04'
@@ -62,6 +63,6 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: tauri-build-${{ matrix.platform }}-${{ matrix.arch }}
-          path: ${{ matrix.folder == '' && 'src-tauri/target/release/bundle' || format('src-tauri/target/{0}/release/bundle', matrix.folder) }}
+          path: ${{ matrix.folder == '' && 'src-tauri/target/release/bundle' || 'src-tauri/target/' + matrix.folder + '/release/bundle' }}
           retention-days: 5  # Optional: specify how long to keep the artifacts
           compression-level: 6  # Optional: specify compression level (0-9)
