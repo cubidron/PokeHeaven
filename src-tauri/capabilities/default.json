@@ -36,6 +36,11 @@
     "drpc:allow-is-running",
     "drpc:allow-spawn-thread",
     "drpc:allow-destroy-thread",
-    "log:default"
+    "log:default",
+    "process:allow-restart",
+    "updater:allow-check",
+    "updater:allow-download-and-install",
+    "updater:allow-install",
+    "updater:allow-download"
   ]
 }

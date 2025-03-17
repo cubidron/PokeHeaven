@@ -49,7 +49,7 @@ pub struct LoaderConfig {
 #[serde(rename_all = "camelCase")]
 pub struct OptionalMod {
     pub file_name: String,
-    pub enabled: bool
+    pub enabled: bool,
 }
 
 #[tauri::command]

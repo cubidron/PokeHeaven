@@ -22,6 +22,8 @@ pub struct AppState {
 pub fn run() {
     log::info!("Starting launcher");
     tauri::Builder::default()
+        .plugin(tauri_plugin_process::init())
+        .plugin(tauri_plugin_updater::Builder::new().build())
         .plugin(tauri_plugin_log::Builder::new().build())
         .plugin(tauri_plugin_single_instance::init(|app, _, _| {
             log::info!("Another instance of the launcher is already running.");

@@ -17,12 +17,31 @@ import { start } from "tauri-plugin-drpc";
 import { initializeDiscordState } from "../helpers";
 import { DISCORD_CLIENT_ID } from "../constants";
 import Alert from "../components/alert";
+import { check } from "@tauri-apps/plugin-updater"
+import { relaunch } from "@tauri-apps/plugin-process"
 
 export let storage: Store | undefined;
 
 export const Route = createRootRoute({
   component: RootComponent,
 });
+
+const disableShortcuts = (event: KeyboardEvent) => {
+  if (
+    (event.ctrlKey && event.code === "KeyQ") ||
+    (event.ctrlKey && event.code === "KeyP") ||
+    (event.ctrlKey && event.code === "KeyF") ||
+    event.code === "F5"
+  ) {
+    event.preventDefault();
+  }
+};
+const disableContextMenu = (e: MouseEvent) => e.preventDefault();
+const disableCombinationClicks = (e: MouseEvent) => {
+  if (e.ctrlKey || e.altKey) {
+    e.preventDefault();
+  }
+};
 
 function RootComponent() {
   const location = useLocation();
@@ -37,6 +56,35 @@ function RootComponent() {
     let unlisten: UnlistenFn[] | undefined;
     (async () => {
       try {
+        info("Checking updates");
+        const update = await check();
+        if (update) {
+          info(
+            `found update ${update.version} from ${update.date} with notes ${update.body}`
+          );
+          let downloaded = 0;
+          let contentLength = 0;
+          // alternatively we could also call update.download() and update.install() separately
+          await update.downloadAndInstall((event) => {
+            switch (event.event) {
+              case 'Started':
+                contentLength = event.data.contentLength!;
+                setLoading("Mise à jour", "Téléchargement de la mise à jour...");
+                break;
+              case 'Progress':
+                downloaded += event.data.chunkLength;
+                useLoading.setState({
+                  currentProgress: downloaded,
+                  maxProgress: contentLength
+                })
+                break;
+              case 'Finished':
+                break;
+            }
+          });
+
+          return await relaunch();
+        }
         info("Loading storage");
         storage = await load("storage.json", { autoSave: true });
         setLoading("Veuillez patienter", "Chargement des paramètres...");
@@ -101,8 +149,15 @@ function RootComponent() {
       }
     })();
 
+    window.addEventListener("contextmenu", disableContextMenu);
+    window.addEventListener("keydown", disableShortcuts);
+    window.addEventListener("click", disableCombinationClicks);
+
     return () => {
       unlisten?.map((fn) => fn());
+      window.removeEventListener("contextmenu", disableContextMenu);
+      window.removeEventListener("keydown", disableShortcuts);
+      window.removeEventListener("click", disableCombinationClicks);
     };
   }, []);
 

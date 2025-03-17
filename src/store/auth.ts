@@ -3,6 +3,7 @@ import { WEB_API_BASE } from "../constants";
 import { jsonRequest } from "../helpers";
 import { addNoti } from "../components/notification";
 import { storage } from "../routes/__root";
+import { error } from "@tauri-apps/plugin-log";
 
 //SYSTEM AUTH
 interface IUser {
@@ -29,10 +30,10 @@ export const useAuth = create<UserStore>((set, get) => ({
   users: [],
   init: async () => {
     try {
-      const userData = await storage?.get<{ all: IUser[]; current?: IUser }>("user");
+      let userData = await storage?.get<{ all: IUser[]; current?: IUser }>("user");
       if (!userData) {
-        addNoti("Error while loading user data. Please try again or contact support.");
-        return;
+        userData = { all: [], current: undefined };
+        await storage?.set("user", userData);
       };
 
       const { current, all } = userData;
@@ -53,7 +54,8 @@ export const useAuth = create<UserStore>((set, get) => ({
       }
       await storage?.set("user", userData);
       set({ user: userData.current, users: userData.all });
-    } catch (error) {
+    } catch (e: any) {
+      error(typeof e === "string" ? e : e.message);
       addNoti("Error while loading user data. Please try again or contact support.");
     }
   },
@@ -68,7 +70,6 @@ export const useAuth = create<UserStore>((set, get) => ({
       access_token: user.access_token
     });
 
-    console.log("Verifying user", user, request.status);
     if (request.status !== 200) {
       return false;
     }
@@ -77,7 +78,6 @@ export const useAuth = create<UserStore>((set, get) => ({
   },
   findValidUser: async (users: IUser[]) => {
     for (const user of users) {
-      console.log("Verifying user", user);
       if (await get().verifyUser(user)) {
         return user;
       }

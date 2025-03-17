@@ -2,7 +2,7 @@ name: 'publish'
 on:
   push:
     branches:
-      - main
+      - release
   workflow_dispatch:
 
 jobs:
@@ -42,34 +42,24 @@ jobs:
       - name: install Rust stable
         uses: dtolnay/rust-toolchain@stable
         with:
-          # Use spaces instead of commas for targets
-          targets: ${{ matrix.platform == 'macos-latest' && 'aarch64-apple-darwin x86_64-apple-darwin' || '' }}
-
+          targets: ${{ matrix.platform == 'macos-latest' && 'aarch64-apple-darwin,x86_64-apple-darwin' || '' }}
+      - name: Rust cache
+        uses: swatinem/rust-cache@v2
+        with:
+          workspaces: './src-tauri -> target'
       - name: install dependencies (ubuntu only)
         if: matrix.platform == 'ubuntu-22.04'
         run: |
           sudo apt-get update
-          sudo apt-get install -y libwebkit2gtk-4.0-dev libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf xdg-utils build-essential libgtk-3-dev
+          sudo apt-get install -y libwebkit2gtk-4.0-dev libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
       - name: Install dependencies with Bun
         run: bun install
       - name: Build Tauri app
         run: bun run tauri build ${{ matrix.args }}
-      - name: Clean case-sensitive duplicates
-        if: matrix.platform == 'ubuntu-22.04'
-        run: |
-          find src-tauri/target/ -iname "phynariamc*" -print0 | while IFS= read -r -d '' file; do
-            base=$(basename "$file")
-            dir=$(dirname "$file")
-            mv "$file" "$dir/${base,,}" 2>/dev/null || true
-          done
-
       - name: Upload build artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: tauri-build-${{ matrix.platform }}-${{ matrix.arch }}
-          path: ${{ 
-            matrix.folder == '' && 
-            'src-tauri/target/release/bundle' || 
-            format('src-tauri/target/{0}/release/bundle', matrix.folder) }}
-          retention-days: 5
-          compression-level: 6
+          path: ${{ matrix.folder == '' && 'src-tauri/target/release/bundle' || format('src-tauri/target/{0}/release/bundle', matrix.folder) }}
+          retention-days: 5  # Optional: specify how long to keep the artifacts
+          compression-level: 6  # Optional: specify compression level (0-9)
