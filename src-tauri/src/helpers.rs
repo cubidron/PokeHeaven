@@ -1,9 +1,11 @@
 use std::path::{PathBuf, MAIN_SEPARATOR_STR};
 
+use lyceris::minecraft::emitter::Emitter as LycerisEmitter;
 use serde::{Deserialize, Serialize};
 use tauri_plugin_http::reqwest::Client;
-use lyceris::minecraft::emitter::Emitter as LycerisEmitter;
 use tokio::fs;
+
+use crate::commands::OptionalMod;
 
 pub fn get_loader_by(r#type: &str, version: &str) -> Box<dyn lyceris::minecraft::loader::Loader> {
     match r#type {
@@ -47,10 +49,35 @@ pub async fn list_files_recursively(dir: PathBuf) -> crate::Result<Vec<PathBuf>>
     Ok(files)
 }
 
+pub async fn set_optional_mods(
+    profile_dir: PathBuf,
+    optional_mods: &Vec<OptionalMod>,
+) -> crate::Result<()> {
+    let mods_dir = profile_dir.join("mods");
+    if !mods_dir.exists() {
+        fs::create_dir_all(&mods_dir).await?;
+    }
+
+    for optional_mod in optional_mods {
+        let mod_path = mods_dir.join(&optional_mod.file_name);
+        let ignored_mod_path = mods_dir.join(format!("{}.ignored", &optional_mod.file_name));
+        if optional_mod.enabled {
+            if ignored_mod_path.exists() {
+                fs::rename(&ignored_mod_path, &mod_path).await?;
+            }
+        } else if mod_path.exists() {
+            fs::rename(&mod_path, &ignored_mod_path).await?;
+        }
+    }
+
+    Ok(())
+}
+
 pub async fn synchronize_files(
     profile_dir: PathBuf,
     profile_name: String,
     exclude: Vec<String>,
+    optional_mods: &[OptionalMod],
     emitter: LycerisEmitter,
     client: Client,
 ) -> crate::Result<()> {
@@ -79,22 +106,64 @@ pub async fn synchronize_files(
         }
     }
 
+    let mods_dir = profile_dir.join("mods");
+
     for remote_file in &remote_files {
         let local_path = profile_dir.join(&remote_file.path);
-        if !local_path.exists() {
-            lyceris::http::downloader::download(
-                format!(
-                    "{}/PhynariaLauncherV2/files/game/{}/{}",
-                    LAUNCHER_BASE, profile_name, remote_file.path
-                ),
-                &local_path,
-                Some(&emitter),
-                Some(&client),
-            )
-            .await?;
+        let ignored_path = if local_path.starts_with(&mods_dir) {
+            Some(mods_dir.join(format!("{}.ignored", &remote_file.name)))
         } else {
-            let hash = lyceris::util::hash::calculate_sha1(&local_path)?;
-            if hash != remote_file.hash {
+            None
+        };
+
+        let should_download = if let Some(ignored_path) = &ignored_path {
+            !local_path.exists() && !ignored_path.exists()
+        } else {
+            !local_path.exists()
+        };
+
+        if should_download {
+            if let Some(optional) = optional_mods
+                .iter()
+                .find(|om| om.file_name == remote_file.name)
+            {
+                if optional.enabled {
+                    lyceris::http::downloader::download(
+                        format!(
+                            "{}/PhynariaLauncherV2/files/game/{}/{}",
+                            LAUNCHER_BASE, profile_name, remote_file.path
+                        ),
+                        local_path,
+                        Some(&emitter),
+                        Some(&client),
+                    )
+                    .await?;
+                }
+            } else {
+                lyceris::http::downloader::download(
+                    format!(
+                        "{}/PhynariaLauncherV2/files/game/{}/{}",
+                        LAUNCHER_BASE, profile_name, remote_file.path
+                    ),
+                    &local_path,
+                    Some(&emitter),
+                    Some(&client),
+                )
+                .await?;
+            }
+        } else {
+            let local_hash = lyceris::util::hash::calculate_sha1(&local_path).unwrap_or_default();
+            let ignored_hash = if let Some(ignored_path) = &ignored_path {
+                if ignored_path.exists() {
+                    lyceris::util::hash::calculate_sha1(ignored_path).unwrap_or_default()
+                } else {
+                    "".to_string()
+                }
+            } else {
+                "".to_string()
+            };
+
+            if local_hash != remote_file.hash && ignored_hash != remote_file.hash {
                 lyceris::http::downloader::download(
                     format!(
                         "{}/PhynariaLauncherV2/files/game/{}/{}",
@@ -111,17 +180,23 @@ pub async fn synchronize_files(
 
     for local_file in &local_files {
         let relative_path = local_file
-            .strip_prefix(&profile_dir)
-            .unwrap()
+            .strip_prefix(&profile_dir)?
             .to_str()
-            .unwrap();
-        if !remote_files
+            .ok_or(crate::Error::General("Invalid path".to_string()))?;
+
+        let is_remote_file = remote_files
             .iter()
-            .any(|rf| rf.path.replace("/", MAIN_SEPARATOR_STR) == relative_path)
-            && !exclude
-                .iter()
-                .any(|e| relative_path.starts_with(&e.replace("/", MAIN_SEPARATOR_STR)))
-        {
+            .any(|rf| rf.path.replace("/", MAIN_SEPARATOR_STR) == relative_path);
+
+        let is_excluded = exclude
+            .iter()
+            .any(|e| relative_path.starts_with(&e.replace("/", MAIN_SEPARATOR_STR)));
+
+        let is_ignored_mod = relative_path
+            .starts_with(format!("mods{}", MAIN_SEPARATOR_STR).as_str())
+            && relative_path.ends_with(".ignored");
+
+        if !is_remote_file && !is_excluded && !is_ignored_mod {
             fs::remove_file(local_file).await?;
         }
     }

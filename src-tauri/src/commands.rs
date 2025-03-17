@@ -9,7 +9,7 @@ use tauri::{Emitter, Manager};
 use tauri::{State, Window};
 use tokio::process::Child;
 
-use crate::helpers::{get_loader_by, synchronize_files};
+use crate::helpers::{get_loader_by, set_optional_mods, synchronize_files};
 use crate::AppState;
 
 // The main instance of the minecraft process
@@ -29,6 +29,7 @@ pub struct Config {
     memory: u64,
     fullscreen: bool,
     after: String,
+    optional_mods: Vec<OptionalMod>,
 }
 
 #[derive(Serialize, Deserialize, Clone)]
@@ -44,21 +45,35 @@ pub struct LoaderConfig {
     version: String,
 }
 
+#[derive(Serialize, Deserialize, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct OptionalMod {
+    pub file_name: String,
+    pub enabled: bool
+}
+
 #[tauri::command]
 pub async fn launch(window: Window, state: State<'_, AppState>, cfg: Config) -> crate::Result<()> {
     log::info!(
-        "Launching game with memory: {}, username: {}",
+        "Preparing launch with memory: {}, username: {}",
         cfg.memory * 512,
         cfg.username
     );
     let game_dir = PathBuf::from(cfg.game_dir);
+    let minecraft_version_separated = cfg.minecraft.version.split('.').collect::<Vec<&str>>();
+    if minecraft_version_separated.len() < 2 {
+        return Err(crate::Error::General(
+            "Invalid minecraft version format".to_string(),
+        ));
+    }
+
     let lyceris_config = lyceris::minecraft::config::Config {
         game_dir: game_dir.clone(),
         profile: Some(Profile {
             name: cfg.profile.clone(),
             root: game_dir.join("profiles"),
         }),
-        version: cfg.minecraft.version,
+        version: cfg.minecraft.version.clone(),
         authentication: lyceris::auth::AuthMethod::Offline {
             username: cfg.username,
             uuid: None,
@@ -75,10 +90,29 @@ pub async fn launch(window: Window, state: State<'_, AppState>, cfg: Config) -> 
         java_version: None,
         runtime_dir: None,
         custom_java_args: vec![],
-        custom_args: if cfg.fullscreen {
-            vec!["--fullscreen".to_string()]
-        } else {
-            vec![]
+        custom_args: {
+            let mut args = if minecraft_version_separated
+                .get(1)
+                .and_then(|v| v.parse::<u16>().ok())
+                .unwrap_or_default()
+                >= 20
+            {
+                vec![
+                    "--quickPlayMultiplayer".to_string(),
+                    format!("{}:{}", cfg.ip, cfg.port),
+                ]
+            } else {
+                vec![
+                    "--server".to_string(),
+                    cfg.ip.clone(),
+                    "--port".to_string(),
+                    cfg.port.to_string(),
+                ]
+            };
+            if cfg.fullscreen {
+                args.push("--fullscreen".to_string());
+            }
+            args
         },
     };
 
@@ -105,16 +139,22 @@ pub async fn launch(window: Window, state: State<'_, AppState>, cfg: Config) -> 
     lyceris::minecraft::install::install(&lyceris_config, Some(&emitter)).await?;
 
     log::info!("Synchronizing files");
+    let profile_dir = game_dir.join("profiles").join(cfg.profile.clone());
     synchronize_files(
-        game_dir.join("profiles").join(cfg.profile.clone()),
+        profile_dir.clone(),
         cfg.profile,
         cfg.minecraft.exclude,
+        &cfg.optional_mods,
         emitter.clone(),
         state.request.clone(),
     )
     .await?;
 
+    set_optional_mods(profile_dir, &cfg.optional_mods).await?;
+
     let mut child = GAME.lock().await;
+
+    log::info!("Launching game");
 
     *child = Some(lyceris::minecraft::launch::launch(&lyceris_config, Some(&emitter)).await?);
 
@@ -137,10 +177,7 @@ pub async fn launch(window: Window, state: State<'_, AppState>, cfg: Config) -> 
     loop {
         let mut lock = GAME.lock().await;
         if let Some(status) = lock.as_mut().unwrap().try_wait()? {
-            if status.success() {
-                window.show().ok();
-                window.set_focus().ok();
-            } else {
+            if !status.success() {
                 #[derive(Clone, Serialize, Deserialize)]
                 struct Payload {
                     title: String,
@@ -159,6 +196,8 @@ pub async fn launch(window: Window, state: State<'_, AppState>, cfg: Config) -> 
                     )
                     .ok();
             }
+            window.show().ok();
+            window.set_focus().ok();
             break;
         }
 

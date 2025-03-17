@@ -64,7 +64,7 @@ function RouteComponent() {
           </span>
           <hr />
           <span className="flex gap-2 items-center">
-            <p className="text-xs w-30 text-white/60">Emplacement de Java.</p>
+            <p className="text-xs w-45 text-white/60">Emplacement de Java.</p>
             <input
               type="text"
               spellCheck={false}

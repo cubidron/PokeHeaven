@@ -62,6 +62,21 @@ function RouteComponent() {
     [options]
   );
 
+
+  const selectedServer =
+    options.selectedServer !== undefined
+      ? options.selectedServer
+      : remote?.servers?.[0]?.profile;
+
+  const optionalMods = remote.servers
+    ?.find((s) => s.profile === selectedServer)
+    ?.minecraft?.optionalMods.map((om) => {
+      om.enabled = options.optionalMods?.find(
+        (om2) => om2.fileName === om.fileName && om2.profile === selectedServer,
+      )?.enabled ?? om.default;
+      return om;
+    }) || [];
+
   const handleLaunchClick = useCallback(
     async (server: any) => {
       try {
@@ -80,6 +95,7 @@ function RouteComponent() {
             gameDir: options.appDir,
             minecraft: server.minecraft,
             after: options.launchBehavior,
+            optionalMods
           },
         });
         mainLoading.clear();
@@ -99,11 +115,6 @@ function RouteComponent() {
     [auth, disabled, mainLoading, options]
   );
 
-  const selectedServer =
-    options.selectedServer !== undefined
-      ? options.selectedServer
-      : remote?.servers?.[0]?.profile;
-
   return (
     <>
       <span className="flex h-12 shrink-0 relative rounded-xl backdrop-blur-sm bg-body/80 w-full">
@@ -116,11 +127,10 @@ function RouteComponent() {
                   e.stopPropagation();
                   handleServerClick(server);
                 }}
-                className={`shrink-0 flex outline-none w-56 items-center justify-center hover:bg-white/5 ease-smooth duration-200 rounded-lg ${
-                  selectedServer === server.profile
-                    ? "text-white bg-white/5"
-                    : "opacity-40 mix-blend-luminosity"
-                }`}>
+                className={`shrink-0 flex outline-none w-56 items-center justify-center hover:bg-white/5 ease-smooth duration-200 rounded-lg ${selectedServer === server.profile
+                  ? "text-white bg-white/5"
+                  : "opacity-40 mix-blend-luminosity"
+                  }`}>
                 <img
                   src={server.icon || "/images/logo.png"}
                   className="h-full p-1 pointer-events-none inline-block aspect-square max-w-max"
@@ -144,9 +154,9 @@ function RouteComponent() {
               <motion.span
                 key={server.serverName}
                 initial={{ opacity: 0, scale: 0.9, filter: "blur(12px)" }}
-                animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+                animate={{ opacity: 1, scale: 1, filter: "" }}
                 exit={{ opacity: 0, scale: 0.9, filter: "blur(12px)" }}
-                transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                transition={{ type: "spring", stiffness: 400, damping: 40 }}
                 className="flex w-full gap-4 items-center justify-center">
                 <div className="flex w-full flex-col min-w-[24rem]">
                   <img
@@ -167,9 +177,8 @@ function RouteComponent() {
                     <button
                       disabled={disabled.disabled}
                       onClick={() => handleLaunchClick(server)}
-                      className={`px-3.5 py-1.5 w-full cursor-pointer ease-smooth duration-200 hover:saturate-150 gap-3 bg-primary rounded-lg flex items-center justify-center ${
-                        disabled.disabled && "brightness-50 cursor-not-allowed"
-                      }`}>
+                      className={`px-3.5 py-1.5 w-full cursor-pointer ease-smooth duration-200 hover:saturate-150 gap-3 bg-primary rounded-lg flex items-center justify-center ${disabled.disabled && "brightness-50 cursor-not-allowed"
+                        }`}>
                       Lancer
                     </button>
                     <button
@@ -209,17 +218,7 @@ function RouteComponent() {
       <Mods
         show={modsModal}
         close={() => setModsModal(false)}
-        mods={
-          remote.servers
-            ?.find((s) => s.profile === selectedServer)
-            ?.minecraft?.optionalMods.map((om) => {
-              om.enabled = options.optionalMods?.find(
-                (om2) =>
-                  om2.fileName === om.fileName && om2.profile === selectedServer
-              )?.enabled;
-              return om;
-            }) || []
-        }
+        mods={optionalMods}
       />
     </>
   );

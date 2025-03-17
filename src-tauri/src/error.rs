@@ -8,6 +8,8 @@ pub enum Error {
     Tauri(#[from] tauri::Error),
     #[error(transparent)]
     IO(#[from] std::io::Error),
+    #[error(transparent)]
+    StripPrefix(#[from] std::path::StripPrefixError),
     #[error("{0}")]
     General(String),
 }

@@ -80,12 +80,8 @@ function RootComponent() {
             clearLoading();
           }),
           await listen("crash", (event: any) => {
-            Alert({
-              title: event.payload.title,
-              message: event.payload.message,
-              bg: true,
-            });
-          }),
+            Alert({ title: event.payload.title, message: event.payload.message });
+          })
         ];
         clearLoading();
       } catch (e: any) {

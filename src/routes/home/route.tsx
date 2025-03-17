@@ -104,9 +104,10 @@ function RouteComponent() {
                       <Link
                         to={path}
                         className="font-medium hover:text-primary ease-gentle duration-200 px-1.5">
-                        {frenchPages[
+                        {// @ts-ignore
+                          frenchPages[
                           item.charAt(0).toUpperCase() + item.slice(1)
-                        ] || item.charAt(0).toUpperCase() + item.slice(1)}
+                          ] || item.charAt(0).toUpperCase() + item.slice(1)}
                       </Link>
                       {i != paths.length - 2 && <span className="mx-0">/</span>}
                     </span>
@@ -184,17 +185,15 @@ function RouteComponent() {
                         className="bg-side size-8 rounded"></div>
                       <span className="relative">
                         <div
-                          className={`size-4 rounded-full grid place-items-center absolute -right-1 -top-1 ${
-                            auth?.user?.username == account.username
+                          className={`size-4 rounded-full grid place-items-center absolute -right-1 -top-1 ${auth?.user?.username == account.username
                               ? "bg-green-500/40"
                               : "bg-red-500/40"
-                          }`}>
+                            }`}>
                           <div
-                            className={`size-2 rounded-full ${
-                              auth?.user?.username == account.username
+                            className={`size-2 rounded-full ${auth?.user?.username == account.username
                                 ? "bg-green-500"
                                 : "bg-red-500"
-                            }`}></div>
+                              }`}></div>
                         </div>
                         <img
                           onLoad={(e) => {
@@ -223,11 +222,10 @@ function RouteComponent() {
                             account.username != auth?.user?.username &&
                               auth.switch(account);
                           }}
-                          className={`button shrink-0 hover:bg-white/5 rounded-lg ease-smooth duration-200 px-2 py-1 overflow-hidden relative ${
-                            auth?.user?.username === account.username
+                          className={`button shrink-0 hover:bg-white/5 rounded-lg ease-smooth duration-200 px-2 py-1 overflow-hidden relative ${auth?.user?.username === account.username
                               ? "hover:bg-dark cursor-default"
                               : ""
-                          }`}>
+                            }`}>
                           <p>Changer</p>
                         </button>
                       )}

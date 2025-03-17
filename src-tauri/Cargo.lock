@@ -2524,7 +2524,7 @@ dependencies = [
 [[package]]
 name = "lyceris"
 version = "1.1.1"
-source = "git+https://github.com/BatuhanAksoyy/lyceris?rev=aead2268af7fcefb360894303a824f22278a4e8a#aead2268af7fcefb360894303a824f22278a4e8a"
+source = "git+https://github.com/BatuhanAksoyy/lyceris?rev=3b0c2c8ef5af021bb0f7b32cd32c19428d5402b3#3b0c2c8ef5af021bb0f7b32cd32c19428d5402b3"
 dependencies = [
  "base64 0.22.1",
  "event-emitter-rs",
