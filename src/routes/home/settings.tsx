@@ -114,12 +114,9 @@ function RouteComponent() {
         </section>
         <section className="flex flex-col gap-1 relative size-full p-6 rounded-xl backdrop-blur-sm bg-body/80">
           <h4 className="font-extrabold mb-2">À propos du lanceur</h4>
-          <h1 className="text-4xl font-light">PhynariaMC</h1>
+          <h1 className="text-4xl font-light">{remote.about?.title}</h1>
           <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium
-            maiores commodi error vel maxime animi fuga qui architecto in, iste,
-            distinctio culpa quibusdam magni vero similique incidunt tempora
-            voluptates laborum?
+            {remote.about?.description}
           </p>
         </section>
       </div>
