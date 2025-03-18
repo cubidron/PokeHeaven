@@ -22,6 +22,7 @@ pub struct AppState {
 pub fn run() {
     log::info!("Starting launcher");
     tauri::Builder::default()
+        .plugin(tauri_plugin_system_info::init())
         .plugin(tauri_plugin_process::init())
         .plugin(tauri_plugin_updater::Builder::new().build())
         .plugin(tauri_plugin_log::Builder::new().build())
