@@ -52,7 +52,7 @@ function RouteComponent() {
           </div>
           <p className="font-extrabold my-2">Paramètres initiaux en jeu</p>
 
-          <span className="flex h-max gap-1 items-center">
+          <span className="flex h-max min-h-7 -gap-1 items-center">
             <p className="text-xs w-full text-white/60">
               Quantité maximale de mémoire.
             </p>
@@ -117,9 +117,7 @@ function RouteComponent() {
         <section className="flex flex-col gap-1 relative size-full p-6 rounded-xl backdrop-blur-sm bg-body/80">
           <h4 className="font-extrabold mb-2">À propos du lanceur</h4>
           <h1 className="text-4xl font-light">{remote.about?.title}</h1>
-          <p>
-            {remote.about?.description}
-          </p>
+          <p>{remote.about?.description}</p>
         </section>
       </div>
       <section className="flex flex-col relative p-4 rounded-xl backdrop-blur-sm bg-body/80">
