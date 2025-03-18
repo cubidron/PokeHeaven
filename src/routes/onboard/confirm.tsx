@@ -49,6 +49,7 @@ function RouteComponent() {
       <span className="relative flex flex-col mb-1_ mt-3">
         <Link
           to="/home"
+          draggable={false}
           className="px-3.5 py-1.5 cursor-pointer outline-none ease-smooth duration-200 hover:saturate-150 gap-3 bg-primary rounded-lg flex items-center justify-center">
           Continuer
           <svg

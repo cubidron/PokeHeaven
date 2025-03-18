@@ -103,7 +103,8 @@ function RouteComponent() {
                     <span key={i} className="flex items-center">
                       <Link
                         to={path}
-                        className="font-medium hover:text-primary ease-gentle duration-200 px-1.5">
+                        className="font-medium hover:text-primary ease-gentle duration-200 px-1.5"
+                        draggable={false}>
                         {// @ts-ignore
                           frenchPages[
                           item.charAt(0).toUpperCase() + item.slice(1)
@@ -267,12 +268,14 @@ function RouteComponent() {
         <Hd />
         <Link
           to="/home"
-          className="flex items-center hover:bg-white/5 ease-smooth duration-200 px-4 rounded-lg h-full w-max">
+          className="flex items-center hover:bg-white/5 ease-smooth duration-200 px-4 rounded-lg h-full w-max"
+          draggable={false}>
           Accueil
         </Link>
         <Link
           to="/home/settings"
-          className="flex items-center hover:bg-white/5 ease-smooth duration-200 px-4 rounded-lg h-full w-max">
+          className="flex items-center hover:bg-white/5 ease-smooth duration-200 px-4 rounded-lg h-full w-max"
+          draggable={false}>
           Paramètres
         </Link>
       </header>
