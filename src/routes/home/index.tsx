@@ -102,6 +102,7 @@ function RouteComponent() {
           },
         });
         mainLoading.clear();
+        disabled.setDisabled(false);
       } catch (err: any) {
         console.error(err);
         Alert({

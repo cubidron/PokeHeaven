@@ -123,13 +123,26 @@ pub async fn launch(window: Window, state: State<'_, AppState>, cfg: Config) -> 
             lyceris::minecraft::emitter::Event::MultipleDownloadProgress,
             {
                 let window = window.clone();
-                move |(_, current, total): (String, u64, u64)| {
+                move |(path, current, total, file_type): (String, u64, u64, String)| {
                     #[derive(Clone, Serialize, Deserialize)]
                     struct Payload {
                         current: u64,
                         total: u64,
+                        path: String,
+                        #[serde(rename = "fileType")]
+                        file_type: String,
                     }
-                    window.emit("progress", Payload { current, total }).ok();
+                    window
+                        .emit(
+                            "progress",
+                            Payload {
+                                current,
+                                total,
+                                path,
+                                file_type,
+                            },
+                        )
+                        .ok();
                 }
             },
         )
@@ -170,39 +183,38 @@ pub async fn launch(window: Window, state: State<'_, AppState>, cfg: Config) -> 
         _ => {}
     }
 
-    drop(child);
+    tauri::async_runtime::spawn(async move {
+        loop {
+            let mut lock = GAME.lock().await;
+            if let Some(status) = lock.as_mut().unwrap().try_wait()? {
+                if !status.success() {
+                    #[derive(Clone, Serialize, Deserialize)]
+                    struct Payload {
+                        title: String,
+                        message: String,
+                    }
 
-    window.emit("clear-loading", ()).ok();
+                    log::info!("Launcher closed with a different status code. Game might have crashed. Status code: {}", status.code().unwrap_or_default());
 
-    loop {
-        let mut lock = GAME.lock().await;
-        if let Some(status) = lock.as_mut().unwrap().try_wait()? {
-            if !status.success() {
-                #[derive(Clone, Serialize, Deserialize)]
-                struct Payload {
-                    title: String,
-                    message: String,
+                    window
+                        .emit(
+                            "crash",
+                            Payload {
+                                title: "Game crashed!".to_string(),
+                                message: "It seems like your game just crashed. Please try again or check the crash reports log for more information.".to_string(),
+                            },
+                        )
+                        .ok();
                 }
-
-                log::info!("Launcher closed with a different status code. Game might have crashed. Status code: {}", status.code().unwrap_or_default());
-
-                window
-                    .emit(
-                        "crash",
-                        Payload {
-                            title: "Game crashed!".to_string(),
-                            message: "It seems like your game just crashed. Please try again or check the crash reports log for more information.".to_string(),
-                        },
-                    )
-                    .ok();
+                window.show().ok();
+                window.set_focus().ok();
+                break;
             }
-            window.show().ok();
-            window.set_focus().ok();
-            break;
-        }
 
-        tokio::time::sleep(Duration::from_secs(1)).await;
-    }
+            tokio::time::sleep(Duration::from_secs(1)).await;
+        }
+        Ok::<(), crate::Error>(())
+    });
 
     Ok(())
 }

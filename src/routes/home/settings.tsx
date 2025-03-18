@@ -7,7 +7,7 @@ import Dropdown from "../../components/Dropdown";
 import { start, destroy } from "tauri-plugin-drpc";
 import { DISCORD_CLIENT_ID } from "../../constants";
 import { initializeDiscordState } from "../../helpers";
-import { memoryInfo, MemoryInfo } from "tauri-plugin-system-info-api";
+import { memoryInfo } from "tauri-plugin-system-info-api";
 import { useEffect, useState } from "react";
 import { motion } from "motion/react";
 export const Route = createFileRoute("/home/settings")({

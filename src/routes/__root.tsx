@@ -64,7 +64,6 @@ function RootComponent() {
           );
           let downloaded = 0;
           let contentLength = 0;
-          // alternatively we could also call update.download() and update.install() separately
           await update.downloadAndInstall((event) => {
             switch (event.event) {
               case 'Started':
@@ -118,10 +117,26 @@ function RootComponent() {
         }
         setLoading("Veuillez patienter", "Finalisation...");
         unlisten = [
-          await listen("progress", (event: any) => {
+          await listen("progress", (event: {
+            payload: { current: number; total: number, path: string, fileType: string };
+          }) => {
+            let subText;
+            switch (event.payload.fileType) {
+              case "Asset":
+                subText = `Téléchargement des assets...`;
+                break;
+              case "Library":
+                subText = `Téléchargement des bibliothèques...`;
+                break;
+              case "Java":
+                subText = `Téléchargement de Java...`;
+                break;
+            }
+
             useLoading.setState({
               currentProgress: event.payload.current,
               maxProgress: event.payload.total,
+              subText
             });
           }),
           await listen("clear-loading", (_) => {
