@@ -38,6 +38,10 @@ interface IRemote {
     largeText: string;
     details: string;
   };
+  about?: {
+    title: string;
+    description: string;
+  },
   servers?: IServer[];
   version?: string;
   website?: string;
