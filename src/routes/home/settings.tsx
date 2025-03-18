@@ -7,14 +7,22 @@ import Dropdown from "../../components/Dropdown";
 import { start, destroy } from "tauri-plugin-drpc";
 import { DISCORD_CLIENT_ID } from "../../constants";
 import { initializeDiscordState } from "../../helpers";
-import { useState } from "react";
+import { memoryInfo, MemoryInfo } from "tauri-plugin-system-info-api";
+import { useEffect, useState } from "react";
+import { motion } from "motion/react";
 export const Route = createFileRoute("/home/settings")({
   component: RouteComponent,
 });
 function RouteComponent() {
   const remote = useRemote();
   const options = useOptions();
-  const [sysMem, _sysMem] = useState(2); //GigaBytes
+  const [sysMem, _sysMem] = useState(-1); //GigaBytes
+  useEffect(() => {
+    (async () => {
+      const info = await memoryInfo();
+      _sysMem(Math.floor(info.total_memory / 1024 / 1024 / 1024));
+    })();
+  }, []);
 
   return (
     <>
@@ -48,21 +56,23 @@ function RouteComponent() {
             <p className="text-xs w-full text-white/60">
               Quantité maximale de mémoire.
             </p>
-            <p className=" shrink-0 text-xs mr-2">
-              {(options.maxMemory! * 512) / 1024} GB
-            </p>
-            <InputRange
-              className=" shrink-0"
-              title="Quantité de mémoire"
-              min={1}
-              max={sysMem * 2}
-              value={options.maxMemory!}
-              onChange={(e) => {
-                options.set({
-                  maxMemory: e,
-                });
-              }}
-            />
+            <motion.p layout className=" shrink-0 text-xs mr-2">
+              {((options.maxMemory! * 512) / 1024).toFixed(1)} GB
+            </motion.p>
+            {sysMem != -1 && (
+              <InputRange
+                className=" shrink-0"
+                title="Quantité de mémoire"
+                min={1}
+                max={sysMem * 2}
+                value={options.maxMemory!}
+                onChange={(e) => {
+                  options.set({
+                    maxMemory: e,
+                  });
+                }}
+              />
+            )}
           </span>
           <hr />
           <span className="flex gap-2 items-center">
