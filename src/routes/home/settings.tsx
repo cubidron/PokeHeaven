@@ -56,22 +56,24 @@ function RouteComponent() {
             <p className="text-xs w-full text-white/60">
               Quantité maximale de mémoire.
             </p>
-            <motion.p layout className=" shrink-0 text-xs mr-2">
-              {((options.maxMemory! * 512) / 1024).toFixed(1)} GB
-            </motion.p>
             {sysMem != -1 && (
-              <InputRange
-                className=" shrink-0"
-                title="Quantité de mémoire"
-                min={1}
-                max={sysMem * 2}
-                value={options.maxMemory!}
-                onChange={(e) => {
-                  options.set({
-                    maxMemory: e,
-                  });
-                }}
-              />
+              <>
+                <motion.p layout className=" shrink-0 text-xs mr-2">
+                  {((options.maxMemory! * 512) / 1024).toFixed(1)} GB
+                </motion.p>
+                <InputRange
+                  className=" shrink-0"
+                  title="Quantité de mémoire"
+                  min={1}
+                  max={sysMem * 2}
+                  value={options.maxMemory!}
+                  onChange={(e) => {
+                    options.set({
+                      maxMemory: e,
+                    });
+                  }}
+                />
+              </>
             )}
           </span>
           <hr />
