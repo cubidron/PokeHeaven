@@ -7,13 +7,15 @@ import Dropdown from "../../components/Dropdown";
 import { start, destroy } from "tauri-plugin-drpc";
 import { DISCORD_CLIENT_ID } from "../../constants";
 import { initializeDiscordState } from "../../helpers";
-
+import { useState } from "react";
 export const Route = createFileRoute("/home/settings")({
   component: RouteComponent,
 });
 function RouteComponent() {
   const remote = useRemote();
   const options = useOptions();
+  const [sysMem, _sysMem] = useState(2); //GigaBytes
+
   return (
     <>
       <div className="flex gap-2 size-full">
@@ -53,7 +55,7 @@ function RouteComponent() {
               className=" shrink-0"
               title="Quantité de mémoire"
               min={1}
-              max={32}
+              max={sysMem * 2}
               value={options.maxMemory!}
               onChange={(e) => {
                 options.set({

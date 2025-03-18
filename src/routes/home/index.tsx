@@ -63,20 +63,22 @@ function RouteComponent() {
     [options]
   );
 
-
   const selectedServer =
     options.selectedServer !== undefined
       ? options.selectedServer
       : remote?.servers?.[0]?.profile;
 
-  const optionalMods = remote.servers
-    ?.find((s) => s.profile === selectedServer)
-    ?.minecraft?.optionalMods.map((om) => {
-      om.enabled = options.optionalMods?.find(
-        (om2) => om2.fileName === om.fileName && om2.profile === selectedServer,
-      )?.enabled ?? om.default;
-      return om;
-    }) || [];
+  const optionalMods =
+    remote.servers
+      ?.find((s) => s.profile === selectedServer)
+      ?.minecraft?.optionalMods.map((om) => {
+        om.enabled =
+          options.optionalMods?.find(
+            (om2) =>
+              om2.fileName === om.fileName && om2.profile === selectedServer
+          )?.enabled ?? om.default;
+        return om;
+      }) || [];
 
   const handleLaunchClick = useCallback(
     async (server: any) => {
@@ -96,7 +98,7 @@ function RouteComponent() {
             gameDir: options.appDir,
             minecraft: server.minecraft,
             after: options.launchBehavior,
-            optionalMods
+            optionalMods,
           },
         });
         mainLoading.clear();
@@ -120,7 +122,7 @@ function RouteComponent() {
     <>
       <span className="flex h-12 shrink-0 relative rounded-xl backdrop-blur-sm bg-body/80 w-full">
         <DragWrapper rootClass="w-full">
-          <ul className="h-full grid grid-flow-col !scroll-auto w-full max-w-full relative p-1 hidden-scroll grid-rows-1 gap-1 overflow-x-auto overflow-y-hidden">
+          <ul className="h-full flex !scroll-auto w-full max-w-full relative p-1 hidden-scroll grid-rows-1 gap-1 overflow-x-auto overflow-y-hidden">
             {remote?.servers?.map((server) => (
               <div
                 key={server.profile}
@@ -128,10 +130,11 @@ function RouteComponent() {
                   e.stopPropagation();
                   handleServerClick(server);
                 }}
-                className={`shrink-0 flex outline-none w-56 items-center justify-center hover:bg-white/5 ease-smooth duration-200 rounded-lg ${selectedServer === server.profile
-                  ? "text-white bg-white/5"
-                  : "opacity-40 mix-blend-luminosity"
-                  }`}>
+                className={`shrink-0 flex outline-none w-56 items-center justify-center hover:bg-white/5 ease-smooth duration-200 rounded-lg ${
+                  selectedServer === server.profile
+                    ? "text-white bg-white/5"
+                    : "opacity-40 mix-blend-luminosity"
+                }`}>
                 <img
                   src={server.icon || "/images/logo.png"}
                   className="h-full p-1 pointer-events-none inline-block aspect-square max-w-max"
@@ -159,7 +162,7 @@ function RouteComponent() {
                 exit={{ opacity: 0, scale: 0.9, filter: "blur(12px)" }}
                 transition={{ type: "spring", stiffness: 400, damping: 40 }}
                 className="flex w-full gap-4 items-center justify-center">
-                <div className="flex w-full flex-col min-w-[24rem]">
+                <div className="flex w-full flex-col min-w-[24rem] max-w-[36rem]">
                   <img
                     src={server.icon || "/images/logo.png"}
                     className="h-32 inline-block aspect-square max-w-max"
@@ -178,8 +181,9 @@ function RouteComponent() {
                     <button
                       disabled={disabled.disabled}
                       onClick={() => handleLaunchClick(server)}
-                      className={`px-3.5 py-1.5 w-full cursor-pointer ease-smooth duration-200 hover:saturate-150 gap-3 bg-primary rounded-lg flex items-center justify-center ${disabled.disabled && "brightness-50 cursor-not-allowed"
-                        }`}>
+                      className={`px-3.5 py-1.5 w-full cursor-pointer ease-smooth duration-200 hover:saturate-150 gap-3 bg-primary rounded-lg flex items-center justify-center ${
+                        disabled.disabled && "brightness-50 cursor-not-allowed"
+                      }`}>
                       Lancer
                     </button>
                     <button
@@ -198,7 +202,7 @@ function RouteComponent() {
                     </button>
                   </div>
                 </div>
-                <div className="w-1/2 shrink-0 rounded relative justify-center flex flex-col size-full h-full items-center overflow-clip aspect-video">
+                <div className="w-1/2 ml-auto shrink-0 rounded relative justify-center flex flex-col size-full h-full items-center overflow-clip aspect-video">
                   {loading && (
                     <div className="flex absolute -z-10 flex-col items-center gap-4 h-full m-auto inset-0 justify-center">
                       <Spinner className="!h-24" />

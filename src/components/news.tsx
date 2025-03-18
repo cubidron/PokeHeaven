@@ -170,7 +170,7 @@ export default function NewsSection() {
           news.newses.map((item, i) => (
             <div
               key={i}
-              className="relative *:relative w-[20rem] h-full snap-start rounded-lg group flex flex-col-reverse p-4 shrink-0 overflow-hidden !bg-cover !bg-center">
+              className="relative *:relative w-[20rem] h-full snap-end rounded-lg group flex flex-col-reverse p-4 shrink-0 overflow-hidden !bg-cover !bg-center">
               <img
                 onError={(e) => {
                   //when error occurs change source to local missing image src
