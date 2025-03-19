@@ -23,7 +23,7 @@ declare module "@tanstack/react-router" {
 
 window.onunhandledrejection = (event) => {
   console.error(event.reason);
-}
+};
 
 const rootElement = document.getElementById("app")!;
 
@@ -48,8 +48,9 @@ if (!rootElement.innerHTML) {
             border-radius: ${platform() == "macos" ? 10 : 8}px;
           }
           
-          ${platform() !== "macos"
-            ? `
+          ${
+            platform() !== "macos"
+              ? `
           ::-webkit-scrollbar { 
             width: 8px; 
             height: 8px; 
@@ -70,7 +71,7 @@ if (!rootElement.innerHTML) {
             background: rgba(255, 255, 255, 0.6); 
           }
           `
-            : ""
+              : ""
           }
         `}</style>
       </Helmet>

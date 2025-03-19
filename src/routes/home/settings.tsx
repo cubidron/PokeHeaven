@@ -10,6 +10,7 @@ import { initializeDiscordState } from "../../helpers";
 import { memoryInfo } from "tauri-plugin-system-info-api";
 import { useEffect, useState } from "react";
 import { motion } from "motion/react";
+import Skin from "../../components/Skin";
 export const Route = createFileRoute("/home/settings")({
   component: RouteComponent,
 });
@@ -26,7 +27,7 @@ function RouteComponent() {
 
   return (
     <>
-      <div className="flex gap-2 size-full">
+      <div className="flex gap-2 contain-strict size-full">
         <section className="flex flex-col relative size-full p-6 gap-4 rounded-xl backdrop-blur-sm bg-body/80">
           <h4 className="font-extrabold mb-2">Paramètres du lanceur</h4>
           <div className="flex items-center justify-between gap-1">
@@ -118,6 +119,8 @@ function RouteComponent() {
           <h4 className="font-extrabold mb-2">À propos du lanceur</h4>
           <h1 className="text-4xl font-light">{remote.about?.title}</h1>
           <p>{remote.about?.description}</p>
+          <hr className="my-2" />
+          <Skin />
         </section>
       </div>
       <section className="flex flex-col relative p-4 rounded-xl backdrop-blur-sm bg-body/80">
