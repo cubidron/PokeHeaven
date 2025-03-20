@@ -52,3 +52,12 @@ export function base64ToFile(base64: string, filename: string, mimeType: string)
 
     return new File([uint8Array], filename, { type: mimeType });
 }
+
+export function blobToBase64(blob: Blob) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result); // Includes `data:image/...;base64,...`
+        reader.onerror = reject;
+        reader.readAsDataURL(blob);
+    });
+}

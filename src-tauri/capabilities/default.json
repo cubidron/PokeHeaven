@@ -42,6 +42,11 @@
     "updater:allow-download-and-install",
     "updater:allow-install",
     "updater:allow-download",
-    "system-info:allow-memory-info"
+    "system-info:allow-memory-info",
+    "dialog:allow-confirm",
+    "dialog:allow-open",
+    "dialog:allow-save",
+    "dialog:allow-ask",
+    "fs:allow-read-file"
   ]
 }

@@ -22,10 +22,16 @@ pub struct AppState {
 pub fn run() {
     log::info!("Starting launcher");
     tauri::Builder::default()
+        .plugin(tauri_plugin_fs::init())
+        .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_system_info::init())
         .plugin(tauri_plugin_process::init())
         .plugin(tauri_plugin_updater::Builder::new().build())
-        .plugin(tauri_plugin_log::Builder::new().level(log::LevelFilter::Info).build())
+        .plugin(
+            tauri_plugin_log::Builder::new()
+                .level(log::LevelFilter::Info)
+                .build(),
+        )
         .plugin(tauri_plugin_single_instance::init(|app, _, _| {
             log::info!("Another instance of the launcher is already running.");
             app.get_webview_window("main").unwrap().set_focus().ok();

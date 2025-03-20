@@ -3,12 +3,16 @@ import { useAuth } from "../store/auth";
 import Spinner from "./Spinner";
 import { SkinViewer } from "skinview3d";
 import { WEB_API_BASE } from "../constants";
+import { open } from "@tauri-apps/plugin-dialog";
+import { readFile } from "@tauri-apps/plugin-fs";
+import { blobToBase64 } from "../helpers";
 
 export default function Skin({ setSkinModal }: { setSkinModal: (value: boolean) => void }) {
   const auth = useAuth();
   const [loading, setLoading] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   let skinViewer: SkinViewer;
+  let currentFile: Blob;
   useEffect(() => {
     (async () => {
       if (!canvasRef.current) return;
@@ -69,18 +73,22 @@ export default function Skin({ setSkinModal }: { setSkinModal: (value: boolean) 
           <span className="relative group flex flex-col hover:outline-primary outline-1 p-10 pb-2 gap-6 h-max outline-transparent overflow-hidden rounded-md w-full items-center justify-center">
             <input
               className="absolute z-10 left-0 top-0 size-full opacity-0 cursor-pointer"
-              type="file"
+              //type="file"
               name="skin"
               id=""
-              accept="image/png, image/jpeg, image/jpg"
-              onChange={async (e) => {
-                const file = e.currentTarget.files?.[0];
-                if (!file) return;
-                //turn file to base64 like data:image/png;base64,.... and store in a variable
-                let playerSkin = URL.createObjectURL(file);
-                const base64 = await skinToBase64(playerSkin);
-                localStorage.setItem("playerSkin", base64);
-                skinViewer.loadSkin(playerSkin);
+              onClick={async () => {
+                const file = await open({
+                  multiple: false,
+                  directory: false,
+                  filters: [{ name: "Images", extensions: ["png", "jpg", "jpeg"] }],
+                });
+
+                if (file) {
+                  const fileData = await readFile(file as string);
+                  currentFile = new Blob([new Uint8Array(fileData)], { type: "image/png" });
+                  const base64 = await blobToBase64(currentFile);
+                  skinViewer.loadSkin(base64 as string);
+                }
               }}
             />
             <p className="opacity-0 group-hover:opacity-100 size-full text-nowrap bg-primary/10 rounded-xl p-1 ease-smooth duration-300 font-light absolute flex items-end justify-center text-center inset-0 m-auto"></p>
@@ -110,7 +118,7 @@ export default function Skin({ setSkinModal }: { setSkinModal: (value: boolean) 
             {auth.user?.username}
           </h1>
           <button onClick={async () => {
-            auth.updateSkin(auth.user?.access_token || "", localStorage.getItem("playerSkin") || "");
+            await auth.updateSkin(auth.user?.access_token || "", currentFile);
             setSkinModal(false);
             //todo: find a better way to do this.
             window.location.reload();

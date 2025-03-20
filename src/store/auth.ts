@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { WEB_API_BASE } from "../constants";
-import { base64ToFile, jsonRequest } from "../helpers";
+import { jsonRequest } from "../helpers";
 import { addNoti } from "../components/notification";
 import { storage } from "../routes/__root";
 import { error } from "@tauri-apps/plugin-log";
@@ -25,7 +25,7 @@ interface UserStore {
   isLogged: () => boolean;
   verifyUser: (user: IUser) => Promise<boolean>;
   findValidUser: (users: IUser[]) => Promise<IUser | undefined>;
-  updateSkin: (access_token: string, skin: string) => Promise<void>;
+  updateSkin: (access_token: string, skin: Blob) => Promise<void>;
 }
 
 export const useAuth = create<UserStore>((set, get) => ({
@@ -139,8 +139,7 @@ export const useAuth = create<UserStore>((set, get) => ({
   updateSkin: async (access_token, skin) => {
     const formData = new FormData();
     formData.append("access_token", access_token);
-    console.log(skin);
-    formData.append("skin", base64ToFile(skin, "skin.png", "image/png"));
+    formData.append("skin", skin, "skin.png");
 
     const response = await fetch(`${WEB_API_BASE}/skin-api/skins`, {
       method: "POST",
