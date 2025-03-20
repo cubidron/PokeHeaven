@@ -82,10 +82,7 @@ pub async fn launch(window: Window, state: State<'_, AppState>, cfg: Config) -> 
             cfg.memory * 512,
         )),
         version_name: None,
-        loader: Some(get_loader_by(
-            &cfg.minecraft.loader.r#type,
-            &cfg.minecraft.loader.version,
-        )),
+        loader: get_loader_by(&cfg.minecraft.loader.r#type, &cfg.minecraft.loader.version),
         client: Some(state.request.clone()),
         java_version: None,
         runtime_dir: None,

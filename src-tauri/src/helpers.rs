@@ -7,21 +7,24 @@ use tokio::fs;
 
 use crate::commands::OptionalMod;
 
-pub fn get_loader_by(r#type: &str, version: &str) -> Box<dyn lyceris::minecraft::loader::Loader> {
+pub fn get_loader_by(
+    r#type: &str,
+    version: &str,
+) -> Option<Box<dyn lyceris::minecraft::loader::Loader>> {
     match r#type {
-        "fabric" => Box::new(lyceris::minecraft::loader::fabric::Fabric(
+        "fabric" => Some(Box::new(lyceris::minecraft::loader::fabric::Fabric(
             version.to_string(),
-        )),
-        "forge" => Box::new(lyceris::minecraft::loader::forge::Forge(
+        ))),
+        "forge" => Some(Box::new(lyceris::minecraft::loader::forge::Forge(
             version.to_string(),
-        )),
-        "neoforge" => Box::new(lyceris::minecraft::loader::neoforge::NeoForge(
+        ))),
+        "neoforge" => Some(Box::new(lyceris::minecraft::loader::neoforge::NeoForge(
             version.to_string(),
-        )),
-        "quilt" => Box::new(lyceris::minecraft::loader::quilt::Quilt(
+        ))),
+        "quilt" => Some(Box::new(lyceris::minecraft::loader::quilt::Quilt(
             version.to_string(),
-        )),
-        _ => panic!("Unknown loader type: {}", r#type),
+        ))),
+        _ => None,
     }
 }
 
