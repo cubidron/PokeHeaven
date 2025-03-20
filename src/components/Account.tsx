@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import { platform } from "@tauri-apps/plugin-os";
 import { AnimatePresence, motion } from "motion/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "../store/auth";
 import Alert from "./alert";
 
@@ -10,7 +10,18 @@ export default function Account(props: {
 }) {
   const auth = useAuth();
   const [accountModal, setAccountModal] = useState(false);
-  const nav = useNavigate();
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (!(e.target as Element).closest(`.accountModal`)) {
+        setAccountModal(false);
+      }
+    };
+
+    document.addEventListener("click", handleClickOutside);
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, []);
   return (
     <>
       <span className={`relative h-full`}>
