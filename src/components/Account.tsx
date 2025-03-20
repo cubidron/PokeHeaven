@@ -5,7 +5,9 @@ import { useState } from "react";
 import { useAuth } from "../store/auth";
 import Alert from "./alert";
 
-export default function Account() {
+export default function Account(props: {
+  setSkinModal: (value: boolean) => void;
+}) {
   const auth = useAuth();
   const [accountModal, setAccountModal] = useState(false);
   const nav = useNavigate();
@@ -31,9 +33,9 @@ export default function Account() {
                   document.getElementById("user-head")?.remove();
                   e.currentTarget.classList.remove("hidden");
                 }}
-                src={`https://visage.surgeplay.com/face/${auth?.user?.username || "MHF_Steve"}`}
+                src={`https://vzge.me/face/${auth?.user?.username || "MHF_Steve"}`}
                 onError={(e) => {
-                  const a = "https://visage.surgeplay.com/face/MHF_Steve";
+                  const a = "https://vzge.me/face/MHF_Steve";
                   if (e.currentTarget.src != a) {
                     e.currentTarget.src = a;
                   }
@@ -157,19 +159,36 @@ export default function Account() {
                     </button>
                   </li>
                 ))}
-                <Link
-                  to="/onboard"
-                  className="button size-8 !p-0 grid hover:bg-white/5 rounded-lg place-items-center overflow-hidden relative">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="w-4"
-                    viewBox="0 0 24 24">
-                    <path
-                      fill="currentColor"
-                      d="M11 13H5v-2h6V5h2v6h6v2h-6v6h-2z"
-                    />
-                  </svg>
-                </Link>
+                <span className="flex gap-2">
+                  <Link
+                    to="/onboard"
+                    className="button size-8 !p-0 grid hover:bg-white/5 rounded-lg place-items-center overflow-hidden relative">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="w-4"
+                      viewBox="0 0 24 24">
+                      <path
+                        fill="currentColor"
+                        d="M11 13H5v-2h6V5h2v6h6v2h-6v6h-2z"
+                      />
+                    </svg>
+                  </Link>
+                  <button
+                    onClick={() => {
+                      props.setSkinModal(true);
+                    }}
+                    className="button size-8 !p-0 grid hover:bg-white/5 rounded-lg place-items-center overflow-hidden relative">
+                    <svg
+                      className="w-4"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 1024 1024">
+                      <path
+                        fill="currentColor"
+                        d="M870 126H663.8c-17.4 0-32.9 11.9-37 29.3C614.3 208.1 567 246 512 246s-102.3-37.9-114.8-90.7a37.93 37.93 0 0 0-37-29.3H154a44 44 0 0 0-44 44v252a44 44 0 0 0 44 44h75v388a44 44 0 0 0 44 44h478a44 44 0 0 0 44-44V466h75a44 44 0 0 0 44-44V170a44 44 0 0 0-44-44"
+                      />
+                    </svg>
+                  </button>
+                </span>
               </ul>
             </motion.div>
           )}

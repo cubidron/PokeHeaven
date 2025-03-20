@@ -120,7 +120,6 @@ function RouteComponent() {
           <h1 className="text-4xl font-light">{remote.about?.title}</h1>
           <p>{remote.about?.description}</p>
           <hr className="my-2" />
-          <Skin />
         </section>
       </div>
       <section className="flex flex-col relative p-4 rounded-xl backdrop-blur-sm bg-body/80">
