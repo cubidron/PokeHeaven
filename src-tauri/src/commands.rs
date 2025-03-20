@@ -158,15 +158,15 @@ pub async fn launch(window: Window, state: State<'_, AppState>, cfg: Config) -> 
 
     log::info!("Synchronizing files");
     let profile_dir = game_dir.join("profiles").join(cfg.profile.clone());
-    // synchronize_files(
-    //     profile_dir.clone(),
-    //     cfg.profile,
-    //     cfg.minecraft.exclude,
-    //     &cfg.optional_mods,
-    //     emitter.clone(),
-    //     state.request.clone(),
-    // )
-    // .await?;
+    synchronize_files(
+        profile_dir.clone(),
+        cfg.profile,
+        cfg.minecraft.exclude,
+        &cfg.optional_mods,
+        emitter.clone(),
+        state.request.clone(),
+    )
+    .await?;
 
     set_optional_mods(profile_dir, &cfg.optional_mods).await?;
 
