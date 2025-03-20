@@ -93,6 +93,7 @@ function RouteComponent() {
             version: server.version,
             ip: server.ip,
             port: server.port,
+            directConnect: server.directConnect,
             memory: options.maxMemory,
             fullscreen: options.fullScreen,
             gameDir: options.appDir,
@@ -142,9 +143,9 @@ function RouteComponent() {
                   alt=""
                 />
                 <h1
-                  title={server.serverName}
+                  title={server.title}
                   className="text-sm font-medium text-ellipsis line-clamp-1">
-                  {server.serverName || "Serveur sans nom"}
+                  {server.title || "Serveur sans nom"}
                 </h1>
               </div>
             ))}
@@ -157,7 +158,7 @@ function RouteComponent() {
             ?.filter((server) => server.profile === selectedServer)
             .map((server) => (
               <motion.span
-                key={server.serverName}
+                key={server.title}
                 initial={{ opacity: 0, scale: 0.9, filter: "blur(12px)" }}
                 animate={{ opacity: 1, scale: 1, filter: "" }}
                 exit={{ opacity: 0, scale: 0.9, filter: "blur(12px)" }}
@@ -170,9 +171,9 @@ function RouteComponent() {
                     alt=""
                   />
                   <h1
-                    title={server.serverName}
+                    title={server.title}
                     className="text-3xl w-full font-bold text-ellipsis line-clamp-1">
-                    {server.serverName || "Serveur sans nom"}
+                    {server.title || "Serveur sans nom"}
                   </h1>
                   <p>
                     {server.description ||

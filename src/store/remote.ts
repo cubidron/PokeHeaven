@@ -8,9 +8,9 @@ interface IServer {
   profile?: string;
   description?: string;
   version?: string;
-  serverName?: string;
   ip?: string;
   port?: number;
+  directConnect?: boolean;
   minecraft?: {
     version: string;
     loader: {

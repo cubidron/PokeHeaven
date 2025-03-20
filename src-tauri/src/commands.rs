@@ -24,6 +24,7 @@ pub struct Config {
     username: String,
     ip: String,
     port: u32,
+    direct_connect: bool,
     minecraft: MinecraftConfig,
     game_dir: String,
     memory: u64,
@@ -50,6 +51,15 @@ pub struct LoaderConfig {
 pub struct OptionalMod {
     pub file_name: String,
     pub enabled: bool,
+}
+
+#[derive(Clone, Serialize, Deserialize)]
+pub struct Payload {
+    current: u64,
+    total: u64,
+    path: String,
+    #[serde(rename = "fileType")]
+    file_type: String,
 }
 
 #[tauri::command]
@@ -88,24 +98,30 @@ pub async fn launch(window: Window, state: State<'_, AppState>, cfg: Config) -> 
         runtime_dir: None,
         custom_java_args: vec![],
         custom_args: {
-            let mut args = if minecraft_version_separated
-                .get(1)
-                .and_then(|v| v.parse::<u16>().ok())
-                .unwrap_or_default()
-                >= 20
-            {
-                vec![
-                    "--quickPlayMultiplayer".to_string(),
-                    format!("{}:{}", cfg.ip, cfg.port),
-                ]
-            } else {
-                vec![
-                    "--server".to_string(),
-                    cfg.ip.clone(),
-                    "--port".to_string(),
-                    cfg.port.to_string(),
-                ]
-            };
+            let mut args = vec![];
+            if cfg.direct_connect {
+                args.extend(
+                    if minecraft_version_separated
+                        .get(1)
+                        .and_then(|v| v.parse::<u16>().ok())
+                        .unwrap_or_default()
+                        >= 20
+                    {
+                        vec![
+                            "--quickPlayMultiplayer".to_string(),
+                            format!("{}:{}", cfg.ip, cfg.port),
+                        ]
+                    } else {
+                        vec![
+                            "--server".to_string(),
+                            cfg.ip.clone(),
+                            "--port".to_string(),
+                            cfg.port.to_string(),
+                        ]
+                    },
+                );
+            }
+
             if cfg.fullscreen {
                 args.push("--fullscreen".to_string());
             }
@@ -121,14 +137,6 @@ pub async fn launch(window: Window, state: State<'_, AppState>, cfg: Config) -> 
             {
                 let window = window.clone();
                 move |(path, current, total, file_type): (String, u64, u64, String)| {
-                    #[derive(Clone, Serialize, Deserialize)]
-                    struct Payload {
-                        current: u64,
-                        total: u64,
-                        path: String,
-                        #[serde(rename = "fileType")]
-                        file_type: String,
-                    }
                     window
                         .emit(
                             "progress",
@@ -150,15 +158,15 @@ pub async fn launch(window: Window, state: State<'_, AppState>, cfg: Config) -> 
 
     log::info!("Synchronizing files");
     let profile_dir = game_dir.join("profiles").join(cfg.profile.clone());
-    synchronize_files(
-        profile_dir.clone(),
-        cfg.profile,
-        cfg.minecraft.exclude,
-        &cfg.optional_mods,
-        emitter.clone(),
-        state.request.clone(),
-    )
-    .await?;
+    // synchronize_files(
+    //     profile_dir.clone(),
+    //     cfg.profile,
+    //     cfg.minecraft.exclude,
+    //     &cfg.optional_mods,
+    //     emitter.clone(),
+    //     state.request.clone(),
+    // )
+    // .await?;
 
     set_optional_mods(profile_dir, &cfg.optional_mods).await?;
 

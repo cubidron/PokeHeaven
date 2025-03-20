@@ -1,6 +1,9 @@
 use std::path::{PathBuf, MAIN_SEPARATOR_STR};
 
-use lyceris::minecraft::emitter::Emitter as LycerisEmitter;
+use lyceris::{
+    download_multiple,
+    minecraft::{emitter::Emitter as LycerisEmitter, install::FileType},
+};
 use serde::{Deserialize, Serialize};
 use tauri_plugin_http::reqwest::Client;
 use tokio::fs;
@@ -111,6 +114,8 @@ pub async fn synchronize_files(
 
     let mods_dir = profile_dir.join("mods");
 
+    let mut files_to_be_downloaded = vec![];
+
     for remote_file in &remote_files {
         let local_path = profile_dir.join(&remote_file.path);
         let ignored_path = if local_path.starts_with(&mods_dir) {
@@ -131,28 +136,24 @@ pub async fn synchronize_files(
                 .find(|om| om.file_name == remote_file.name)
             {
                 if optional.enabled {
-                    lyceris::http::downloader::download(
+                    files_to_be_downloaded.push((
                         format!(
                             "{}/PhynariaLauncherV2/files/game/{}/{}",
                             LAUNCHER_BASE, profile_name, remote_file.path
                         ),
                         local_path,
-                        Some(&emitter),
-                        Some(&client),
-                    )
-                    .await?;
+                        FileType::Custom,
+                    ));
                 }
             } else {
-                lyceris::http::downloader::download(
+                files_to_be_downloaded.push((
                     format!(
                         "{}/PhynariaLauncherV2/files/game/{}/{}",
                         LAUNCHER_BASE, profile_name, remote_file.path
                     ),
-                    &local_path,
-                    Some(&emitter),
-                    Some(&client),
-                )
-                .await?;
+                    local_path,
+                    FileType::Custom,
+                ));
             }
         } else {
             let local_hash = lyceris::util::hash::calculate_sha1(&local_path).unwrap_or_default();
@@ -167,19 +168,19 @@ pub async fn synchronize_files(
             };
 
             if local_hash != remote_file.hash && ignored_hash != remote_file.hash {
-                lyceris::http::downloader::download(
+                files_to_be_downloaded.push((
                     format!(
                         "{}/PhynariaLauncherV2/files/game/{}/{}",
                         LAUNCHER_BASE, profile_name, remote_file.path
                     ),
-                    &local_path,
-                    Some(&emitter),
-                    Some(&client),
-                )
-                .await?;
+                    local_path,
+                    FileType::Custom,
+                ));
             }
         }
     }
+
+    download_multiple(files_to_be_downloaded, Some(&emitter), Some(&client)).await?;
 
     for local_file in &local_files {
         let relative_path = local_file

@@ -131,6 +131,9 @@ function RootComponent() {
               case "Java":
                 subText = `Téléchargement de Java...`;
                 break;
+              case "Custom":
+                subText = `Téléchargement de fichiers personnalisés...`;
+                break;
             }
 
             useLoading.setState({
