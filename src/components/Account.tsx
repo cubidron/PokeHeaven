@@ -1,9 +1,10 @@
-import { Link, useNavigate } from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
 import { platform } from "@tauri-apps/plugin-os";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useState } from "react";
 import { useAuth } from "../store/auth";
 import Alert from "./alert";
+import { WEB_API_BASE } from "../constants";
 
 export default function Account(props: {
   setSkinModal: (value: boolean) => void;
@@ -44,7 +45,7 @@ export default function Account(props: {
                   document.getElementById("user-head")?.remove();
                   e.currentTarget.classList.remove("hidden");
                 }}
-                src={`https://vzge.me/face/${auth?.user?.username || "MHF_Steve"}`}
+                src={`${WEB_API_BASE}/skin-api/avatars/face/${auth?.user?.username || "MHF_Steve"}`}
                 onError={(e) => {
                   const a = "https://vzge.me/face/MHF_Steve";
                   if (e.currentTarget.src != a) {
@@ -110,7 +111,7 @@ export default function Account(props: {
                           document.getElementById("user-head" + i)?.remove();
                           e.currentTarget.classList.remove("hidden");
                         }}
-                        src={`https://visage.surgeplay.com/face/${account.username}`}
+                        src={`${WEB_API_BASE}/skin-api/avatars/face/${account.username}`}
                         onError={(e) => {
                           const a =
                             "https://visage.surgeplay.com/face/MHF_Steve";

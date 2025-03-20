@@ -7,9 +7,7 @@ import {
 } from "@tanstack/react-router";
 import { platform } from "@tauri-apps/plugin-os";
 import { TitleButtons } from "../../components/tauri/TitleBar";
-import { AnimatePresence, motion } from "motion/react";
-import { useAuth } from "../../store/auth";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useOptions } from "../../store/options";
 import Account from "../../components/Account";
 import Skin from "../../components/Skin";
@@ -160,7 +158,7 @@ function RouteComponent() {
             setSkinModal(false);
           }}
           className=" fixed inset-0 size-full bg-black/60 z-50 flex items-center justify-center">
-          <Skin />
+          <Skin setSkinModal={setSkinModal}/>
         </span>
       )}
     </>

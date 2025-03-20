@@ -10,7 +10,7 @@ import { initializeDiscordState } from "../../helpers";
 import { memoryInfo } from "tauri-plugin-system-info-api";
 import { useEffect, useState } from "react";
 import { motion } from "motion/react";
-import Skin from "../../components/Skin";
+
 export const Route = createFileRoute("/home/settings")({
   component: RouteComponent,
 });

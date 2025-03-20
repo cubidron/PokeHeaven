@@ -1,9 +1,10 @@
 import { create } from "zustand";
 import { WEB_API_BASE } from "../constants";
-import { jsonRequest } from "../helpers";
+import { base64ToFile, jsonRequest } from "../helpers";
 import { addNoti } from "../components/notification";
 import { storage } from "../routes/__root";
 import { error } from "@tauri-apps/plugin-log";
+import { fetch } from "@tauri-apps/plugin-http";
 
 //SYSTEM AUTH
 interface IUser {
@@ -24,6 +25,7 @@ interface UserStore {
   isLogged: () => boolean;
   verifyUser: (user: IUser) => Promise<boolean>;
   findValidUser: (users: IUser[]) => Promise<IUser | undefined>;
+  updateSkin: (access_token: string, skin: string) => Promise<void>;
 }
 
 export const useAuth = create<UserStore>((set, get) => ({
@@ -66,7 +68,7 @@ export const useAuth = create<UserStore>((set, get) => ({
       reason: string;
       message: string;
       username: string;
-    }>(`${WEB_API_BASE}/verify`, "POST", {
+    }>(`${WEB_API_BASE}/auth/verify`, "POST", {
       access_token: user.access_token
     });
 
@@ -92,7 +94,7 @@ export const useAuth = create<UserStore>((set, get) => ({
         reason: string;
         message: string;
         username: string;
-      }>(`${WEB_API_BASE}/authenticate`, "POST", { email, password });
+      }>(`${WEB_API_BASE}/auth/authenticate`, "POST", { email, password });
 
       if (request.status !== 200) {
         addNoti(data.reason === "invalid_credentials"
@@ -117,7 +119,7 @@ export const useAuth = create<UserStore>((set, get) => ({
     const all = users.filter(u => u.username !== user.username);
     const current = currentUser?.username === user.username ? all[0] : currentUser;
 
-    await jsonRequest(`${WEB_API_BASE}/logout`, "POST", { access_token: user.access_token });
+    await jsonRequest(`${WEB_API_BASE}/auth/logout`, "POST", { access_token: user.access_token });
     await storage?.set("user", { all, current });
     set({ user: current, users: all });
   },
@@ -132,5 +134,21 @@ export const useAuth = create<UserStore>((set, get) => ({
     set({ user: account });
   },
 
-  isLogged: () => get().user !== undefined
+  isLogged: () => get().user !== undefined,
+
+  updateSkin: async (access_token, skin) => {
+    const formData = new FormData();
+    formData.append("access_token", access_token);
+    console.log(skin);
+    formData.append("skin", base64ToFile(skin, "skin.png", "image/png"));
+
+    const response = await fetch(`${WEB_API_BASE}/skin-api/skins`, {
+      method: "POST",
+      body: formData
+    });
+
+    if (response.status !== 200) {
+      addNoti("Error while updating skin. Please try again or contact support.");
+    }
+  }
 }));

@@ -182,8 +182,13 @@ function RootComponent() {
         nav({
           to: "/onboard",
         });
+    }else {
+      location.href.includes("/home") ||
+        nav({
+          to: "/home",
+        });
     }
-  }, [useAuth.getState()]);
+  }, [useAuth.getState().user]);
   return (
     <>
       <div className="size-full">

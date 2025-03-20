@@ -40,3 +40,15 @@ export const initializeDiscordState = async ({
 
     await setActivity(activity);
 }
+
+export function base64ToFile(base64: string, filename: string, mimeType: string) {
+    let byteString = atob(base64.split(',')[1]); // Decode Base64
+    let arrayBuffer = new ArrayBuffer(byteString.length);
+    let uint8Array = new Uint8Array(arrayBuffer);
+
+    for (let i = 0; i < byteString.length; i++) {
+        uint8Array[i] = byteString.charCodeAt(i);
+    }
+
+    return new File([uint8Array], filename, { type: mimeType });
+}

@@ -1,5 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useAuth } from "../../store/auth";
+import { WEB_API_BASE } from "../../constants";
 
 export const Route = createFileRoute("/onboard/confirm")({
   component: RouteComponent,
@@ -29,7 +30,7 @@ function RouteComponent() {
         <span className="rounded-xl flex mt-3 flex-col items-center justify-center gap-2 bg-dark p-4">
           <img
             className="size-20 rounded-md bg-white/5 p-1.5"
-            src={`https://visage.surgeplay.com/face/${auth?.user?.username || "MHF_Steve"}`}
+            src={`${WEB_API_BASE}/skin-api/avatars/face/${auth?.user?.username || "MHF_Steve"}`}
             alt=""
             onError={(e) => {
               const a = "https://visage.surgeplay.com/face/MHF_Steve";
