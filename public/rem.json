@@ -9,98 +9,98 @@
   "servers": [
     {
       "icon": "/images/logo.png",
-      "title": "ATM10",
-      "profile": "phynariamc",
-      "description": "Elesya enhances Minecraft in various ways, preserving its core while introducing exciting new elements.",
+      "title": "Fake Server 1",
+      "profile": "fakeprofile1",
+      "description": "This is a fake server for testing purposes.",
       "version": "1.0.0",
-      "serverName": "Phynaria MC | ATM10",
-      "ip": "hypixel.net",
-      "port": 25565,
+      "serverName": "Fake Server 1",
+      "ip": "fake1.server.net",
+      "port": 12345,
       "minecraft": {
-        "version": "1.21.3",
-        "loader": {
-          "type": "fabric",
-          "version": "0.16.10"
-        },
-        "exclude": []
+      "version": "1.0.0",
+      "loader": {
+        "type": "fakeLoader",
+        "version": "0.0.1"
       },
-      "videoUrl": "https://www.youtube.com/embed/PMxn3LaFVEE"
+      "exclude": []
+      },
+      "videoUrl": "https://www.youtube.com/embed/dQw4w9WgXcQ"
     },
     {
       "icon": "/images/logo.png",
-      "title": "ATM11",
-      "profile": "phynariamc2",
-      "description": "Elesya enhances Minecraft in various ways, preserving its core while introducing exciting new elements.",
+      "title": "Fake Server 2",
+      "profile": "fakeprofile2",
+      "description": "This is a fake server for testing purposes.",
       "version": "1.0.0",
-      "serverName": "Phynaria MC | ATM11",
-      "ip": "hypixel.net",
-      "port": 25565,
+      "serverName": "Fake Server 2",
+      "ip": "fake2.server.net",
+      "port": 12345,
       "minecraft": {
-        "version": "1.21.4",
-        "loader": {
-          "type": "neoforge",
-          "version": "21.4.111-beta"
-        },
-        "exclude": []
+      "version": "1.0.0",
+      "loader": {
+        "type": "fakeLoader",
+        "version": "0.0.1"
       },
-      "videoUrl": "https://www.youtube.com/embed/0KROgbD0kfQ"
+      "exclude": []
+      },
+      "videoUrl": "https://www.youtube.com/embed/dQw4w9WgXcQ"
     },
     {
       "icon": "/images/logo.png",
-      "title": "ATM12",
-      "profile": "phynariamc3",
-      "description": "Elesya enhances Minecraft in various ways, preserving its core while introducing exciting new elements.",
+      "title": "Fake Server 3",
+      "profile": "fakeprofile3",
+      "description": "This is a fake server for testing purposes.",
       "version": "1.0.0",
-      "serverName": "Phynaria MC | ATM12",
-      "ip": "hypixel.net",
-      "port": 25565,
+      "serverName": "Fake Server 3",
+      "ip": "fake3.server.net",
+      "port": 12345,
       "minecraft": {
-        "version": "1.21.3",
-        "loader": {
-          "type": "fabric",
-          "version": "0.16.10"
-        },
-        "exclude": []
+      "version": "1.0.0",
+      "loader": {
+        "type": "fakeLoader",
+        "version": "0.0.1"
       },
-      "videoUrl": "https://www.youtube.com/embed/0KROgbD0kfQ"
+      "exclude": []
+      },
+      "videoUrl": "https://www.youtube.com/embed/dQw4w9WgXcQ"
     },
     {
       "icon": "/images/logo.png",
-      "title": "ATM13",
-      "profile": "phynariamc4",
-      "description": "Elesya enhances Minecraft in various ways, preserving its core while introducing exciting new elements.",
+      "title": "Fake Server 4",
+      "profile": "fakeprofile4",
+      "description": "This is a fake server for testing purposes.",
       "version": "1.0.0",
-      "serverName": "Phynaria MC | ATM13",
-      "ip": "hypixel.net",
-      "port": 25565,
+      "serverName": "Fake Server 4",
+      "ip": "fake4.server.net",
+      "port": 12345,
       "minecraft": {
-        "version": "1.21.3",
-        "loader": {
-          "type": "fabric",
-          "version": "0.16.10"
-        },
-        "exclude": []
+      "version": "1.0.0",
+      "loader": {
+        "type": "fakeLoader",
+        "version": "0.0.1"
       },
-      "videoUrl": "https://www.youtube.com/embed/0KROgbD0kfQ"
+      "exclude": []
+      },
+      "videoUrl": "https://www.youtube.com/embed/dQw4w9WgXcQ"
     },
     {
       "icon": "/images/logo.png",
-      "title": "ATM14",
-      "profile": "phynariamc5",
-      "description": "Elesya enhances Minecraft in various ways, preserving its core while introducing exciting new elements.",
+      "title": "Fake Server 5",
+      "profile": "fakeprofile5",
+      "description": "This is a fake server for testing purposes.",
       "version": "1.0.0",
-      "serverName": "Phynaria MC | ATM14",
-      "ip": "hypixel.net",
-      "port": 25565,
+      "serverName": "Fake Server 5",
+      "ip": "fake5.server.net",
+      "port": 12345,
       "minecraft": {
-        "version": "1.21.3",
-        "loader": {
-          "type": "fabric",
-          "version": "0.16.10"
-        },
-        "exclude": []
+      "version": "1.0.0",
+      "loader": {
+        "type": "fabric",
+        "version": "0.16.10"
       },
-      "videoUrl": "https://www.youtube.com/embed/0KROgbD0kfQ"
+      "exclude": []
+      },
+      "videoUrl": "https://www.youtube.com/embed/dQw4w9WgXcQ"
     },
     {
       "icon": "/images/logo.png",
@@ -112,12 +112,12 @@
       "ip": "hypixel.net",
       "port": 25565,
       "minecraft": {
-        "version": "1.21.3",
-        "loader": {
-          "type": "fabric",
-          "version": "0.16.10"
-        },
-        "exclude": []
+      "version": "1.21.3",
+      "loader": {
+        "type": "fabric",
+        "version": "0.16.10"
+      },
+      "exclude": []
       },
       "videoUrl": "https://www.youtube.com/embed/0KROgbD0kfQ"
     }

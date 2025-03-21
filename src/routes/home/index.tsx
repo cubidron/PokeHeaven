@@ -71,7 +71,7 @@ function RouteComponent() {
   const optionalMods =
     remote.servers
       ?.find((s) => s.profile === selectedServer)
-      ?.minecraft?.optionalMods.map((om) => {
+      ?.minecraft?.optionalMods?.map((om) => {
         om.enabled =
           options.optionalMods?.find(
             (om2) =>

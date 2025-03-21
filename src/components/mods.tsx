@@ -22,14 +22,14 @@ export default function Mods({
       remote.servers?.find((s) => s.profile === options.selectedServer) ||
       remote.servers?.[0]!;
 
-    currentServer.minecraft?.optionalMods.forEach((m) => {
+    currentServer.minecraft?.optionalMods?.forEach((m) => {
       if (m.fileName === mod.fileName) {
         m.enabled = !m.enabled;
       }
     });
 
     let optionalMods =
-      currentServer.minecraft?.optionalMods.map((m) => ({
+      currentServer.minecraft?.optionalMods?.map((m) => ({
         fileName: m.fileName,
         enabled: m.enabled!,
         profile: options.selectedServer!,
