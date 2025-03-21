@@ -12,7 +12,7 @@ export const stage = 4;
 function RouteComponent() {
   return (
     <div className="flex bg-black/20 w-full h-svh overflow-y-auto items-center justify-center flex-col">
-      <span className="absolute inset-0 size-full bg-cover bg-center bg-[url('/images/bg.png')] -z-10"></span>
+      <span className="absolute inset-0 size-full bg-cover bg-center bg-[url('/images/bg.jpg')] -z-10"></span>
       <span className="absolute inset-0 size-full bg-black/60 -z-10"></span>
       <span
         className={`absolute inset-0 size-max z-10 flex w-full ${platform() != "macos" ? "justify-end" : "p-3"}`}>

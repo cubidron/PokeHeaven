@@ -30,7 +30,7 @@ function RouteComponent() {
   return (
     <>
       <div className="flex bg-black/20 contain-content w-full h-svh overflow-clip p-1.5 flex-col relative max-h-svh">
-        <span className="absolute inset-0 size-full bg-cover bg-center bg-[url('/images/bg.png')] -z-10"></span>
+        <span className="absolute inset-0 size-full bg-cover bg-center bg-[url('/images/bg.jpg')] -z-10"></span>
         <span className="absolute inset-0 size-full bg-black/60 -z-10"></span>
         <header
           data-tauri-drag-region

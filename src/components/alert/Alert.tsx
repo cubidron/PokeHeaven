@@ -15,7 +15,7 @@ export default function AlertComponent() {
             }
           }}
           data-tauri-drag-region
-          className={`fixed z-[100] inset-0 bg-black/40 flex !bg-center ${alert_store.bg ? "bg-[url('/images/bg.png')]" : ""} bg-blend-darken !bg-cover flex-col items-center justify-center`}>
+          className={`fixed z-[100] inset-0 bg-black/40 flex !bg-center ${alert_store.bg ? "bg-[url('/images/bg.jpg')]" : ""} bg-blend-darken !bg-cover flex-col items-center justify-center`}>
           <div
             onClick={(e) => {
               e.stopPropagation();
