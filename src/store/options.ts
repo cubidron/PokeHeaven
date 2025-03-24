@@ -32,7 +32,7 @@ interface IOptionsStore extends IOptions {
 export const useOptions = create<IOptionsStore>((set) => ({
   init: async () => {
     const options = await storage?.get<ILocalOptions>("options");
-    const appDir = await path.join(await path.dataDir(), ".phynaria");
+    const appDir = await path.join(await path.dataDir(), ".pokeheaven");
 
     set({
       version: await getVersion(),

@@ -3452,33 +3452,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "phynariamc"
-version = "1.0.0"
-dependencies = [
- "log",
- "lyceris",
- "serde",
- "serde_json",
- "tauri",
- "tauri-build",
- "tauri-plugin-dialog",
- "tauri-plugin-drpc",
- "tauri-plugin-fs",
- "tauri-plugin-http",
- "tauri-plugin-log",
- "tauri-plugin-opener",
- "tauri-plugin-os",
- "tauri-plugin-process",
- "tauri-plugin-single-instance",
- "tauri-plugin-store",
- "tauri-plugin-system-info",
- "tauri-plugin-updater",
- "thiserror 2.0.11",
- "tokio",
- "window-vibrancy",
-]
-
-[[package]]
 name = "pin-project-lite"
 version = "0.2.16"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3531,6 +3504,33 @@ dependencies = [
  "fdeflate",
  "flate2",
  "miniz_oxide",
+]
+
+[[package]]
+name = "pokeheaven"
+version = "1.0.0"
+dependencies = [
+ "log",
+ "lyceris",
+ "serde",
+ "serde_json",
+ "tauri",
+ "tauri-build",
+ "tauri-plugin-dialog",
+ "tauri-plugin-drpc",
+ "tauri-plugin-fs",
+ "tauri-plugin-http",
+ "tauri-plugin-log",
+ "tauri-plugin-opener",
+ "tauri-plugin-os",
+ "tauri-plugin-process",
+ "tauri-plugin-single-instance",
+ "tauri-plugin-store",
+ "tauri-plugin-system-info",
+ "tauri-plugin-updater",
+ "thiserror 2.0.11",
+ "tokio",
+ "window-vibrancy",
 ]
 
 [[package]]

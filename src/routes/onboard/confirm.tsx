@@ -13,7 +13,7 @@ function RouteComponent() {
     <>
       <span className="flex justify-between">
         <span>
-          <h1 className="font-extrabold text-3xl">PhynariaMC</h1>
+          <h1 className="font-extrabold text-3xl">PokeHeaven</h1>
           <p className="font-light text-sm text-white/50">
             Vous n'avez pas de compte?{" "}
             <a
@@ -43,7 +43,7 @@ function RouteComponent() {
             {auth.user?.username}
           </h1>
           <p className="text-base font-extralight leading-[100%]">
-            Compte Phynaria
+            Compte PokeHeaven
           </p>
         </span>
       )}

@@ -132,7 +132,7 @@ function RouteComponent() {
             alt=""
           />
           <p className="text-xs">
-            PhynariaMC{" "}
+            PokeHeaven{" "}
             <span className="text-white/50">
               {" "}
               • Non affilié à Mojang Studios
