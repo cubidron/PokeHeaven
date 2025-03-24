@@ -93,12 +93,15 @@ function RootComponent() {
           "Initialisation de l'authentification..."
         );
         await auth.init();
-        if (useAuth.getState().user && useAuth.getState().users.length > 0) {
-          location.href.includes("/home") ||
-            nav({
-              to: "/home",
-            });
-        }
+        // if (useAuth.getState().user && useAuth.getState().users.length > 0) {
+        //   location.href.includes("/home") ||
+        //     nav({
+        //       to: "/home",
+        //     });
+        // }
+        nav({
+          to: "/home",
+        });
         setLoading("Veuillez patienter", "Récupération des actualités...");
         await news.fetch();
         setLoading("Veuillez patienter", "Récupération à distance...");
@@ -179,19 +182,19 @@ function RootComponent() {
     };
   }, []);
 
-  useEffect(() => {
-    if (!useAuth.getState().user) {
-      location.href.includes("/onboard") ||
-        nav({
-          to: "/onboard",
-        });
-    }else {
-      location.href.includes("/home") ||
-        nav({
-          to: "/home",
-        });
-    }
-  }, [useAuth.getState().user]);
+  // useEffect(() => {
+  //   if (!useAuth.getState().user) {
+  //     location.href.includes("/onboard") ||
+  //       nav({
+  //         to: "/onboard",
+  //       });
+  //   }else {
+  //     location.href.includes("/home") ||
+  //       nav({
+  //         to: "/home",
+  //       });
+  //   }
+  // }, [useAuth.getState().user]);
   return (
     <>
       <div className="size-full">

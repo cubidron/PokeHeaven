@@ -17,7 +17,7 @@ interface NewsStore {
 const useNewses = create<NewsStore>((set) => ({
   newses: [],
   fetch: async () => {
-    const response = await fetch(`${LAUNCHER_BASE}/PhynariaLauncherV2/news.json`);
+    const response = await fetch(`${LAUNCHER_BASE}/news.json`);
 
     if (!response.ok) {
       addNoti("Could not fetch news.");
