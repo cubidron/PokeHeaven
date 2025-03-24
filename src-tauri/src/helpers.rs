@@ -31,7 +31,7 @@ pub fn get_loader_by(
     }
 }
 
-static LAUNCHER_BASE: &str = "https://launcher.phynaria.fr/www";
+static LAUNCHER_BASE: &str = "https://launcher.playpokeheaven.eu";
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct RemoteFile {
@@ -88,10 +88,7 @@ pub async fn synchronize_files(
     client: Client,
 ) -> crate::Result<()> {
     let remote_files: Vec<RemoteFile> = lyceris::http::fetch::fetch(
-        format!(
-            "{}/PhynariaLauncherV2/files/?directory={}",
-            LAUNCHER_BASE, profile_name
-        ),
+        format!("{}/files/?directory={}", LAUNCHER_BASE, profile_name),
         Some(&client),
     )
     .await?;
@@ -138,7 +135,7 @@ pub async fn synchronize_files(
                 if optional.enabled {
                     files_to_be_downloaded.push((
                         format!(
-                            "{}/PhynariaLauncherV2/files/game/{}/{}",
+                            "{}/files/game/{}/{}",
                             LAUNCHER_BASE, profile_name, remote_file.path
                         ),
                         local_path,
@@ -148,7 +145,7 @@ pub async fn synchronize_files(
             } else {
                 files_to_be_downloaded.push((
                     format!(
-                        "{}/PhynariaLauncherV2/files/game/{}/{}",
+                        "{}/files/game/{}/{}",
                         LAUNCHER_BASE, profile_name, remote_file.path
                     ),
                     local_path,
@@ -170,7 +167,7 @@ pub async fn synchronize_files(
             if local_hash != remote_file.hash && ignored_hash != remote_file.hash {
                 files_to_be_downloaded.push((
                     format!(
-                        "{}/PhynariaLauncherV2/files/game/{}/{}",
+                        "{}/files/game/{}/{}",
                         LAUNCHER_BASE, profile_name, remote_file.path
                     ),
                     local_path,
