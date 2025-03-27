@@ -2,10 +2,10 @@ import { useState, useEffect, useRef } from "react";
 import { useAuth } from "../store/auth";
 import Spinner from "./Spinner";
 import { SkinViewer } from "skinview3d";
-import { WEB_API_BASE } from "../constants";
 import { open } from "@tauri-apps/plugin-dialog";
 import { readFile } from "@tauri-apps/plugin-fs";
 import { blobToBase64 } from "../helpers";
+import Alert from "./alert";
 
 export default function Skin({ setSkinModal }: { setSkinModal: (value: boolean) => void }) {
   const auth = useAuth();
@@ -26,13 +26,13 @@ export default function Skin({ setSkinModal }: { setSkinModal: (value: boolean) 
         skin: savedSkin ?? "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAEwElEQVR4Xu1av2sUURgMqCABQQVBBK0SCdooMQQD5jSFkNgpKdIEwSZoZ6GYJohNUmlhqrSxsUlhYZM/If/TmdncrLOz3+7drcneXtyB4f36bvNm3vd2l32ZmOiD+3eudMHZqWtJyTrbn189LqVfb+xAwZ17N1LxqLsBH17MZniuDFDBXn5b6+TEkxjz640dXLSmP8r/wgDd+74VILJoC5wLA3TFNRsgHqRQv/mh7+v64vkwwO8BSoiE4KLSrzd2UNF+QwQpdnn6aobs9+s1DpraFDZ183Im5ZkFSjVBf6PX0WtEcSh9PrUjmiBIIVpX8V7yd5Foxvn10efzqR0qwifMvr03y91fn9a7v7+8S8qf79eSvkfT13OxINvs0zpNYJ/Pp3ZwQjpRXUkIhWAIp3gSY5Go6JqsM55tn0/t0ImxxCMM4iACQoGXT3ZS0agDaCMGffhNdC0aGhnUCAN8hShIyRV/+/RBQs0AJUX5yuv9QQ1B2+dTOzgRlFx5PsO/v15MX2jwaPu4NJdw6fZkJoaPPGaCXtMN8LbPp3bwrU3FuwkoIRomsKRoGqS/5fX0zfDurckM2e/zGTkWHu50lfPz8wlnZmYSenwOR0fp9lBj0Ycxv77TL5fDwUE34f5+Znt6WGX4hCicRnh8DsciVbyacNoGqNEeVhk+oSoZcNYGTB4epgY0MgPOdAscC9ct8M8Z8Gxurwvij6N8vvAjJftYkjp+cXc3Q0/PVHxv4kXxYKafQpW9uLS9tZWlxg4KChzUAB0HMdlL29sJU0E9oUxP74/iMyK9j/2RARsbJ6QBHB8UZQI9O3wchJALm5sJUdcURel9Hu8muFkZ8WJGMlZkADgoygQWGaB1iiH7CfL4UJi0c2mupHg1gRwULpDtqE/HSBeUWXEzQFc/MiC39/f/3uh4s9N6RI67zkK4Ab7CkSHa9pRODegJcQM83jMkFd9r66OON1Rtq+hKj8XIAN8GZeMURXoK66p6bBTvv3VhKj4ygKXrLASFFQnsZwAmqWKSDNAVZTb0BHl8aIDED2oAykoZ4OmtwpUeR1KQiqNwF8cYj8sYIOIR4yvrBqgRlQxYWVnpgn5zczLOqaIiM1Sgx6YGiGgVD6rgoizQLTC0AXi97XQ6GVGrq6s5oYjxWNR1i6hhmjk0gsI8RrePxiATIwM0K9wAlq6zEHzHpzgXSOFRHOpqAKnbiCVX1OP9XsMY9pcJ1/3vRrjOFi1atGjRosX4AR9Ai5h5fT44+ViajrVo0aJFixYtWtQN/5Q29OGqfELTDyEe1li4AUMfr4sBmZPlcYEbUCUD+JrLDBhrAypnwHFZ6airbujXX//I6WM6zpjcgaefEbDtbAoGEcls8DEwPOJWA9wEtpsCNwClG6Dj/QxID0vcCK83BS7QRfq49iUGlJ3xl5HQTOmZ498NnKdqoItnO+rTMdLP9/XG5wce2u/zGBmKBPtq67jGu1h99Hm7kY/FSGC/LaB0A4pEs5+lz2NkcIEoIwMic8DofM/Fq/DGZYCnv6+09kfbJNrnkXDv93mMDDxJpsAi+nE7WSY+Et44A3hcrqKG+f+CyAAV7Qaw7fMYGaL/G1CBFB7FoQ5BRfeByAiO+zyq4g8lK5z2I+oYkQAAAABJRU5ErkJggg==",
       });
 
-      const remoteSkin = await skinToBase64(`${WEB_API_BASE}/skin-api/skins/${auth.user?.username || "MHF_Steve"}.png`);
+      const skinUrl = await auth.fetchSkin(auth.user?.uuid || "");
+      const remoteSkin = await skinToBase64(`${skinUrl ? skinUrl : "https://vzge.me/skin/MHF_Steve"}`);
       if (remoteSkin !== savedSkin) {
         skinViewer.loadSkin(remoteSkin);
       }
 
     })();
-
 
     return () => {
       skinViewer.dispose();
@@ -62,8 +62,6 @@ export default function Skin({ setSkinModal }: { setSkinModal: (value: boolean) 
         const file = input.get("skin") as File;
         if (!file) return;
         setLoading(true);
-        // API Call
-        console.log(file);
         // API CALL END
         setLoading(false);
       }}
@@ -120,8 +118,7 @@ export default function Skin({ setSkinModal }: { setSkinModal: (value: boolean) 
           <button onClick={async () => {
             await auth.updateSkin(auth.user?.access_token || "", currentFile);
             setSkinModal(false);
-            //todo: find a better way to do this.
-            window.location.reload();
+            Alert({title: "Info", message: "Votre skin a bien été modifié ! Il est visible dans le jeu, mais son effet sera visible dans 15 à 20 minutes au lancement."});
           }} className="px-3.5 w-full py-1.5 cursor-pointer ease-smooth duration-200 hover:saturate-150 gap-3 bg-primary rounded-lg mt-3 flex items-center justify-center">
             Changer de Skin
             {loading ? (

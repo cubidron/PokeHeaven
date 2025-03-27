@@ -25,6 +25,12 @@
         },
         {
           "url": "https://*.playpokeheaven.eu"
+        },
+        {
+          "url": "https://sessionserver.mojang.com"
+        },
+        {
+          "url": "https://api.minecraftservices.com"
         }
       ]
     },

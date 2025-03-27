@@ -41,7 +41,7 @@ pub fn run() {
         .plugin(tauri_plugin_os::init())
         .plugin(tauri_plugin_opener::init())
         .plugin(tauri_plugin_drpc::init())
-        .invoke_handler(tauri::generate_handler![commands::launch])
+        .invoke_handler(tauri::generate_handler![commands::launch, commands::authenticate, commands::verify])
         .setup(|app| {
             log::info!("Setting up launcher");
             let quit = MenuItem::with_id(

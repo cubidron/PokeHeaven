@@ -87,7 +87,7 @@ function RouteComponent() {
         mainLoading.set("Veuillez patienter", "Lancement du jeu...");
         await invoke("launch", {
           cfg: {
-            username: auth.user?.username,
+            account: auth.user!,
             title: server.title,
             profile: server.profile,
             version: server.version,

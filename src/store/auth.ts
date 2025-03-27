@@ -1,30 +1,32 @@
 import { create } from "zustand";
-import { WEB_API_BASE } from "../constants";
-import { jsonRequest } from "../helpers";
+import { MOJANG_API, MOJANG_SESSION_SERVICE } from "../constants";
 import { addNoti } from "../components/notification";
 import { storage } from "../routes/__root";
 import { error } from "@tauri-apps/plugin-log";
 import { fetch } from "@tauri-apps/plugin-http";
+import { invoke } from "@tauri-apps/api/core";
+import { clearLoading, setLoading } from "../components/loading";
+import Alert from "../components/alert";
 
 //SYSTEM AUTH
 interface IUser {
-  email?: string;
-  access_token: string;
   username?: string;
+  uuid?: string;
+  access_token?: string;
+  refresh_token?: string;
+  xuid?: string;
+  exp?: number;
 }
 interface UserStore {
   user?: IUser
   users: IUser[]
   init: () => Promise<void>;
-  login: (user: {
-    email: string;
-    password: string;
-  }) => Promise<boolean>;
+  login: () => Promise<boolean>;
   logout: (user: IUser) => Promise<void>;
   switch: (account: IUser) => void;
   isLogged: () => boolean;
-  verifyUser: (user: IUser) => Promise<boolean>;
-  findValidUser: (users: IUser[]) => Promise<IUser | undefined>;
+  verifyUser: (user: IUser) => Promise<IUser | null>;
+  fetchSkin: (uuid: String) => Promise<string | null>;
   updateSkin: (access_token: string, skin: Blob) => Promise<void>;
 }
 
@@ -38,20 +40,17 @@ export const useAuth = create<UserStore>((set, get) => ({
         await storage?.set("user", userData);
       };
 
-      const { current, all } = userData;
+      if (userData.current) {
+        const verified = await get().verifyUser(userData.current);
+        if (verified) {
+          userData.current = verified;
+          userData.all.map(async user => {
+            if (user.uuid === verified.uuid) {
+              user = verified;
+            }
 
-      if (current) {
-        if (!(await get().verifyUser(current))) {
-          const users = all.filter(user => user.username !== current.username);
-          const validUser = await get().findValidUser(users);
-          if (validUser) {
-            addNoti("Another account is selected because current account is expired or changed.")
-            userData.current = validUser;
-            userData.all = users;
-          } else {
-            addNoti("Current account is expired or changed. Please login again.");
-            userData.current = undefined;
-          }
+            return user;
+          });
         }
       }
       await storage?.set("user", userData);
@@ -62,54 +61,38 @@ export const useAuth = create<UserStore>((set, get) => ({
     }
   },
   verifyUser: async (user: IUser) => {
-    const { request } = await jsonRequest<{
-      access_token: string;
-      banned: boolean;
-      reason: string;
-      message: string;
-      username: string;
-    }>(`${WEB_API_BASE}/auth/verify`, "POST", {
-      access_token: user.access_token
-    });
-
-    if (request.status !== 200) {
-      return false;
-    }
-
-    return true;
+    setLoading("Please wait!", "Verifying user...");
+    const newAccount = await invoke("verify", { exp: user.exp, refreshToken: user.refresh_token });
+    clearLoading();
+    return newAccount ? newAccount : null;
   },
-  findValidUser: async (users: IUser[]) => {
-    for (const user of users) {
-      if (await get().verifyUser(user)) {
-        return user;
-      }
-    }
-    return undefined;
-  },
-  login: async ({ email, password }) => {
+  login: async () => {
     try {
-      const { data, request } = await jsonRequest<{
-        access_token: string;
-        banned: boolean;
-        reason: string;
-        message: string;
-        username: string;
-      }>(`${WEB_API_BASE}/auth/authenticate`, "POST", { email, password });
+      const account: IUser = await invoke("authenticate");
+      const allUsers = [...get().users.filter(user => user.uuid !== account.uuid), account];
 
-      if (request.status !== 200) {
-        addNoti(data.reason === "invalid_credentials"
-          ? "Invalid credentials"
-          : "Authentication error. Please try again or contact support.");
+      await storage?.set("user", { all: allUsers, current: account });
+      set({ user: account, users: allUsers });
+      return true;
+    } catch (error) {
+      console.error(error);
+      if (error === "Account does not own Minecraft.") {
+        Alert({
+          title: "Oh no!",
+          message: "This account does not own Minecraft.",
+          force: true,
+          action: () => { get().login() }
+        });
         return false;
       }
+      else if (error === "Authentication channel closed unexpectedly") {
+        return false;
+      }
+      Alert({
+        title: "Oh no!",
+        message: "There was an error during authentication. Please try again later."
+      });
 
-      const newUser = { email, access_token: data.access_token, username: data.username };
-      const allUsers = [...get().users.filter(user => user.email !== newUser.email), newUser];
-
-      await storage?.set("user", { all: allUsers, current: newUser });
-      set({ user: newUser, users: allUsers });
-      return true;
-    } catch {
       return false;
     }
   },
@@ -118,36 +101,81 @@ export const useAuth = create<UserStore>((set, get) => ({
     const { users, user: currentUser } = get();
     const all = users.filter(u => u.username !== user.username);
     const current = currentUser?.username === user.username ? all[0] : currentUser;
-
-    await jsonRequest(`${WEB_API_BASE}/auth/logout`, "POST", { access_token: user.access_token });
     await storage?.set("user", { all, current });
     set({ user: current, users: all });
   },
 
   switch: async (account) => {
-    if (!(await get().verifyUser(account))) {
-      addNoti("This account is expired or banned. Please login with another account.");
-      set({ user: undefined });
-      return;
-    }
-    await storage?.set("user", { all: get().users, current: account });
-    set({ user: account });
+    const verified = await get().verifyUser(account);
+    const newAcc = verified ? verified : account;
+    const all = get().users.map(user => {
+      if (user.uuid === newAcc.uuid) {
+        return newAcc;
+      }
+      return user;
+    });
+    await storage?.set("user", { all, current: newAcc });
+    set({ user: newAcc, users: all });
   },
 
   isLogged: () => get().user !== undefined,
+  fetchSkin: async (uuid) => {
+    const info = await fetch(`${MOJANG_SESSION_SERVICE}/session/minecraft/profile/${uuid}`);
 
+    if (info.status !== 200) {
+      Alert({
+        title: "Error", message: "Failed to fetch skin"
+      });
+
+      return null;
+    }
+
+    const data: {
+      id: string,
+      name: string,
+      properties:
+      {
+        name: string,
+        value: string
+      }[]
+    } = await info.json();
+
+    if (data.properties) {
+      const base64 = data.properties[0].value;
+      console.log(atob(base64));
+      const skinData: {
+        timestamp: number,
+        profileId: string,
+        profileName: string,
+        textures: {
+          SKIN: {
+            url: string
+          },
+          CAPE: {
+            url: string
+          }
+        }
+      } = JSON.parse(atob(base64));
+
+      return skinData.textures.SKIN.url;
+    }
+
+    return null;
+  },
   updateSkin: async (access_token, skin) => {
     const formData = new FormData();
-    formData.append("access_token", access_token);
-    formData.append("skin", skin, "skin.png");
+    formData.append("variant", "classic");
+    formData.append("file", skin, "skin.png");
 
-    const response = await fetch(`${WEB_API_BASE}/skin-api/skins`, {
+    const response = await fetch(`${MOJANG_API}/minecraft/profile/skins`, {
       method: "POST",
+      headers: {
+        "Authorization": `Bearer ${access_token}`
+      },
       body: formData
     });
 
-    if (response.status !== 200) {
-      addNoti("Error while updating skin. Please try again or contact support.");
-    }
+    console.log(response);
+    
   }
 }));

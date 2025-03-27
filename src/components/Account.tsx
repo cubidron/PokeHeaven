@@ -4,7 +4,6 @@ import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useState } from "react";
 import { useAuth } from "../store/auth";
 import Alert from "./alert";
-import { WEB_API_BASE } from "../constants";
 
 export default function Account(props: {
   setSkinModal: (value: boolean) => void;
@@ -45,9 +44,9 @@ export default function Account(props: {
                   document.getElementById("user-head")?.remove();
                   e.currentTarget.classList.remove("hidden");
                 }}
-                src={`${WEB_API_BASE}/skin-api/avatars/face/${auth?.user?.username || "MHF_Steve"}`}
+                src={`https://mineskin.eu/helm/${auth?.user?.username}`}
                 onError={(e) => {
-                  const a = "https://vzge.me/face/MHF_Steve";
+                  const a = "https://mineskin.eu/helm/MHF_Steve";
                   if (e.currentTarget.src != a) {
                     e.currentTarget.src = a;
                   }
@@ -111,10 +110,10 @@ export default function Account(props: {
                           document.getElementById("user-head" + i)?.remove();
                           e.currentTarget.classList.remove("hidden");
                         }}
-                        src={`${WEB_API_BASE}/skin-api/avatars/face/${account.username}`}
+                        src={`https://mineskin.eu/helm/${account.username}`}
                         onError={(e) => {
                           const a =
-                            "https://visage.surgeplay.com/face/MHF_Steve";
+                            "https://mineskin.eu/helm/MHF_Steve";
                           if (e.currentTarget.src != a) {
                             e.currentTarget.src = a;
                           }

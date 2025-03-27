@@ -1,9 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { useAuth } from "../../store/auth";
-import Spinner from "../../components/Spinner";
-import Alert from "../../components/alert";
-import { addNoti } from "../../components/notification";
 
 export const Route = createFileRoute("/onboard/")({
   component: RouteComponent,
@@ -33,8 +30,10 @@ function RouteComponent() {
       <div
         className={`flex flex-col gap-1.5 w-full h-max ${loading && "scale-95 brightness-50"} ease-smooth duration-700`}>
         <button
-          onClick={async (e) => {
-            addNoti("Microsoft pop-up çıkacak!!");
+          onClick={async () => {
+            if((await auth.login())) {
+              navigate({ to: "/onboard/confirm" });
+            }
           }}
           className="w-full grid place-items-center hover:bg-white/10 hover:scale-105 active:duration-75 active:scale-100 ease-smooth duration-200 h-32 bg-white/5 cursor-pointer rounded-xl">
           <svg

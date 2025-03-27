@@ -1,6 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useAuth } from "../../store/auth";
-import { WEB_API_BASE } from "../../constants";
 
 export const Route = createFileRoute("/onboard/confirm")({
   component: RouteComponent,
@@ -17,7 +16,7 @@ function RouteComponent() {
           <p className="font-light text-sm text-white/50">
             Vous n'avez pas de compte?{" "}
             <a
-              href="https://phynaria.fr/user/register"
+              href="https://www.minecraft.net/en-us/store/minecraft-deluxe-collection-pc"
               target="_blank"
               className="text-primary hover:underline">
               S'inscrire
@@ -30,10 +29,10 @@ function RouteComponent() {
         <span className="rounded-xl flex mt-3 flex-col items-center justify-center gap-2 bg-dark p-4">
           <img
             className="size-20 rounded-md bg-white/5 p-1.5"
-            src={`${WEB_API_BASE}/skin-api/avatars/face/${auth?.user?.username || "MHF_Steve"}`}
+            src={`https://mineskin.eu/helm/${auth.user.username}`}
             alt=""
             onError={(e) => {
-              const a = "https://visage.surgeplay.com/face/MHF_Steve";
+              const a = "https://mineskin.eu/helm/MHF_Steve";
               if (e.currentTarget.src != a) {
                 e.currentTarget.src = a;
               }

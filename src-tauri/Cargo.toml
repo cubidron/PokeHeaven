@@ -7,10 +7,6 @@ edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
-[profile.dev]
-incremental = true
-opt-level = 1      # Slight optimization while keeping fast compiles
-
 [lib]
 # The `_lib` suffix may seem redundant but it is necessary
 # to make the lib name unique and wouldn't conflict with the bin name.
@@ -26,7 +22,7 @@ tauri = { version = "2", features = ["macos-private-api", "tray-icon"] }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 window-vibrancy = "0.5.2"
-lyceris = { git = "https://github.com/BatuhanAksoyy/lyceris", rev = "118e99362a7467ac72e9a5df0df3612b1c8104ac" }
+lyceris = { git = "https://github.com/BatuhanAksoyy/lyceris", rev = "ea8742bcf2d1832606d32d7c99c42232ed252e83" }
 thiserror = "2.0.11"
 tokio = { version = "1.44.1", features = ["process"] }
 log = "0.4.26"
