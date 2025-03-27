@@ -106,7 +106,7 @@ function RouteComponent() {
               onChange={async (e) => {
                 options.set({ discordRpc: e });
                 if (e) {
-                  await start(DISCORD_CLIENT_ID);
+                  await start(remote.discordRpc?.clientId || DISCORD_CLIENT_ID);
                   await initializeDiscordState(remote.discordRpc!);
                 } else {
                   await destroy();

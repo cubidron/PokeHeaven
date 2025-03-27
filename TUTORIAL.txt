@@ -25,7 +25,13 @@ The file "config.json" is used for configuring the launcher's behavior.
         "exclude": [] // Array of excluded files/folders for the server. Must be a valid array and must not contain any duplicate entries. Everything in the array must be a valid string.
     },
     "videoUrl": "" // Video URL for the server. Must be a valid URL.
-    "optionalMods": [] // This field is used for determining which mods are optional. If mod is not present in the list, it won't be optional and users won't be able to delete/modify that mod.
+    "optionalMods": [ // This field is used for determining which mods are optional. If mod is not present in the list, it won't be optional and users won't be able to delete/modify that mod. You can add/remove from the array.
+        {
+            "name": "", // Name of the mod. Must be a valid string.
+            "fileName": "" // Version of the mod. Must be a valid string.
+            "default": true // Default value for the mod. Must be a valid boolean.
+        }
+    ] 
 }
 """
 "version": "" // Version field defines the launcher version. When we need to update the launcher, we increase the version number by semver standards.
