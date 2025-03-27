@@ -99,9 +99,6 @@ function RootComponent() {
               to: "/home",
             });
         }
-        nav({
-          to: "/home",
-        });
         setLoading("Veuillez patienter", "Récupération des actualités...");
         await news.fetch();
         setLoading("Veuillez patienter", "Récupération à distance...");
