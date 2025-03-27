@@ -20,7 +20,7 @@ const useNewses = create<NewsStore>((set) => ({
     const response = await fetch(`${LAUNCHER_BASE}/news.json`);
 
     if (!response.ok) {
-      addNoti("Could not fetch news.");
+      addNoti("Impossible de récupérer les actualités.");
       return;
     }
 

@@ -78,8 +78,8 @@ export const useAuth = create<UserStore>((set, get) => ({
       console.error(error);
       if (error === "Account does not own Minecraft.") {
         Alert({
-          title: "Oh no!",
-          message: "This account does not own Minecraft.",
+          title: "Oh non!",
+          message: "Ce compte ne possède pas Minecraft.",
           force: true,
           action: () => { get().login() }
         });
@@ -89,8 +89,8 @@ export const useAuth = create<UserStore>((set, get) => ({
         return false;
       }
       Alert({
-        title: "Oh no!",
-        message: "There was an error during authentication. Please try again later."
+        title: "Oh non!",
+        message: "Une erreur s'est produite lors de l'authentification. Veuillez réessayer plus tard."
       });
 
       return false;
@@ -124,7 +124,7 @@ export const useAuth = create<UserStore>((set, get) => ({
 
     if (info.status !== 200) {
       Alert({
-        title: "Error", message: "Failed to fetch skin"
+        title: "Erreur", message: "Échec de la récupération de la skin"
       });
 
       return null;

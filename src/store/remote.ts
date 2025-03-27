@@ -75,7 +75,7 @@ const useRemote = create<RemoteStore>((set) => ({
     const response = await fetch(`${LAUNCHER_BASE}/config.json`);
 
     if (!response.ok) {
-      throw new Error("Could not fetch the data");
+      throw new Error("Impossible de récupérer les données");
     }
 
     const data = await response.json();
