@@ -19,7 +19,7 @@ function RouteComponent() {
           <p className="font-light text-sm text-white/50">
             Vous n'avez pas de compte?{" "}
             <a
-              href="https://phynaria.fr/user/register"
+              href="https://www.minecraft.net/en-us/store/minecraft-deluxe-collection-pc"
               target="_blank"
               className="text-primary hover:underline">
               Inscrivez-vous
