@@ -54,7 +54,7 @@
   },
   "plugins": {
     "updater": {
-      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDUzOTNBOTkyRkQyMkQ2MkIKUldRcjFpTDlrcW1UVTNIWm9XaXdzRUt1OXFUMHoxWFVZS29iL21jM1dpMVh3Y1c3aUlrRk1XaDcK",
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDNGNzcwNzczMDg5MDYyRDUKUldUVllwQUljd2QzUDJtcjNqWmhCQVNzRGpLUzV1RHltZTd3YzNGRXo4eUJyT1F2Y3VjQWZJZFMK",
       "endpoints": ["https://launcher.playpokeheaven.eu/config.json"]
     }
   }
